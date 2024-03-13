@@ -3,7 +3,7 @@ import React from "react"
 function App() {
   return (
     <div>
-      <div>영석아 배포할 시간이다zz1211212211~</div>
+      <div>젠킨스 반응속도~</div>
     </div>
   );
 }
