@@ -5,8 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-public class MemberSignInRequestDto {
+public class MemberSignUpRequestDto {
 
     private String email;
     private String password;
+    private String name;
+    private String nickname;
+    private String birth;
+    private int gender;
+
 }

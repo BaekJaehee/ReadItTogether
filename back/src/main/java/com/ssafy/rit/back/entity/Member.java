@@ -5,10 +5,9 @@ import lombok.*;
 
 @Entity
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @EqualsAndHashCode()
 @Table(name = "member")
 public class Member {
@@ -27,10 +26,10 @@ public class Member {
     @Column(name = "nickname", unique = true, nullable = false)
     private String nickname;
 
-    @Column(name = "nickname", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "profile_image", nullable = false)
+    @Column(name = "profile_image")
     private String profileImage;
 
     @Column(name = "is_disabled")
