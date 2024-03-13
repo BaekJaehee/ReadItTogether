@@ -24,7 +24,6 @@ pipeline {
             steps {
                 script {
                     dir('front') {
-                        sh 'npm install'
                         sh 'npm run build'
                         sh 'cp -r front/build .'
                         frontendImage = docker.build("${FRONT_IMAGE_NAME}:${env.BUILD_NUMBER}", '.')
