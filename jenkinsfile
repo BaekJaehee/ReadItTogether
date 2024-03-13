@@ -5,13 +5,9 @@ def modelImage
 pipeline {
     agent any
     environment {
-        // 환경 변수 설정
         GIT_REGISTRY_CREDENTIALS = credentials('gitlab_tokken')
         DOCKER_REGISTRY_CREDENTIALS = credentials('docker')
-        GCP_SERVICE_ACCOUNT_JSON = credentials('GCP_SERVICE_ACCOUNT_JSON')
         FRONT_IMAGE_NAME = "${env.FRONT_IMAGE_NAME}"
-        DATABASE_URL = "${env.DATABASE_URL}"
-        REACT_APP_API_BASE_URL = "${env.REACT_APP_API_BASE_URL}"
         DOCKER_COMPOSE_FILE = "docker-compose.yml"       
     }
     stages {
@@ -26,31 +22,11 @@ pipeline {
         stage('Build and Push the Front-end Docker Image') {
             steps {
                 script {
-                    sh 'echo "Starting Build Front Docker Image"'
-                    dir('front') {
-                        withDockerRegistry(credentialsId: 'docker', url: 'https://registry.hub.docker.com') {
-                            
-                             frontendImage = docker.build("${FRONT_IMAGE_NAME}:${env.BUILD_NUMBER}",
-                            //   "--build-arg REACT_APP_API_BASE_URL=${env.REACT_APP_API_BASE_URL} .")  //추후 예정
-                             )
-
-                            if (frontendImage != 0) {
-                                sh 'npm install'
-                                sh 'npm run build'
-                                sh 'cp -r build/ ../nginx/www'
-                                echo "Docker build succeeded: ${FRONT_IMAGE_NAME}:${env.BUILD_NUMBER}"
-                                docker.withRegistry('https://registry.hub.docker.com', 'docker') {
-                                    frontendImage.push()
-                            }
-                            } else {
-                                error "Docker build failed"
-                            }
-                        }
-                    }
+                    docker.build("${FRONT_IMAGE_NAME}:${env.BUILD_NUMBER}", './front')
                 }
             }
-            
         }
+
         stage('Deploy') {
             steps {
                 script {
@@ -61,4 +37,3 @@ pipeline {
         }
     }
 }
-
