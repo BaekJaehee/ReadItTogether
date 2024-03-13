@@ -35,6 +35,9 @@ pipeline {
                              )
 
                             if (frontendImage != 0) {
+                                sh 'npm install'
+                                sh 'npm run build'
+                                sh 'cp -r build/ ../nginx/www'
                                 echo "Docker build succeeded: ${FRONT_IMAGE_NAME}:${env.BUILD_NUMBER}"
                                 docker.withRegistry('https://registry.hub.docker.com', 'docker') {
                                     frontendImage.push()
