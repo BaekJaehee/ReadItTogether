@@ -3,7 +3,7 @@ import React from "react"
 function App() {
   return (
     <div>
-      <div>젠킨스 반응속도~2</div>
+      <div>nginx테스트1</div>
     </div>
   );
 }
