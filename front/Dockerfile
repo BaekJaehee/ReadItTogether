@@ -2,7 +2,7 @@
 FROM node:20
 
 # 애플리케이션 디렉토리 생성
-WORKDIR /app
+WORKDIR /
 
 COPY package*.json ./
 RUN npm install
