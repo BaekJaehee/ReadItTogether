@@ -5,7 +5,7 @@ COPY package*.json ./
 # Yarn is already installed
 RUN npm install
 COPY . .
-RUN npm build
+RUN npm run build
 
 
 # ARG 및 ENV 설정 추가
