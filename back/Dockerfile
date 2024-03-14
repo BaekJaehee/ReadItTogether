@@ -1,20 +1,14 @@
-FROM gradle:jdk11 as build-stage
+FROM maven:3.8.5-openjdk-17 as build
 
 WORKDIR /app
+COPY . /app
+RUN --mount=type=cache,target=/root/.m2 mvn -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true package
 
-COPY . .
+FROM amazoncorretto:17-alpine
 
-# First, correctly apply execute permissions to gradlew
-RUN chmod +x ./gradlew
-
-# Then, execute your build command in a separate RUN instruction
-RUN ./gradlew build -x test
-
-FROM openjdk:17-jdk-slim
+ARG JAR_FILE=example-0.0.1-SNAPSHOT.jar
 
 WORKDIR /app
-
-# Copy the jar file from the previous stage
-COPY --from=build-stage /app/build/libs/*.jar app.jar
-
-ENTRYPOINT ["java","-jar","app.jar"]
+COPY --from=build /app/target/${JAR_FILE} /app/app.jar
+COPY scripts/run.sh /app/
+ENTRYPOINT ["./run.sh"]
