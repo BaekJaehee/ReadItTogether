@@ -16,6 +16,6 @@ RUN ./gradlew clean build -x test --no-daemon
 FROM openjdk:17
 WORKDIR /app
 # 빌드 스테이지에서 생성된 JAR 파일 복사
-COPY --from=build /app/build/libs/*.jar app.jar
+COPY --from=build /app/build/libs/*.jar /app/app.jar
 # 애플리케이션 실행
 ENTRYPOINT ["java","-jar","app.jar"]
