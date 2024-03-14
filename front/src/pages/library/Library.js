@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import PostIt from "../../components/modal/PostIt";
+import Diary from "../../components/modal/Diary";
 
 import table from "../../assets/library/table.png";
 import bookshelf from "../../assets/library/bookshelf.png";
@@ -12,9 +13,12 @@ import mailBox from "../../assets/library/mailBox.png";
 
 const Library = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDiaryModalOpen, setIsDiaryModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+  const openDiaryModal = () => setIsDiaryModalOpen(true);
+  const closeDiaryModal = () => setIsDiaryModalOpen(false);
 
   return (
     <div className="min-h-screen min-w-full overflow-auto">
@@ -47,13 +51,14 @@ const Library = () => {
           {isModalOpen && <PostIt onClose={closeModal} />}
         </div>
         <div className="group absolute right-64 bottom-36 overflow-hidden">
-          <Link to="/">
+          <button onClick={openDiaryModal}>
             <img
               className="w-[230px] transform transition-transform duration-500 ease-in-out group-hover:scale-110"
               src={diary}
               alt="다이어리"
             />
-          </Link>
+          </button>
+          {isDiaryModalOpen && <Diary onClose={closeDiaryModal}/>}
         </div>
         <div className="group flex items-center justify-center overflow-hidden">
           <Link to="/">
