@@ -7,7 +7,7 @@ RUN ./gradlew build -x test
 
 FROM amazoncorretto:17-alpine
 
-ARG JAR_FILE=example-0.0.1-SNAPSHOT.jar
+ARG JAR_FILE=back-0.0.1-SNAPSHOT.jar
 
 WORKDIR /app
 COPY --from=build /app/target/${JAR_FILE} /app/app.jar
