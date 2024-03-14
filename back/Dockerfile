@@ -5,7 +5,7 @@ WORKDIR /app
 # 소스 코드 복사
 COPY . .
 
-RUN ./gradlew build
+RUN chmod +x ./gradlew
 
 ARG JAR_FILE=*.jar
 
