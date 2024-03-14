@@ -1,21 +1,20 @@
-# 빌드 스테이지
 FROM gradle:jdk11 as build-stage
 
 WORKDIR /app
 
-# 소스 코드 및 빌드 스크립트 복사
 COPY . .
 
-# 애플리케이션 빌드 (테스트 제외)
-RUN chmod +x /app/gradlew build -x test
+# First, correctly apply execute permissions to gradlew
+RUN chmod +x ./gradlew
 
-# 실행 스테이지
-FROM openjdk:17-jdk
+# Then, execute your build command in a separate RUN instruction
+RUN ./gradlew build -x test
+
+FROM openjdk:17
 
 WORKDIR /app
 
-# 빌드 스테이지에서 생성된 JAR 파일 복사
+# Copy the jar file from the previous stage
 COPY --from=build-stage /app/build/libs/*.jar app.jar
 
-# 애플리케이션 실행
 ENTRYPOINT ["java","-jar","app.jar"]
