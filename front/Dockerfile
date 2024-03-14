@@ -14,7 +14,7 @@ ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
 
 # production stage
 FROM nginx:stable-alpine as production-stage
-COPY --from=build-stage /build /usr/share/nginx/html
+COPY --from=build-stage /build /usr/share/nginx/html2
 
 EXPOSE 80 443
 
