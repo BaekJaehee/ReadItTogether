@@ -7,7 +7,7 @@ WORKDIR /app
 COPY . .
 
 # 애플리케이션 빌드 (테스트 제외)
-RUN chmod +x ./gradlew build -x test
+RUN chmod +x /app/gradlew build -x test
 
 # 실행 스테이지
 FROM openjdk:17-jdk
