@@ -18,20 +18,14 @@ function App() {
           <Route path="/" element={<Library />} />
           <Route path="/login" element={<Login />} />
           <Route path="/bookshelf" element={<Bookshelf />} />
+
+          <Route path="/sign_up" element={<SignUp />} />
+        </Routes>
+        <Routes>
+          <Route path="/diary" element={<Diary />} />
         </Routes>
       </BrowserRouter>
     </div>
-    // <div>
-    //   <div>영석아 배포할 시간이다~</div>
-    // </div>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/sign_up" element={<SignUp/>}/>
-      </Routes>
-      <Routes>
-        <Route path="/diary" element={<Diary/>}/>
-      </Routes>
-    </BrowserRouter>
   );
 }
 
