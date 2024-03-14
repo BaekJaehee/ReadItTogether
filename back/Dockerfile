@@ -10,6 +10,6 @@ FROM amazoncorretto:17-alpine
 ARG JAR_FILE=back-0.0.1-SNAPSHOT.jar
 
 WORKDIR /app
-COPY --from=build /app/target/${JAR_FILE} /app/app.jar
+COPY --from=build /app/build/libs/${JAR_FILE} /app/app.jar
 COPY scripts/run.sh /app/
 ENTRYPOINT ["./run.sh"]
