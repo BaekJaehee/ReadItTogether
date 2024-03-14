@@ -1,4 +1,4 @@
-FROM node:20 as build-stage
+FROM node:14 as build-stage
 WORKDIR /app
 COPY package*.json ./
 
@@ -13,8 +13,9 @@ ARG REACT_APP_API_BASE_URL
 ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
 
 # production stage
-FROM nginx:stable-alpine as production-stage
-COPY --from=build-stage /app/build /usr/share/nginx/html2
+FROM nginx:latest as production-stage
+
+COPY --from=build-stage /app/build /usr/share/nginx/html
 
 EXPOSE 80 443
 
