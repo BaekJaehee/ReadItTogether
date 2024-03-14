@@ -14,7 +14,7 @@ ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
 
 # production stage
 FROM nginx:stable-alpine as production-stage
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY --from=build-stage /app/build /usr/share/nginx/html
 
 # copy the custom nginx configuration file
 COPY nginx.conf /etc/nginx/nginx.conf
