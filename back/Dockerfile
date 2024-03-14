@@ -11,7 +11,7 @@ COPY . .
 RUN chmod +x ./gradlew
 
 # 빌드 실행 (테스트 제외)
-RUN ./gradlew clean build -x test --no-daemon
+RUN ./gradlew build -x test --no-daemon
 
 
 # 애플리케이션 실행
