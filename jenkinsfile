@@ -35,7 +35,7 @@ pipeline {
                                 sh 'cp $GCP_SERVICE_ACCOUNT_JSON ./google_service_key.json'
                                
                                 backendImage = docker.build("${BACK_IMAGE_NAME}:${env.BUILD_NUMBER}", 
-                                    "--build-arg DATABASE_URL=${env.DATABASE_URL} " +)
+                                    "--build-arg DATABASE_URL=${env.DATABASE_URL} " )
                                                    
                                 sh 'rm -f ./google_service_key.json' // 빌드 후 파일 삭제
                                 
