@@ -5,7 +5,7 @@ WORKDIR /app
 # 소스 코드 복사
 COPY . .
 
-RUN ./gradlew clean build -x test --no-daemon
+RUN ./gradlew build
 
 ARG JAR_FILE=*.jar
 
