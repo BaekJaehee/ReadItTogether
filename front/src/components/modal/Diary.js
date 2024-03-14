@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
-import Received from "../../components/Received";
-import Sent from "../../components/Sent";
+import Received from "./Received";
+import Sent from "./Sent";
 
 // 받은 카드 리스트에서 책 표지 클릭 시 카드 상세
 // 하단 페이지네이션

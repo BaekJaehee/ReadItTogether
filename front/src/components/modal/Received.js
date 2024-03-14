@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 // import axios from "axios";
-import dummy from '../assets/MOCK_DATA';
+import dummy from '../../assets/MOCK_DATA';
 
 const Received = () => {
   const [page, setPage] = useState(1);  // 기본 페이지 1
