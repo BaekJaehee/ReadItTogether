@@ -2,7 +2,8 @@ FROM maven:3.8.5-openjdk-17 as build
 
 WORKDIR /app
 COPY . /app
-RUN --mount=type=cache,target=/root/.m2 mvn -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true package
+RUN chmod +x ./gradlew
+RUN ./gradlew build -x test
 
 FROM amazoncorretto:17-alpine
 
