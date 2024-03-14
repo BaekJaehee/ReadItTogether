@@ -10,7 +10,7 @@ pipeline {
         DOCKER_REGISTRY_CREDENTIALS = credentials('docker')
         GCP_SERVICE_ACCOUNT_JSON = credentials('GCP_SERVICE_ACCOUNT_JSON')
         FRONT_IMAGE_NAME = "${env.FRONT_IMAGE_NAME}"
-        DATABASE_URL = "${env.DATABASE_URL}"
+        // DATABASE_URL = "${env.DATABASE_URL}"
         REACT_APP_API_BASE_URL = "${env.REACT_APP_API_BASE_URL}"
         DOCKER_COMPOSE_FILE = "docker-compose.yml"       
     }
@@ -34,8 +34,8 @@ pipeline {
                             withCredentials([file(credentialsId: 'GCP_SERVICE_ACCOUNT_JSON', variable: 'GCP_SERVICE_ACCOUNT_JSON')]) {
                                 sh 'cp $GCP_SERVICE_ACCOUNT_JSON ./google_service_key.json'
                                
-                                backendImage = docker.build("${BACK_IMAGE_NAME}:${env.BUILD_NUMBER}", 
-                                    "--build-arg DATABASE_URL=${env.DATABASE_URL} " )
+                                backendImage = docker.build("${BACK_IMAGE_NAME}:${env.BUILD_NUMBER}")
+                                    // "--build-arg DATABASE_URL=${env.DATABASE_URL} " )
                                                    
                                 sh 'rm -f ./google_service_key.json' // 빌드 후 파일 삭제
                                 
