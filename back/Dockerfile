@@ -10,7 +10,7 @@ RUN chmod +x ./gradlew
 # Then, execute your build command in a separate RUN instruction
 RUN ./gradlew build -x test
 
-FROM openjdk:17
+FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
