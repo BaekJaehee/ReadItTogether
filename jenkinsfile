@@ -12,7 +12,7 @@ pipeline {
         GCP_SERVICE_ACCOUNT_JSON = credentials('GCP_SERVICE_ACCOUNT_JSON')
         FRONT_IMAGE_NAME = "${env.FRONT_IMAGE_NAME}"
         REACT_APP_API_BASE_URL = "${env.REACT_APP_API_BASE_URL}"
-        DATABASE_URL=jdbc:mysql="${env.DATABASE_URL}"
+        DATABASE_URL="${env.DATABASE_URL}"
         DATABASE_USERNAME="${env.DATABASE_USERNAME}"
         DATABASE_PASSWORD="${env.DATABASE_PASSWORD}"
         DOCKER_COMPOSE_FILE = "docker-compose.yml"       
