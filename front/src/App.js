@@ -3,7 +3,8 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
 import Library from "./pages/library/Library";
 import Login from "./pages/accounts/Login";
-import Bookshelf from "../src/pages/bookshelf/Bookshelf";
+import FindPassword from "./pages/accounts/FindPassword";
+import Bookshelf from "./pages/library/Bookshelf";
 import NavBar from "./components/navbar/NavBar";
 
 import SignUp from "./pages/accounts/SignUp";
@@ -17,8 +18,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Library />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/find_password" element={<FindPassword />} />
           <Route path="/bookshelf" element={<Bookshelf />} />
-          <Route path="/sign_up" element={<SignUp/>}/>
+          <Route path="/signup" element={<SignUp/>}/>
           <Route path="/diary" element={<Diary/>}/>
         </Routes>
       </BrowserRouter>

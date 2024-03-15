@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import PostIt from "../../components/modal/PostIt";
+import PostItLauncher from "../../components/modal/PostItLauncher";
 import Diary from "../../components/modal/Diary";
+import GuestBook from "../../components/modal/GuestBook";
 
+// 이미지
 import table from "../../assets/library/table.png";
 import bookshelf from "../../assets/library/bookshelf.png";
 import post from "../../assets/library/post.png";
@@ -12,13 +15,20 @@ import whiteBoard from "../../assets/library/whiteBoard.png";
 import mailBox from "../../assets/library/mailBox.png";
 
 const Library = () => {
+  // 방명록 상태
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDiaryModalOpen, setIsDiaryModalOpen] = useState(false);
-
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  // 다이어리 상태
+  const [isDiaryModalOpen, setIsDiaryModalOpen] = useState(false);
   const openDiaryModal = () => setIsDiaryModalOpen(true);
   const closeDiaryModal = () => setIsDiaryModalOpen(false);
+
+  // 소개글 상태
+  const [isGuestBookOpen, setIsGuestBookOpen] = useState(false);
+  const openGuestBook = () => setIsGuestBookOpen(true);
+  const closeGuestBook = () => setIsGuestBookOpen(false);
 
   return (
     <div className="min-h-screen min-w-full overflow-auto">
@@ -32,7 +42,7 @@ const Library = () => {
           alt=""
         />
         <div className="group absolute left-52 bottom-40 overflow-hidden">
-          <Link to="/">
+          <Link to="/bookshelf">
             <img
               className="w-[400px] transform transition-transform duration-500 ease-in-out group-hover:scale-110"
               src={bookshelf}
@@ -43,31 +53,32 @@ const Library = () => {
         <div className="group absolute right-40 top-20 overflow-hidden">
           <button onClick={openModal}>
             <img
-              className="w-[300px] transform transition-transform duration-500 ease-in-out group-hover:scale-110"
+              className="w-[250px] transform transition-transform duration-500 ease-in-out group-hover:scale-110"
               src={post}
               alt="포스트잇"
             />
           </button>
-          {isModalOpen && <PostIt onClose={closeModal} />}
+          {isModalOpen && <PostItLauncher onClose={closeModal} />}
         </div>
-        <div className="group absolute right-64 bottom-36 overflow-hidden">
+        <div className="group absolute right-64 bottom-44 overflow-hidden">
           <button onClick={openDiaryModal}>
             <img
-              className="w-[230px] transform transition-transform duration-500 ease-in-out group-hover:scale-110"
+              className="w-[200px] transform transition-transform duration-500 ease-in-out group-hover:scale-110"
               src={diary}
               alt="다이어리"
             />
           </button>
-          {isDiaryModalOpen && <Diary onClose={closeDiaryModal}/>}
+          {isDiaryModalOpen && <Diary onClose={closeDiaryModal} />}
         </div>
         <div className="group flex items-center justify-center overflow-hidden">
-          <Link to="/">
+          <button onClick={openGuestBook}>
             <img
               className="w-[500px] transform transition-transform duration-500 ease-in-out"
               src={whiteBoard}
               alt="화이트보드"
             />
-          </Link>
+          </button>
+          {isGuestBookOpen && <GuestBook onClose={closeGuestBook} />}
         </div>
         <div className="group flex items-center justify-center  overflow-hidden">
           <Link to="/">

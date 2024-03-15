@@ -1,5 +1,5 @@
 import React from "react";
-import { getSessionState } from "../../api/login/authService";
+import { getSessionState } from "../../api/accounts/authService";
 
 import button from "../../assets/login/naver.png";
 
