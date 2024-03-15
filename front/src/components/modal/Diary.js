@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import Received from "./Received";
 import Sent from "./Sent";
 
-// 받은 카드 리스트에서 책 표지 클릭 시 카드 상세
-// 하단 페이지네이션
+// 받은 카드 리스트에서 책 표지 클릭 시 카드 상세 -> 이땐 페이지네이션 없애기, 뒤로가기 버튼이 있어야???? 근데 컴포넌트 뒤로가면 초기화 안되나?
+// 하단 페이지네이션(컴포넌트에서) -> ㅇㅋ
 // 카드 등록일 기준으로 정렬
 
 const Diary = ({ onClose }) => {

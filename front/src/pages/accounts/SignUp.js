@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import { handleSignUp } from '../../api/signup/signUp';
 // 닉네임, 이메일 중복처리 로직 확인 필요
 
 const SignUp = () => {
-  const baseUrl = process.env.REACT_APP_API_BASE_URL;
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -111,21 +111,14 @@ const SignUp = () => {
     years.push(y)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 회원가입 정보를 객체로 만들기
-    const signUpData = {
-      email,
-      password,
-      nickname,
-      name,
-      birth,
-      gender,
-    };
-
-    // 확인용
-    console.log("회원가입 정보:", signUpData);
+    try {
+      await handleSignUp(name, email, password, nickname, birth, gender);
+    } catch (error) {
+      throw error;
+    }
 
     // 회원가입 후 초기화
     setEmail('');
@@ -140,7 +133,7 @@ const SignUp = () => {
 
   const checkEmailDuplicate = async (email) => {
     try {
-      const response = await axios.get(baseUrl + "/members/email_duplicate", {
+      const response = await axios.get(API_BASE_URL + "/members/email_duplicate", {
         email: email
       });
       return response.data;
@@ -152,7 +145,7 @@ const SignUp = () => {
 
   const checkNicknameDuplicate = async (nickname) => {
     try {
-      const response = await axios.get(baseUrl + "/members/nickname_duplicate", {
+      const response = await axios.get(API_BASE_URL + "/members/nickname_duplicate", {
         nickname: nickname
       });
       return response.data;
@@ -162,7 +155,7 @@ const SignUp = () => {
     }
   }
 
-  const handleCheckEmail = async (e) => {
+  const handleCheckEmail = async () => {
     try {
       const isEmailDuplicate = await checkEmailDuplicate(email);
       setIsEmailValid(!isEmailDuplicate);
@@ -172,7 +165,7 @@ const SignUp = () => {
     }
   }
 
-  const handleCheckNickname = async (e) => {
+  const handleCheckNickname = async () => {
     try {
       const isNicknameDuplicate = await checkNicknameDuplicate(nickname);
       setIsNicknameValid(!isNicknameDuplicate);
