@@ -40,7 +40,7 @@ pipeline {
                                 backendImage = docker.build("${BACK_IMAGE_NAME}:${env.BUILD_NUMBER}",
                                     "--build-arg DATABASE_URL=${env.DATABASE_URL} " +
                                     "--build-arg DATABASE_USERNAME=${env.DATABASE_USERNAME} " +
-                                    "--build-arg DATABASE_PASSWORD=${env.DATABASE_PASSWORD}"
+                                    "--build-arg DATABASE_PASSWORD=${env.DATABASE_PASSWORD}".
                                     )
                                                    
                                 sh 'rm -f ./google_service_key.json' // 빌드 후 파일 삭제
