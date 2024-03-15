@@ -31,3 +31,6 @@ logging:
     org.hibernate.SQL: trace
     org.springframework.security: debug
     org.ssafy.studyback: DEBUG
+
+server:
+  port: 8000
