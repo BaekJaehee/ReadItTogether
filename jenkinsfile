@@ -6,16 +6,16 @@ pipeline {
     agent any
     environment {
         // 환경 변수 설정
-        
         GIT_REGISTRY_CREDENTIALS = credentials('gitlab_tokken')
         DOCKER_REGISTRY_CREDENTIALS = credentials('docker')
         GCP_SERVICE_ACCOUNT_JSON = credentials('GCP_SERVICE_ACCOUNT_JSON')
         FRONT_IMAGE_NAME = "${env.FRONT_IMAGE_NAME}"
+        BACK_IMAGE_NAME = "${env.BACK_IMAGE_NAME}" // 추가됨
         REACT_APP_API_BASE_URL = "${env.REACT_APP_API_BASE_URL}"
         DATABASE_URL="${env.DATABASE_URL}"
         DATABASE_USERNAME="${env.DATABASE_USERNAME}"
         DATABASE_PASSWORD="${env.DATABASE_PASSWORD}"
-        DOCKER_COMPOSE_FILE = "docker-compose.yml"       
+        DOCKER_COMPOSE_FILE = "docker-compose.yml"
     }
     stages {
         stage('Checkout') {
@@ -26,76 +26,52 @@ pipeline {
             }
         }
 
-
         stage('Build and Push the Back-end Docker Image') {
             steps {
                 script {
                     sh 'echo "Starting Build Back Docker Image"'
                     dir('back') {
                         withDockerRegistry(credentialsId: 'docker', url: 'https://registry.hub.docker.com') {
-
                             withCredentials([file(credentialsId: 'GCP_SERVICE_ACCOUNT_JSON', variable: 'GCP_SERVICE_ACCOUNT_JSON')]) {
                                 sh 'cp $GCP_SERVICE_ACCOUNT_JSON ./google_service_key.json'
                                
-                                backendImage = docker.build("${BACK_IMAGE_NAME}:${env.BUILD_NUMBER}",
-                                    "--build-arg DATABASE_URL=${env.DATABASE_URL} " +
-                                    "--build-arg DATABASE_USERNAME=${env.DATABASE_USERNAME} " +
-                                    "--build-arg DATABASE_PASSWORD=${env.DATABASE_PASSWORD}."
-                                    )
-                                                   
+                                backendImage = docker.build("${BACK_IMAGE_NAME}:${env.BUILD_NUMBER}", 
+                                    "--build-arg DATABASE_URL=${DATABASE_URL} " +
+                                    "--build-arg DATABASE_USERNAME=${DATABASE_USERNAME} " +
+                                    "--build-arg DATABASE_PASSWORD=${DATABASE_PASSWORD} .")
+                                                    
                                 sh 'rm -f ./google_service_key.json' // 빌드 후 파일 삭제
-                                
-
-                                // Docker 빌드 결과 출력
-                                if (backendImage != 0) {
-                                    echo "Docker build succeeded: ${BACK_IMAGE_NAME}:${env.BUILD_NUMBER}"
-                                    docker.withRegistry('https://registry.hub.docker.com', 'docker') {
-                                        backendImage.push()
-                                }
-                                } else {
-                                    error "Docker build failed"
-                                }
-                                
                             }
-                            
-                             
+
+                            echo "Docker build succeeded: ${BACK_IMAGE_NAME}:${env.BUILD_NUMBER}"
+                            docker.withRegistry('https://registry.hub.docker.com', 'docker') {
+                                backendImage.push("${BACK_IMAGE_NAME}:${env.BUILD_NUMBER}")
+                            }
                         }
                     }
                 }
             }
-            
-        }    
+        }
+
         stage('Build and Push the Front-end Docker Image') {
             steps {
                 script {
                     sh 'echo "Starting Build Front Docker Image"'
                     dir('front') {
                         withDockerRegistry(credentialsId: 'docker', url: 'https://registry.hub.docker.com') {
-                             frontendImage = docker.build("${FRONT_IMAGE_NAME}:${env.BUILD_NUMBER}",
-                            //   "--build-arg REACT_APP_API_BASE_URL=${env.REACT_APP_API_BASE_URL} .")  //추후 예정
-                             )
+                            frontendImage = docker.build("${FRONT_IMAGE_NAME}:${env.BUILD_NUMBER}",
+                                "--build-arg REACT_APP_API_BASE_URL=${REACT_APP_API_BASE_URL} .")
 
-                            if (frontendImage != 0) {
-                                echo "Docker build succeeded: ${FRONT_IMAGE_NAME}:${env.BUILD_NUMBER}"
-                                docker.withRegistry('https://registry.hub.docker.com', 'docker') {
-                                    frontendImage.push()
-                            }
-                            } else {
-                                error "Docker build failed"
+                            echo "Docker build succeeded: ${FRONT_IMAGE_NAME}:${env.BUILD_NUMBER}"
+                            docker.withRegistry('https://registry.hub.docker.com', 'docker') {
+                                frontendImage.push("${FRONT_IMAGE_NAME}:${env.BUILD_NUMBER}")
                             }
                         }
                     }
                 }
             }
-            
         }
-//         stage('Build Docker Images Without Cache') {
-//             steps {
-//                 script {
-//                     sh "docker-compose -f ${DOCKER_COMPOSE_FILE} build --no-cache"
-//         }
-//     }
-// }
+
         stage('Deploy') {
             steps {
                 script {
@@ -106,4 +82,3 @@ pipeline {
         }
     }
 }
-
