@@ -37,7 +37,7 @@ pipeline {
                             withCredentials([file(credentialsId: 'GCP_SERVICE_ACCOUNT_JSON', variable: 'GCP_SERVICE_ACCOUNT_JSON')]) {
                                 sh 'cp $GCP_SERVICE_ACCOUNT_JSON ./google_service_key.json'
                                
-                                backendImage = docker.build("${BACK_IMAGE_NAME}:${env.BUILD_NUMBER}"
+                                backendImage = docker.build("${BACK_IMAGE_NAME}:${env.BUILD_NUMBER}",
                                     "--build-arg DATABASE_URL=${env.DATABASE_URL} " +
                                     "--build-arg DATABASE_USERNAME=${env.DATABASE_USERNAME} " +
                                     "--build-arg DATABASE_PASSWORD=${env.DATABASE_PASSWORD}"
