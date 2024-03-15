@@ -27,31 +27,35 @@ pipeline {
         }
 
         stage('Build and Push the Back-end Docker Image') {
-            steps {
-                script {
-                    sh 'echo "Starting Build Back Docker Image"'
-                    dir('back') {
-                        withDockerRegistry(credentialsId: 'docker', url: 'https://registry.hub.docker.com') {
-                            withCredentials([file(credentialsId: 'GCP_SERVICE_ACCOUNT_JSON', variable: 'GCP_SERVICE_ACCOUNT_JSON')]) {
-                                sh 'cp $GCP_SERVICE_ACCOUNT_JSON ./google_service_key.json'
-                               
-                                backendImage = docker.build("${BACK_IMAGE_NAME}:${env.BUILD_NUMBER}", 
-                                    "--build-arg DATABASE_URL=${DATABASE_URL} " +
-                                    "--build-arg DATABASE_USERNAME=${DATABASE_USERNAME} " +
-                                    "--build-arg DATABASE_PASSWORD=${DATABASE_PASSWORD} .")
-                                                    
-                                sh 'rm -f ./google_service_key.json' // 빌드 후 파일 삭제
-                            }
+    steps {
+        script {
+            sh 'echo "Starting Build Back Docker Image"'
+            dir('back') {
+                withDockerRegistry(credentialsId: 'docker', url: 'https://registry.hub.docker.com') {
+                    withCredentials([file(credentialsId: 'GCP_SERVICE_ACCOUNT_JSON', variable: 'GCP_SERVICE_ACCOUNT_JSON')]) {
+                        sh 'cp $GCP_SERVICE_ACCOUNT_JSON ./google_service_key.json'
+                        // 올바른 명령어 실행을 위해 sh 스크립트를 수정합니다.
+                        sh """
+                        docker build -t ${BACK_IMAGE_NAME}:${env.BUILD_NUMBER} \
+                        --build-arg DATABASE_URL=${DATABASE_URL} \
+                        --build-arg DATABASE_USERNAME=${DATABASE_USERNAME} \
+                        --build-arg DATABASE_PASSWORD=${DATABASE_PASSWORD} \
+                        --build-arg characterEncoding=UTF-8 .
+                        """
+                        sh 'rm -f ./google_service_key.json' // 빌드 후 파일 삭제
+                    }
 
-                            echo "Docker build succeeded: ${BACK_IMAGE_NAME}:${env.BUILD_NUMBER}"
-                            docker.withRegistry('https://registry.hub.docker.com', 'docker') {
-                                backendImage.push("${BACK_IMAGE_NAME}:${env.BUILD_NUMBER}")
-                            }
-                        }
+                    echo "Docker build succeeded: ${BACK_IMAGE_NAME}:${env.BUILD_NUMBER}"
+                    backendImage = docker.image("${BACK_IMAGE_NAME}:${env.BUILD_NUMBER}")
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker') {
+                        backendImage.push()
                     }
                 }
             }
         }
+    }
+}
+
 
         stage('Build and Push the Front-end Docker Image') {
             steps {
