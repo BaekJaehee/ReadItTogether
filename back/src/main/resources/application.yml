@@ -1,9 +1,11 @@
 spring:
+  config:
+    import: classpath:env.yml
   datasource:
-    url: jdbc:mysql://localhost:3306/rit
+    url: ${DATABASE_URL}
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: realman
-    password: 1234
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
 
   jpa:
     hibernate:
