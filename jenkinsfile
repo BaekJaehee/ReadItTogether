@@ -86,13 +86,13 @@ pipeline {
             }
             
         }
-        // stage('Build Docker Images Without Cache') {
-        //     steps {
-        //         script {
-        //             sh "docker-compose -f ${DOCKER_COMPOSE_FILE} build --no-cache"
-        // }
-    }
-}
+//         stage('Build Docker Images Without Cache') {
+//             steps {
+//                 script {
+//                     sh "docker-compose -f ${DOCKER_COMPOSE_FILE} build --no-cache"
+//         }
+//     }
+// }
         stage('Deploy') {
             steps {
                 script {
