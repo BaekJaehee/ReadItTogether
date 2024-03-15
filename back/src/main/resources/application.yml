@@ -1,6 +1,6 @@
 spring:
   config:
-    import: classpath:env.yml
+    import: optional:classpath:env.yml
   datasource:
     url: ${DATABASE_URL}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -10,7 +10,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
-      database-platform: org.hibernate.dialect.MySQL8Dialect
     properties:
       hibernate:
         show_sql: false
