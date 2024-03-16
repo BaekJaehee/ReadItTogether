@@ -1,13 +1,13 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/rit
+    url: jdbc:mysql://34.47.92.146:3306/ssafy
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: realman
-    password: 1234
+    username: root
+    password: "!A123456bc"
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: false
