@@ -13,7 +13,7 @@ ARG REACT_APP_API_BASE_URL
 ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
 
 # production stage
-FROM nginx:latest as production-stage
+FROM nginx as production-stage
 
 COPY --from=build-stage /app/build /usr/share/nginx/html
 

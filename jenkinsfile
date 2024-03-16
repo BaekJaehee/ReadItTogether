@@ -6,12 +6,15 @@ pipeline {
     agent any
     environment {
         // 환경 변수 설정
+        
         GIT_REGISTRY_CREDENTIALS = credentials('gitlab_tokken')
         DOCKER_REGISTRY_CREDENTIALS = credentials('docker')
         GCP_SERVICE_ACCOUNT_JSON = credentials('GCP_SERVICE_ACCOUNT_JSON')
         FRONT_IMAGE_NAME = "${env.FRONT_IMAGE_NAME}"
-        // DATABASE_URL = "${env.DATABASE_URL}"
         REACT_APP_API_BASE_URL = "${env.REACT_APP_API_BASE_URL}"
+        DATABASE_URL="${env.DATABASE_URL}"
+        DATABASE_USERNAME="${env.DATABASE_USERNAME}"
+        DATABASE_PASSWORD="${env.DATABASE_PASSWORD}"
         DOCKER_COMPOSE_FILE = "docker-compose.yml"       
     }
     stages {
@@ -34,9 +37,12 @@ pipeline {
                             withCredentials([file(credentialsId: 'GCP_SERVICE_ACCOUNT_JSON', variable: 'GCP_SERVICE_ACCOUNT_JSON')]) {
                                 sh 'cp $GCP_SERVICE_ACCOUNT_JSON ./google_service_key.json'
                                
-                                backendImage = docker.build("${BACK_IMAGE_NAME}:${env.BUILD_NUMBER}")
-                                    // "--build-arg DATABASE_URL=${env.DATABASE_URL} " )
-                                                   
+                                backendImage = docker.build("${BACK_IMAGE_NAME}:${env.BUILD_NUMBER}", 
+                                "--build-arg DATABASE_URL='${env.DATABASE_URL}' " +
+                                "--build-arg DATABASE_USERNAME='${env.DATABASE_USERNAME}' " +
+                                "--build-arg DATABASE_PASSWORD='${env.DATABASE_PASSWORD}' .")
+
+
                                 sh 'rm -f ./google_service_key.json' // 빌드 후 파일 삭제
                                 
 
@@ -46,6 +52,7 @@ pipeline {
                                     docker.withRegistry('https://registry.hub.docker.com', 'docker') {
                                         backendImage.push()
                                 }
+                                // sh "docker run -p 8000:8000 ${BACK_IMAGE_NAME}:${env.BUILD_NUMBER}"
                                 } else {
                                     error "Docker build failed"
                                 }
@@ -59,6 +66,7 @@ pipeline {
             }
             
         }    
+
         stage('Build and Push the Front-end Docker Image') {
             steps {
                 script {
@@ -83,13 +91,13 @@ pipeline {
             }
             
         }
-        stage('Build Docker Images Without Cache') {
-            steps {
-                script {
-                    sh "docker-compose -f ${DOCKER_COMPOSE_FILE} build --no-cache"
-        }
-    }
-}
+//         stage('Build Docker Images Without Cache') {
+//             steps {
+//                 script {
+//                     sh "docker-compose -f ${DOCKER_COMPOSE_FILE} build --no-cache"
+//         }
+//     }
+// }
         stage('Deploy') {
             steps {
                 script {

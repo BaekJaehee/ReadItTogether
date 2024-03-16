@@ -1,9 +1,11 @@
 spring:
+  config:
+    import: optional:classpath:env.yml
   datasource:
-    url: jdbc:mysql://34.47.92.146:3306/ssafy
+    url: ${DATABASE_URL}
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: "!A123456bc"
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
 
   jpa:
     hibernate:
@@ -13,6 +15,10 @@ spring:
         show_sql: false
         format_sql: true
         default_batch_fetch_size: 100
+  h2:
+    console:
+      enabled: false 
+
   profiles:
     active: local
   servlet:
@@ -25,3 +31,6 @@ logging:
     org.hibernate.SQL: trace
     org.springframework.security: debug
     org.ssafy.studyback: DEBUG
+
+server:
+  port: 8000
