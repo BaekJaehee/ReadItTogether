@@ -4,7 +4,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - /usr/share/nginx/html/build:/build
+      - /usr/share/nginx/html:/build
   backend:
     image: ${BACK_IMAGE_NAME}:${BUILD_NUMBER}
     ports:
