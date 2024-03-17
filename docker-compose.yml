@@ -5,9 +5,9 @@ services:
       - "3000:3000"
     volumes:
       - /usr/share/nginx/html/build:/build
-    backend:
-        image: ${BACK_IMAGE_NAME}:${BUILD_NUMBER}
-        ports:
-            - "8000:8000"
-        depends_on:
+  backend:
+    image: ${BACK_IMAGE_NAME}:${BUILD_NUMBER}
+    ports:
+        - "8000:8000"
+    depends_on:
             - frontend
