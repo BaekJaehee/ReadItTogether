@@ -2,7 +2,7 @@
 FROM node:14
 
 # 애플리케이션 디렉토리 생성
-WORKDIR .
+WORKDIR /app
 
 # 애플리케이션 의존성 설치
 COPY package*.json ./
