@@ -111,7 +111,7 @@ pipeline {
             def frontContainerId = sh(script: "docker ps -qf \"name=^d206_pipeline_frontend_1\$\"", returnStdout: true).trim()
             if (frontContainerId) {
                 // 경로를 올바르게 설정하여 docker cp 명령어 실행
-                sh "docker cp ${frontContainerId}:/build /home/dudtjr20027/usr/share/nginx/html"
+                sh "sudo docker cp ${frontContainerId}:/build /usr/share/nginx/html"
                 sh "sudo systemctl restart nginx"
             } else {
                 error "Front-end container not found. Deployment failed."
