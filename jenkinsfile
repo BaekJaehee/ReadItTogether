@@ -99,19 +99,16 @@ pipeline {
 //     }
 // }
         stage('Deploy') {
-            steps {
-                script {
-                    sh "docker-compose -f ${DOCKER_COMPOSE_FILE} up -d"
-                    ENV_FRONT_CONTAINER_ID = sh(script: "docker ps -qf 'name=^front$'", returnStdout: true).trim()
-                    if (ENV_FRONT_CONTAINER_ID) {
-                        sh "docker cp ${ENV_FRONT_CONTAINER_ID}:/app/build /usr/share/nginx/html"
-                        sh "sudo systemctl restart nginx"
-                    } else {
-                        error "Front-end container not found"
-                    }
-                }
-            }
+    steps {
+        script {
+            sh "docker-compose -f ${DOCKER_COMPOSE_FILE} up -d"
+            def frontContainerId = sh(script: "docker ps -qf 'name=front'", returnStdout: true).trim()
+            sh "docker cp ${frontContainerId}:/app/build /usr/share/nginx/html"
+            sh "sudo systemctl restart nginx"
         }
+    }
+}
+
     }
 }
 
