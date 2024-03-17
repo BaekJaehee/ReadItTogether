@@ -1,8 +1,10 @@
 services:
-    frontend:
-        image: ${FRONT_IMAGE_NAME}:${BUILD_NUMBER}
-        ports:
-            - "3000:3000"
+  frontend:
+    image: ${FRONT_IMAGE_NAME}:${BUILD_NUMBER}
+    ports:
+      - "3000:3000"
+    volumes:
+      - /usr/share/nginx/html/build:/build
     backend:
         image: ${BACK_IMAGE_NAME}:${BUILD_NUMBER}
         ports:
