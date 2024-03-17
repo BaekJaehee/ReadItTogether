@@ -108,7 +108,7 @@ pipeline {
             sh "docker-compose -f ${DOCKER_COMPOSE_FILE} up -d --no-deps --build frontend"
 
             // 컨테이너 ID를 올바르게 가져오기 위한 수정
-            def frontContainerId = sh(script: "docker ps -a \"name=^d206_pipeline_frontend_1\$\"", returnStdout: true).trim()
+            def frontContainerId = sh(script: "docker ps -qf \"name=^d206_pipeline_frontend_1\$\"", returnStdout: true).trim()
             if (frontContainerId) {
                 // 경로를 올바르게 설정하여 docker cp 명령어 실행
                 sh "docker cp ${frontContainerId}:/app/build /usr/share/nginx/html"
