@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { handleSignUp } from '../../api/signup/signUp';
+import { handleSignUp } from '../../api/accounts/signUp';
 // 닉네임, 이메일 중복처리 로직 확인 필요
 
 const SignUp = () => {
