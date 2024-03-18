@@ -3,6 +3,8 @@ package com.ssafy.rit.back.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Builder
 @NoArgsConstructor
@@ -27,7 +29,7 @@ public class Member {
     @Column(name = "nickname", unique = true, nullable = false)
     private String nickname;
 
-    @Column(name = "nickname", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "profile_image", nullable = false)
@@ -56,4 +58,37 @@ public class Member {
 
     @Column(name = "shelf_group")
     private int shelfGroup = 0;
+
+    // 관계 설정 (many to one 등)
+    @OneToMany(mappedBy = "memberId")
+    private List<Comment> comments;
+
+    @OneToOne(mappedBy = "memberId")
+    private Bookshelf bookshelf;
+
+    @OneToMany(mappedBy = "followingMember")
+    private List<Follow> followings;
+
+    @OneToMany(mappedBy = "followerMember")
+    private List<Follow> followers;
+
+    @OneToMany(mappedBy = "fromMemberId")
+    private List<Card> sentCards;
+
+    @OneToMany(mappedBy = "toMemberId")
+    private List<Card> receiveCards;
+
+    @OneToMany(mappedBy = "memberId")
+    private List<Postbox> postboxes;
+
+    @OneToMany(mappedBy = "memberId")
+    private List<MemberRecommendBook> memberRecommendBooks;
+
+    @OneToMany(mappedBy = "fromMemberId")
+    private List<GuestBook> fromGuestBooks;
+
+    @OneToMany(mappedBy = "toMemberId")
+    private List<GuestBook> toGuestBooks;
+
+
 }
