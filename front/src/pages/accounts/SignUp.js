@@ -113,9 +113,9 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      await handleSignUp(name, email, password, nickname, birth, gender);
+      const response = await handleSignUp(name, email, password, nickname, birth, gender);
+      console.log(response);
     } catch (error) {
       throw error;
     }
