@@ -41,6 +41,7 @@ pipeline {
             steps {
                 script {
                     dir('back') {
+                        sh 'chmod +x ./gradlew'
                         sh './gradlew test'
             }
         }
