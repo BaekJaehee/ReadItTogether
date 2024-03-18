@@ -5,7 +5,7 @@ def modelImage
 pipeline {
     agent any
     environment {
-        // 환경 변수 설정1
+        // 환경 변수 설정12
         
         GIT_REGISTRY_CREDENTIALS = credentials('gitlab_tokken')
         DOCKER_REGISTRY_CREDENTIALS = credentials('docker')
