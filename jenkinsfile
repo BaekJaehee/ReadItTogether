@@ -18,15 +18,7 @@ pipeline {
         DOCKER_COMPOSE_FILE = "docker-compose.yml"       
     }
 
-    stages {
-        stage('Build Test') {
-            steps {
-                dir('back') {
-                    sh './gradlew build'
-                }
-            }
-        }
-    }
+   
     stages {
 
 
