@@ -31,6 +31,7 @@ pipeline {
         stage('Build Test') {
             steps {
                 dir('back') {
+                    sh 'chmod +x gradlew'
                     sh './gradlew build'
                 }
             }
