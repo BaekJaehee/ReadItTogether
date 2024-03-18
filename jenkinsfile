@@ -37,6 +37,26 @@ pipeline {
         //     }
         // }
 
+        stage('Unit Test') {
+            steps {
+                script {
+                    dir('back') {
+                        sh './gradlew test'
+            }
+        }
+    }
+}
+        stage('Integration Test') {
+           steps {
+                script {
+                    dir('back') {
+                sh './gradlew integrationTest'
+            }
+        }
+    }
+}
+
+
         stage('Checkout') {
             steps {
                 script {
