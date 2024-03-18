@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "compelling-weft-415104",
+  "private_key_id": "2c88df6a084301d168d85fd5ad5599e2997fd4e0",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDtbtdfLeod6Cje\nH9OCEZZ2s3jTACh7Pi5AMctGP79k3Y3QlgjUXAY/WFSQi3NTsAem21Eo6O1aMCKL\npOIk3oFzvozLkRpeDuv5I5HdFJDTa/c3JH8q+m9C0ZDdKCB1lqZXrwSkrw8YGwqI\nXrDXSPHcYI31KYUgPI1mMPh8yah0T4W/9hY0LpEQXu1KqjvXEBFOXnB4NGUH41z9\nXwBYvwup91/FOTe6NKfIxQFefiEOLuryPqaVCHuT77GkYc6GA8FVkqQvzqIzAQck\nAacPhcs5vNazXPWftz74OlwF6GR384oRwbzxvq2N37UiCXPKjRrB4K6MNdT1ByOV\nQr5maOtFAgMBAAECggEAFJ0BpkIEeB26hJRTRtDTlREeTYVPPmnm1oxsJzhsG6vv\nfrsz34nwwemfh+APfmXDOE2EpY5ZYvHYYfLJ7mUB7KRPsXGyzhUyD/JyXLUHIM/Y\nCenJf5f39l9e2hB8hvDyFp07hDetkgxw9Odxp3MuClG4qV72L5cKOKPKQv03+obt\nGG9Qd0z7l2clHwEIhJ7vBwmMrn2btOlBxarRno9LMY33nf/XO6jbMburPYdhU/2D\nfVwOoCjeTLT6Mm8oj8ZggFpk9Fe+1YXDT6NBjHryaZ3i05yAVCIVAqdE0+turE3o\nWUmC6mB61F1K/nKc1bEi4DDR1O4+UXTeNO5Z5aOIGQKBgQD44Mw1DMlqIcUuTCNR\nN+pf0YrpOujkPVq3ZGcRAIHP5bGkq76RLDMaxEq5kGTn5AZKRXQDO9HvUMoWVoZH\nV++wdDlsq5gq5KOK9djSriHK/gH87cEvnpxS6xSUhoteG2Emw0IKy6fCW1TSeGuW\nYcykwRF/yjfkn5gbYP4zjzh3eQKBgQD0OjM7Nr13oekIw98XRT3kmeZQeDv11w4F\nW5I552ORSHdlRsoE9i8LqHYkbnipCOp1jgC7V7TBcNvYOph/58SeN00q1xer5wAN\njspkSrEXHujY9k9jk17sPkR/zbrU28OR4IfO3AYxyZoFTsgoMlhX+l3SQHQDIcMM\nquPCK+GDLQKBgDdtuY1HH8SnaMb65hK8pVJZ1NpE6IGMuJuHnPzIZCDtQzctmO+0\nLF2Vwh657f9HZa888K2XsRXfpGJ9OsLA7v0ZpYByZx2GdnYIcxXY+mW/VKoEObZl\nWOOOv7KklH2NE4ISkq7c1KwQsz982llPxsgax87yNqiQcswGOhc5mpXhAoGBAJvG\nF3E4TAbnLaTakgvcrUqG4wEGf3AhmB7QtmbacIZ1Czp8uVQK1h0AeUJpd+qQ9kK+\nrTbRDUiovIChdy113dHwgfbGNKH/d+gt4GexwFx36ZqhGCfyEoRqfvRpezZTad08\nskK90fGlneiuxDnnSrPqzDbTx2tL+IW25giuRmuNAoGBAJzTEJ+yqqj9G27zLKjP\n/gAqnA4qlVe3ulqXChWA1M6gMOmkwM42QPH9r7/QYB06h8K2G3b69FavoI8H4/x+\nYkFdfkklilibdCqWl09qeLQyxDzxWLmZJRJviqbpGjvYAnOOzlo9/OJSIRflfSME\nMEsDZdmNtqQ8DC4134xm83Ao\n-----END PRIVATE KEY-----\n",
+  "client_email": "gcs-d206@compelling-weft-415104.iam.gserviceaccount.com",
+  "client_id": "101903929279413181459",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/gcs-d206%40compelling-weft-415104.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
