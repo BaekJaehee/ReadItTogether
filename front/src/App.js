@@ -6,6 +6,7 @@ import Login from "./pages/accounts/Login";
 import FindPassword from "./pages/accounts/FindPassword";
 import Bookshelf from "./pages/library/Bookshelf";
 import NavBar from "./components/navbar/NavBar";
+import Profile from "./pages/accounts/Profile";
 
 import SignUp from "./pages/accounts/SignUp";
 import Diary from "./components/modal/Diary";
@@ -22,6 +23,7 @@ function App() {
           <Route path="/bookshelf" element={<Bookshelf />} />
           <Route path="/signup" element={<SignUp/>}/>
           <Route path="/diary" element={<Diary/>}/>
+          <Route path="/profile" element={<Profile/>}/>
         </Routes>
       </BrowserRouter>
     </div>
