@@ -8,8 +8,6 @@ import logo from "../../assets/navbar/logo.png";
 import burger from "../../assets/navbar/hamberger.png";
 import search from "../../assets/navbar/search.png";
 
-// 테스트
-
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false); // 검색 입력 창 상태
