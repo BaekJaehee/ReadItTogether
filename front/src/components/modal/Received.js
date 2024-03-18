@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+// import axios from "axios";
 import dummy from '../../assets/MOCK_DATA';
 import Card from './Card';
 
-const Received = ({ onCardOpen, onCardClose, loggedInUser }) => {
+const Received = ({ onCardOpen, onCardClose }) => {
   const [page, setPage] = useState(1);  // 기본 페이지 1
   const [limit] = useState(10); // 페이지당 아이템 수
   const [data, setData] = useState([]); // 더미 데이터
@@ -11,11 +11,6 @@ const Received = ({ onCardOpen, onCardClose, loggedInUser }) => {
   const [selectedItem, setSelectedItem] = useState(null); // 개별 카드 선택
   const [showPagination, setShowPagination] = useState(true); // 페이지 보이기/숨기기
   // const offset = (page - 1) * limit;4
-
-  // 받은 카드 필터링
-  const filterReceivedCards = () => {
-    return data.cards.filter(card => card.to_member_id === loggedInUser);
-  };
   
   // 페이지 이동
   const goToPrev = () => {
@@ -26,6 +21,10 @@ const Received = ({ onCardOpen, onCardClose, loggedInUser }) => {
     setPage(page + 1);
   };
 
+  useEffect(() => {
+    setData(dummy);
+  }, []);
+
   const openCard = (item) => {
     setSelectedItem(item);
     setShowPagination(false);
@@ -34,6 +33,7 @@ const Received = ({ onCardOpen, onCardClose, loggedInUser }) => {
     }
   }
 
+
   const closeCard = () => {
     setSelectedItem(null);
     setShowPagination(true);
@@ -41,25 +41,6 @@ const Received = ({ onCardOpen, onCardClose, loggedInUser }) => {
       onCardClose();  // 닫을 때도 똑같이
     }
   }
-
-  // useEffect(() => {
-  //   setData(dummy);
-  // }, []);
-
-  useEffect(() => {
-    axios.get('backend/api/endpoint')
-      .then(response => {
-        setData(response.data); // 받아온 데이터를 상태에 설정
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }, []);
-
-  useEffect(() => {
-    // 데이터를 백엔드에서 받아온 후 실행되는 코드
-    const receivedCards = filterReceivedCards();
-  }, [data]); // data가 변경될 때마다 실행됨
   
   useEffect(() => {
     const startIndex = (page - 1) * limit;
@@ -106,3 +87,4 @@ const Received = ({ onCardOpen, onCardClose, loggedInUser }) => {
 }
 
 export default Received;
+

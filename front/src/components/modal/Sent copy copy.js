@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import dummy from '../../assets/MOCK_DATA';
 import Card from './Card';
 
-const Sent = ({ onCardOpen, onCardClose }) => {
+const Sent = ({ onCardOpen, onCardClose, loggedInUser }) => {
   const [page, setPage] = useState(1);  // 기본 페이지 1
   const [limit] = useState(10); // 페이지당 아이템 수
   const [data, setData] = useState([]); // 더미 데이터
@@ -11,6 +11,11 @@ const Sent = ({ onCardOpen, onCardClose }) => {
   const [selectedItem, setSelectedItem] = useState(null); // 개별 카드 선택
   const [showPagination, setShowPagination] = useState(true); // 페이지 보이기/숨기기
   // const offset = (page - 1) * limit;4
+
+  // 보낸 카드 필터링
+  const filterSentCards = () => {
+    return data.cards.filter(card => card.from_member_id === loggedInUser);
+  };
   
   // 페이지 이동
   const goToPrev = () => {
@@ -21,10 +26,6 @@ const Sent = ({ onCardOpen, onCardClose }) => {
     setPage(page + 1);
   };
 
-  useEffect(() => {
-    setData(dummy);
-  }, []);
-
   const openCard = (item) => {
     setSelectedItem(item);
     setShowPagination(false);
@@ -33,7 +34,6 @@ const Sent = ({ onCardOpen, onCardClose }) => {
     }
   }
 
-
   const closeCard = () => {
     setSelectedItem(null);
     setShowPagination(true);
@@ -41,6 +41,15 @@ const Sent = ({ onCardOpen, onCardClose }) => {
       onCardClose();  // 닫을 때도 똑같이
     }
   }
+
+  useEffect(() => {
+    setData(dummy);
+  }, []);
+
+  useEffect(() => {
+    // 데이터를 백엔드에서 받아온 후 실행되는 코드
+    const sentCards = filterSentCards();
+  }, [data]); // data가 변경될 때마다 실행됨
   
   useEffect(() => {
     const startIndex = (page - 1) * limit;
@@ -50,7 +59,7 @@ const Sent = ({ onCardOpen, onCardClose }) => {
 
   return (
     <div>
-      <h1 className="text-xl font-medium leading-6 text-gray-900 text-center my-5">보낸 카드</h1>
+      <h1 className="text-xl font-medium leading-6 text-gray-900 text-center my-5">받은 카드</h1>
       {selectedItem ? (
         <Card item={selectedItem} onClose={closeCard} />
       ) : (
@@ -87,4 +96,3 @@ const Sent = ({ onCardOpen, onCardClose }) => {
 }
 
 export default Sent;
-
