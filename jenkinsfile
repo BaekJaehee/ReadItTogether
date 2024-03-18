@@ -20,14 +20,14 @@ pipeline {
 
    
     stages {
-        stage('Install Java and Gradle') {
-            steps {
-                sh 'apt-get update && apt-get install -y default-jdk'
-                sh 'wget https://services.gradle.org/distributions/gradle-7.4-bin.zip'
-                sh 'unzip -d /opt/gradle gradle-7.4-bin.zip'
-                sh 'export PATH=$PATH:/opt/gradle/gradle-7.4/bin'
-            }
-        }
+        // stage('Install Java and Gradle') {
+        //     steps {
+        //         sh 'apt-get update && apt-get install -y default-jdk'
+        //         sh 'wget https://services.gradle.org/distributions/gradle-7.4-bin.zip'
+        //         sh 'unzip -d /opt/gradle gradle-7.4-bin.zip'
+        //         sh 'export PATH=$PATH:/opt/gradle/gradle-7.4/bin'
+        //     }
+        // }
         stage('Build Test') {
             steps {
                 dir('back') {
