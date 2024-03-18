@@ -31,7 +31,7 @@ const NavBar = () => {
   useEffect(() => {
     setIsOpen(false);
     setIsSearchOpen(false);
-  }, [location]); 
+  }, [location]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -48,7 +48,10 @@ const NavBar = () => {
   }, [navRef]);
 
   return (
-    <nav ref={navRef} className="flex justify-between items-center p-4 fixed w-full z-50">
+    <nav
+      ref={navRef}
+      className="flex justify-between items-center p-4 fixed w-full z-50"
+    >
       {/* 햄버거 버튼 */}
       <div className="flex">
         <button className="mr-4" onClick={toggleMenu}>
@@ -58,9 +61,6 @@ const NavBar = () => {
         {/* 로고/홈 버튼 */}
         <Link to="/" className="font-extrabold mr-6">
           <img className="w-44" src={logo} alt="" />
-        </Link>
-        <Link to="/">
-          <div className="font-extrabold text-xl">추천 홈</div>
         </Link>
       </div>
 
@@ -83,21 +83,10 @@ const NavBar = () => {
 
       {/* 사이드바 메뉴, isOpen 상태에 따라 표시 여부 결정 */}
       <div
-        className={`fixed top-0 left-0 w-60 h-full bg-white p-4 box-border z-50 transform transition duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 w-[260px] h-full bg-white box-border z-50 transform transition duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex">
-          <button className="mr-4" onClick={toggleMenu}>
-            <img className="w-5" src={burger} alt="햄버거" />
-          </button>
-
-          <Link to="/login">
-            <img className="w-44" src={logo} alt="" />
-          </Link>
-        </div>
-
-        {/* 사이드바 메뉴 넣는 공간 */}
         <SideBar />
       </div>
     </nav>
