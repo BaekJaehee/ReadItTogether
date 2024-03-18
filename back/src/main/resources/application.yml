@@ -19,6 +19,14 @@ spring:
     console:
       enabled: false 
 
+  cloud:
+    gcp:
+      storage:
+        credentials:
+          location: classpath:gcs_cloud.json
+				project-id: compelling-weft-415104
+				bucket: d206
+
   profiles:
     active: local
   servlet:
