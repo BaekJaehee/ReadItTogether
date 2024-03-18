@@ -1,15 +1,16 @@
-version: '3.8'
+version: '3'
 services:
-  nginx:
-    image: "${FRONT_IMAGE_NAME}:${BUILD_NUMBER}"
+  frontend:
+    image: ${FRONT_IMAGE_NAME}:${BUILD_NUMBER}
     ports:
-      - "80:80"
-      - "443:443"
+      - "3000:3000"
     volumes:
-      - /etc/letsencrypt:/etc/letsencrypt:ro
-      - /home/dudtjr20027/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - /usr/share/nginx/html/build:/app/build
+    command: /bin/sh -c "npm run build && npm start"
   backend:
     image: ${BACK_IMAGE_NAME}:${BUILD_NUMBER}
     ports:
       - "8000:8000"
+    depends_on:
+      - frontend
 
