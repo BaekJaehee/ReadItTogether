@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-import PostIt from "../../components/modal/PostIt";
 import PostItLauncher from "../../components/modal/PostItLauncher";
 import Diary from "../../components/modal/Diary";
 import GuestBook from "../../components/modal/GuestBook";
@@ -50,16 +49,7 @@ const Library = () => {
             />
           </Link>
         </div>
-        <div className="group absolute right-40 top-20 overflow-hidden">
-          <button onClick={openModal}>
-            <img
-              className="w-[250px] transform transition-transform duration-500 ease-in-out group-hover:scale-110"
-              src={post}
-              alt="포스트잇"
-            />
-          </button>
-          {isModalOpen && <PostItLauncher onClose={closeModal} />}
-        </div>
+        
         <div className="group absolute right-64 bottom-44 overflow-hidden">
           <button onClick={openDiaryModal}>
             <img
@@ -88,6 +78,16 @@ const Library = () => {
               alt="우편함"
             />
           </Link>
+        </div>
+        <div className="group absolute right-40 top-20 overflow-hidden">
+          <button onClick={openModal}>
+            <img
+              className="w-[250px] transform transition-transform duration-500 ease-in-out group-hover:scale-110"
+              src={post}
+              alt="포스트잇"
+            />
+          </button>
+          {isModalOpen && <PostItLauncher onClose={closeModal} />}
         </div>
       </div>
     </div>

@@ -1,40 +1,63 @@
 import React, { useState } from "react";
-import PostIt from "./PostIt"; // 기존 PostIt 컴포넌트
+import WriteFormModal from "./PostItWriteForm"; // PostIt 작성 컴포넌트
+import PostIt from "./PostItView"; // PostIt 컴포넌트
 
-const PostItLauncher = () => {
-  const [showButtonsModal, setShowButtonsModal] = useState(true); // 버튼 모달 상태 추가
-  const [showPostIt, setShowPostIt] = useState(false);
-  const [showWriteForm, setShowWriteForm] = useState(false);
+// 이미지
+import postIt from "../../assets/library/post-it.png";
+import pen from "../../assets/library/pen.png";
+
+const PostItLauncher = ({ onClose }) => {
+  const [modalState, setModalState] = useState({
+    showButtonsModal: true,
+    showPostIt: false,
+    showWriteForm: false,
+  });
   const [postItContent, setPostItContent] = useState("");
 
+  // 여기에서 modalState의 각 속성을 구조 분해 할당합니다.
+  const { showButtonsModal, showPostIt, showWriteForm } = modalState;
+
+  const setModal = ({ showButtonsModal, showPostIt, showWriteForm }) => {
+    setModalState({ showButtonsModal, showPostIt, showWriteForm });
+  };
+
   const handleOpenWriteForm = () => {
-    setShowWriteForm(true);
-    setShowButtonsModal(false); // 버튼 모달 닫기
-    setShowPostIt(false); // 포스트잇 보기 모달 닫기
+    setModal({
+      showButtonsModal: false,
+      showPostIt: false,
+      showWriteForm: true,
+    });
   };
 
   const handleOpenPostIt = () => {
-    setShowPostIt(true);
-    setShowButtonsModal(false); // 버튼 모달 닫기
-    setShowWriteForm(false); // 작성 폼 모달 닫기
+    setModal({
+      showButtonsModal: false,
+      showPostIt: true,
+      showWriteForm: false,
+    });
   };
 
   const handleCloseAll = () => {
-    setShowButtonsModal(false);
-    setShowPostIt(false);
-    setShowWriteForm(false);
+    setModal(
+      {
+        showButtonsModal: false,
+        showPostIt: false,
+        showWriteForm: false,
+      },
+      onClose()
+    );
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // 포스트잇 내용 저장 로직
-    console.log(postItContent); // 예시로 콘솔에 출력
+    console.log(postItContent); // 포스트잇 내용 콘솔에 출력
     setPostItContent(""); // 폼 초기화
-    setShowWriteForm(false); // 작성 폼 모달 닫기
-    setShowPostIt(true); // 작성된 포스트잇 보기
+    setModal({
+      showButtonsModal: false,
+      showPostIt: true,
+      showWriteForm: false,
+    }); // 작성 폼 모달 닫고, 포스트잇 보기
   };
-
-
   return (
     <div>
       {showButtonsModal && (
@@ -43,34 +66,46 @@ const PostItLauncher = () => {
           onClick={handleCloseAll}
         >
           <div
-            className="p-5 border w-96 h-96 shadow-lg bg-white"
+            className="flex flex-col items-center justify-center p-5 border w-96 h-96 shadow-lg bg-yellow-200"
             onClick={(e) => e.stopPropagation()}
           >
-            <button onClick={handleOpenWriteForm}>포스트잇 작성하기</button>
-            <button onClick={handleOpenPostIt}>포스트잇 보러가기</button>
+            <div className="mb-4">
+              {" "}
+              {/* 버튼 간의 간격을 주기 위해 marginBottom 추가 */}
+              <button
+                onClick={handleOpenWriteForm}
+                className="flex flex-col items-center"
+              >
+                {" "}
+                {/* 버튼 내용을 세로로 배열 */}
+                <img className=" w-20 mb-2" src={pen} alt="작성" />{" "}
+                {/* 이미지와 텍스트 사이에 간격 추가 */}
+                포스트잇 작성하기
+              </button>
+            </div>
+            <div>
+              <button
+                onClick={handleOpenPostIt}
+                className="flex flex-col items-center"
+              >
+                {" "}
+                {/* 버튼 내용을 세로로 배열 */}
+                <img className="w-20 mb-2" src={postIt} alt="보기" />{" "}
+                {/* 이미지와 텍스트 사이에 간격 추가 */}
+                포스트잇 보러가기
+              </button>
+            </div>
           </div>
         </div>
       )}
 
       {showWriteForm && (
-        <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto h-full w-full z-50"
-          onClick={handleCloseAll}
-        >
-          <div
-            className="p-5 border w-96 h-96 shadow-lg bg-yellow-200"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <form onSubmit={handleSubmit}>
-              <textarea
-                value={postItContent}
-                onChange={(e) => setPostItContent(e.target.value)}
-                className="w-full h-3/4 p-2 bg-yellow-200 resize-none"
-              />
-              <button type="submit">방명록 남기기</button>
-            </form>
-          </div>
-        </div>
+        <WriteFormModal
+          postItContent={postItContent}
+          setPostItContent={setPostItContent}
+          handleSubmit={handleSubmit}
+          handleCloseAll={handleCloseAll}
+        />
       )}
 
       {showPostIt && (
@@ -78,7 +113,10 @@ const PostItLauncher = () => {
           className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto h-full w-full z-60"
           onClick={handleCloseAll}
         >
-          <PostIt onClose={handleCloseAll} createdAt={new Date().toISOString()} />
+          <PostIt
+            onClose={handleCloseAll}
+            createdAt={new Date().toISOString()}
+          />
           {/* createdAt을 현재 시간으로 설정하였습니다. 저장된 데이터에 따라 변경해주세요. */}
         </div>
       )}
