@@ -3,6 +3,7 @@ package com.ssafy.rit.back.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class Card {
     private String comment;
 
     @Column(name = "create_at")
-    private Date createdAt;
+    private LocalDate createdAt;
 
 //    관계 설정
     @ManyToOne

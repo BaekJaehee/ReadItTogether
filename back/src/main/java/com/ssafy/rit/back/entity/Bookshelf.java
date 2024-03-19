@@ -3,6 +3,7 @@ package com.ssafy.rit.back.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class Bookshelf {
     private int rating;
 
     @Column(name = "created_at")
-    private Date createdAt;
+    private LocalDate createdAt;
 
 //  관계 설정
     @OneToOne

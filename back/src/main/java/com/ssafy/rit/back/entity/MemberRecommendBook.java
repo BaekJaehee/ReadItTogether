@@ -1,5 +1,6 @@
 package com.ssafy.rit.back.entity;
 
+import java.time.LocalDate;
 import java.util.Date;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,7 +18,7 @@ public class MemberRecommendBook {
     private int id;
 
     @Column(name = "created_at")
-    private Date createdAt;
+    private LocalDate createdAt;
 
 //    관계 설정
     @ManyToOne

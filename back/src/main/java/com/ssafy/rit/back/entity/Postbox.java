@@ -3,6 +3,7 @@ package com.ssafy.rit.back.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -18,7 +19,7 @@ public class Postbox {
     private int id;
 
     @Column(name = "created_at")
-    private Date createdAt;
+    private LocalDate createdAt;
 
 //    관계 설정
     @ManyToOne
