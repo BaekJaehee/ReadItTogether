@@ -3,8 +3,8 @@ import WriteFormModal from "./PostItWriteForm"; // PostIt 작성 컴포넌트
 import PostIt from "./PostItView"; // PostIt 컴포넌트
 
 // 이미지
-import postIt from "../../assets/library/post-it.png";
-import pen from "../../assets/library/pen.png";
+import postIt from "../../../assets/library/post-it.png";
+import pen from "../../../assets/library/pen.png";
 
 const PostItLauncher = ({ onClose }) => {
   const [modalState, setModalState] = useState({
@@ -69,30 +69,16 @@ const PostItLauncher = ({ onClose }) => {
             className="flex flex-col items-center justify-center p-5 border w-96 h-96 shadow-lg bg-yellow-200"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="mb-4">
-              {" "}
-              {/* 버튼 간의 간격을 주기 위해 marginBottom 추가 */}
-              <button
-                onClick={handleOpenWriteForm}
-                className="flex flex-col items-center"
-              >
-                {" "}
-                {/* 버튼 내용을 세로로 배열 */}
-                <img className=" w-20 mb-2" src={pen} alt="작성" />{" "}
-                {/* 이미지와 텍스트 사이에 간격 추가 */}
-                포스트잇 작성하기
+            <div className="mb-6">
+              <button onClick={handleOpenWriteForm} className="flex items-center">
+                <img className=" w-20 mb-2 mr-4" src={pen} alt="작성" />
+                <div className="font-semibold">방명록 작성하기</div>
               </button>
             </div>
-            <div>
-              <button
-                onClick={handleOpenPostIt}
-                className="flex flex-col items-center"
-              >
-                {" "}
-                {/* 버튼 내용을 세로로 배열 */}
-                <img className="w-20 mb-2" src={postIt} alt="보기" />{" "}
-                {/* 이미지와 텍스트 사이에 간격 추가 */}
-                포스트잇 보러가기
+            <div className="mt-6">
+              <button onClick={handleOpenPostIt} className="flex items-center">
+                <img className="w-20 mb-2 mr-4" src={postIt} alt="보기" />
+                <div className="font-semibold">방명록 보러가기</div>
               </button>
             </div>
           </div>

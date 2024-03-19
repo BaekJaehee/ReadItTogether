@@ -1,11 +1,15 @@
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-import Logout from "../../api/accounts/Logout";
+import FollowModal from "../modal/FollowModal";
 
 // 로고
 import logo from "../../assets/navbar/logo2.png";
+import man from "../../assets/profile/man.png";
 
 const SideBar = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <nav className="flex flex-col h-full">
       <div className="bg-stone-100 py-12 flex flex-col items-center justify-center">
@@ -25,18 +29,29 @@ const SideBar = () => {
       </div>
       <div className="py- flex flex-col items-center justify-center flex-grow">
         {/* 유저 프로필 바로가기 */}
-        <div className="flex flex-col items-center mb-4">
-          <img className="w-12 rounded-full mb-2" src={logo} alt="" />
-          <p className="text-sm font-semibold">유저 닉네임</p>
-        </div>
-        <Link to="/logout">
-        <button className="bg-white border border-gray-300 hover:bg-gray-300 hover:text-white rounded-lg text-gray-500 text-xs py-2 px-4 mt-2 transition-colors duration-300">
-          로그아웃
-        </button>
+        <Link to="/profile">
+          <div className="flex flex-col items-center mb-4">
+            <img
+              className="w-20 h-20 rounded-full mb-2"
+              src={man}
+              alt="프로필 사진"
+            />
+            <p className="text-sm font-semibold">닉네임</p>
+          </div>
         </Link>
-        <button className="bg-white border border-gray-300 hover:bg-gray-300 hover:text-white rounded-lg text-gray-500 text-xs py-2 px-4 mt-4 transition-colors duration-300">
+        <Link to="/logout">
+          <button className="bg-white border border-gray-300 hover:bg-gray-300 hover:text-white rounded-lg text-gray-500 text-xs py-2 px-4 mt-2 transition-colors duration-300">
+            로그아웃
+          </button>
+        </Link>
+        <button
+          className="bg-white border border-gray-300 hover:bg-gray-300 hover:text-white rounded-lg text-gray-500 text-xs py-2 px-4 mt-4 transition-colors duration-300"
+          onClick={() => setIsModalOpen(true)}
+        >
           팔로우 목록
         </button>
+        {isModalOpen && <FollowModal isFollowers={true} onClose={() => setIsModalOpen(false)} />}
+
         <button className="bg-white border border-gray-300 hover:bg-gray-300 hover:text-white rounded-lg text-gray-500 text-xs py-2 px-4 mt-4 transition-colors duration-300">
           FAQ 문의하기
         </button>

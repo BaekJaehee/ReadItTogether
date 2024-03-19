@@ -48,7 +48,7 @@ const NavBar = () => {
   return (
     <nav
       ref={navRef}
-      className="flex justify-between items-center p-4 fixed w-full z-50"
+      className="fixed flex justify-between items-center p-4  w-full z-50"
     >
       {/* 햄버거 버튼 */}
       <div className="flex">
@@ -85,6 +85,9 @@ const NavBar = () => {
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
+        <button className="fixed ml-4 mt-6" onClick={toggleMenu}>
+          <img className="w-5" src={burger} alt="햄버거" />
+        </button>
         <SideBar />
       </div>
     </nav>

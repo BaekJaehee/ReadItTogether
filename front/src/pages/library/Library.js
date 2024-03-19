@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-import PostItLauncher from "../../components/modal/PostItLauncher";
+import PostItLauncher from "../../components/modal/PostIt/PostItLauncher";
 import Diary from "../../components/modal/Diary";
 import GuestBook from "../../components/modal/GuestBook";
 import MailBox from "../../components/modal/MailBox";
