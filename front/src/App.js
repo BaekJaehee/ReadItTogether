@@ -9,7 +9,7 @@ import NavBar from "./components/navbar/NavBar";
 import Profile from "./pages/accounts/Profile";
 
 import SignUp from "./pages/accounts/SignUp";
-import Diary from "./components/modal/Diary";
+import Diary from "./components/modal/Diary/Diary";
 
 function App() {
   return (

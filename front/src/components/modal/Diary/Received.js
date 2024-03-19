@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 // import axios from "axios";
-import dummy from '../../assets/MOCK_DATA';
-import Card from './Card';
+import dummy from '../../../assets/MOCK_DATA';
+import Card from '../Card';
 
 const Received = ({ onCardOpen, onCardClose }) => {
   const [page, setPage] = useState(1);  // 기본 페이지 1
