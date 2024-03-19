@@ -3,7 +3,20 @@ def frontendImage
 def modelImage
 
 pipeline {
+
+    
+    
+
+
     agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+    }
+    
     environment {
         // 환경 변수 설정12345678
         
