@@ -7,14 +7,18 @@ spring:
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
 
+
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         show_sql: false
         format_sql: true
         default_batch_fetch_size: 100
+  jwt:
+    secret: vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbblkjlkjkldfdhgfhjgkjb
+
   h2:
     console:
       enabled: false
@@ -42,3 +46,7 @@ logging:
 
 server:
   port: 8000
+
+cors:
+  allowed-origins: http://localhost:3000
+
