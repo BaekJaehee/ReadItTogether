@@ -2,19 +2,26 @@ import React, { useState } from "react";
 import Received from "./Received";
 import Sent from "./Sent";
 
-// 받은 카드 리스트에서 책 표지 클릭 시 카드 상세 -> 이땐 페이지네이션 없애기, 뒤로가기 버튼이 있어야???? 근데 컴포넌트 뒤로가면 초기화 안되나?
-// 하단 페이지네이션(컴포넌트에서) -> ㅇㅋ
 // 카드 등록일 기준으로 정렬
 
 const Diary = ({ onClose }) => {
-  const [currentComponent, setCurrentComponent] = useState(<Received/>);  // 열었을 시 기본은 받은 카드
+  const handleCardOpen = () => {
+    setShowButtons(false); // 카드가 열리면 버튼 숨김
+  };
+  
+  const handleCardClose = () => {
+    setShowButtons(true); // 카드가 닫히면 버튼 보이기
+  }
+  const [currentComponent, setCurrentComponent] = useState(<Received onCardOpen={handleCardOpen} onCardClose={handleCardClose}/>);  // 열었을 시 기본은 받은 카드
+
+  const [showButtons, setShowButtons] = useState(true);
 
   const handleReceivedClick = () => {
-    setCurrentComponent(<Received />);
+    setCurrentComponent(<Received onCardOpen={handleCardOpen} onCardClose={handleCardClose}/>);
   };
 
   const handleSentClick = () => {
-    setCurrentComponent(<Sent />);
+    setCurrentComponent(<Sent onCardOpen={handleCardOpen} onCardClose={handleCardClose}/>);
   };
 
   // 모달 내에서 버튼을 클릭해도 모달이 닫히지 않도록
@@ -27,11 +34,23 @@ const Diary = ({ onClose }) => {
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto h-full w-full z-50"
       onClick={onClose}
     >
-      <div className="bg-white rounded-lg p-8 max-w-[50%] max-h-[70%] overflow-y-auto" onClick={handleButtonClick}>            
-        <div className="flex justify-around">
-          <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" onClick={handleReceivedClick}>받은 카드</button>
-          <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" onClick={handleSentClick}>보낸 카드</button>
-        </div>
+      <div className="bg-white rounded-lg p-8 w-[45%] h-[70%] overflow-y-auto" onClick={handleButtonClick}>            
+        {showButtons && (
+          <div className="flex justify-around">
+            <button 
+              className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" 
+              onClick={handleReceivedClick}
+            >
+              받은 카드
+            </button>
+            <button 
+              className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" 
+              onClick={handleSentClick}
+            >
+              보낸 카드
+            </button>
+          </div>
+        )}
         <div>
           {currentComponent}
         </div>
