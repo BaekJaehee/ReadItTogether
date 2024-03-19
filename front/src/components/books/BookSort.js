@@ -6,13 +6,13 @@ const BookSort = () => {
 
   const handleSortChange = async (e) => {
     const sortOption = e.target.value;
-    const sortedBooks = await getSortedBooks(sortOption, 'desc'); // 선택된 정렬 옵션에 따라 책 목록을 다시 가져옴
+    const sortedBooks = await getSortedBooks(sortOption, 'asc'); // 오름차순으로 정렬된 책 가져오기
     setBooks(sortedBooks);
   };
 
   const handleOrder = async (e) => {
     const orderOption = e.target.value;
-    const orderedBooks = await getSortedBooks('default', orderOption);
+    const orderedBooks = await getSortedBooks('default', orderOption); // 선택된 정렬 옵션에 따라 정렬된 책 가져오기
     setBooks(orderedBooks);
   };
 
@@ -23,7 +23,7 @@ const BookSort = () => {
 
   useEffect(() => {
     const initBooks = async () => {
-      const defaultSortedBooks = await getSortedBooks('default', 'desc'); // 기본적으로 등록순으로 오름차순 정렬된 책 가져오기
+      const defaultSortedBooks = await getSortedBooks('default', 'asc'); // 기본적으로 등록순으로 오름차순 정렬된 책 가져오기
       setBooks(defaultSortedBooks);
     };
     initBooks();
@@ -31,7 +31,7 @@ const BookSort = () => {
 
   return (
     <div>
-      <select onChange={handleSortChange} className="mr-2">
+      <select onChange={handleSortChange}>
         <option value="default">등록순</option>
         <option value="name">이름순</option>
         <option value="rating">별점순</option>
@@ -41,11 +41,11 @@ const BookSort = () => {
         <option value="asc">오름차순</option>
         <option value="desc">내림차순</option>
       </select>
-      {/* <ul>
+      <ul>
         {books.map((book) => (
           <li key={book.id}>{book.name} - 별점: {book.rating}, 출간일: {book.publishDate}</li>
         ))}
-      </ul> */}
+      </ul>
     </div>
   );
 };
