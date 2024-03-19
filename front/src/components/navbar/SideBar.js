@@ -23,9 +23,11 @@ const SideBar = () => {
             </p>
           </div>
         </Link>
-        <button className="bg-white border border-teal-500 hover:bg-teal-500 hover:text-white rounded-2xl text-teal-500 text-xs h-8 mt-5 w-32 transition-colors duration-300">
-          추천 홈 바로가기
-        </button>
+        <Link to="/recommend-book">
+          <button className="bg-white border border-teal-500 hover:bg-teal-500 hover:text-white rounded-2xl text-teal-500 text-xs h-8 mt-5 w-32 transition-colors duration-300">
+            추천 홈 바로가기
+          </button>
+        </Link>
       </div>
       <div className="py- flex flex-col items-center justify-center flex-grow">
         {/* 유저 프로필 바로가기 */}
@@ -50,7 +52,12 @@ const SideBar = () => {
         >
           팔로우 목록
         </button>
-        {isModalOpen && <FollowModal isFollowers={true} onClose={() => setIsModalOpen(false)} />}
+        {isModalOpen && (
+          <FollowModal
+            isFollowers={true}
+            onClose={() => setIsModalOpen(false)}
+          />
+        )}
 
         <button className="bg-white border border-gray-300 hover:bg-gray-300 hover:text-white rounded-lg text-gray-500 text-xs py-2 px-4 mt-4 transition-colors duration-300">
           FAQ 문의하기
