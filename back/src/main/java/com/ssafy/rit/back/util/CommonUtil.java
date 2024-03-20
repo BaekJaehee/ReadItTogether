@@ -19,9 +19,9 @@ public class CommonUtil {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userId = authentication.getName();
         Member currentMember = memberRepository.findById(Long.valueOf(userId))
-                .orElseThrow(() -> new MemberNotFoundException("해당 유저가 존재하지 않습니다."));
+                .orElseThrow(MemberNotFoundException::new);
         if (currentMember.getIsDisabled() == 1) {
-            throw new MemberDisabledException("해당 유저는 탈퇴했습니다.");
+            throw new MemberDisabledException();
         }
         return currentMember;
     }
