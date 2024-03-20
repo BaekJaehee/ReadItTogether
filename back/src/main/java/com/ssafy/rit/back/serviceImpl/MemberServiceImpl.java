@@ -45,9 +45,6 @@ public class MemberServiceImpl implements MemberService {
                 .build();
 
         memberRepository.save(data);
-
-
-
     }
 
     @Override

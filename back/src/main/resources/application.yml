@@ -50,3 +50,7 @@ server:
 cors:
   allowed-origins: http://localhost:3000
 
+springdoc:
+  swagger-ui:
+    path: /v3/api-docs
+
