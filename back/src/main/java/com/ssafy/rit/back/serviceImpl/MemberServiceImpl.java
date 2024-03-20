@@ -1,11 +1,17 @@
 package com.ssafy.rit.back.serviceImpl;
 
-import com.ssafy.rit.back.dto.member.MemberRequestDto;
+import com.ssafy.rit.back.dto.member.requestDto.CheckEmailRequestDto;
+import com.ssafy.rit.back.dto.member.requestDto.MemberRequestDto;
+import com.ssafy.rit.back.dto.member.requestDto.CheckNicknameRequestDto;
 import com.ssafy.rit.back.entity.Member;
+import com.ssafy.rit.back.exception.member.EmailAlreadyExistsException;
+import com.ssafy.rit.back.exception.member.NicknameAlreadyExistsException;
 import com.ssafy.rit.back.repository.MemberRepository;
 import com.ssafy.rit.back.service.MemberService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -43,6 +49,28 @@ public class MemberServiceImpl implements MemberService {
                 .build();
 
         memberRepository.save(data);
+    }
+
+
+    public Boolean checkEmail(CheckEmailRequestDto dto) {
+
+        Optional<Member> optionalMember = memberRepository.findByEmail(dto.getEmail());
+        optionalMember.ifPresent(member -> {
+            throw new EmailAlreadyExistsException("Email already exists");
+        });
+
+        return false;
+    }
+
+
+    public Boolean checkNickname(CheckNicknameRequestDto dto) {
+
+        Optional<Member> optionalMember = memberRepository.findByNickname(dto.getNickname());
+        optionalMember.ifPresent(member -> {
+            throw new NicknameAlreadyExistsException("Nickname already exists");
+        });
+
+        return false;
     }
 
 }
