@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const genres = ["판타지", "로맨스", "",];
+const genres = ["판타지", "로맨스", "SF", "무협", "추리/미스터리", "공포/스릴러", "역사", "한국문학", "영미문학", "일본문학", "중국문학"];
 
 const BookFilter = ({ onFilterChange }) => {
   const [selectedGenres, setSelectedGenres] = useState([]);
@@ -21,8 +21,9 @@ const BookFilter = ({ onFilterChange }) => {
   };
 
   return (
-    <div className="p-4 bg-white">
-      <div className="flex flex-wrap gap-2">
+    <div className="p-4 bg-white w-1/3">
+      {/* <div className="flex flex-wrap gap-2"> */}
+      <div className="grid grid-cols-3 gap-2">
         {genres.map((genre) => (
           <div key={genre} className="flex items-center">
             <input

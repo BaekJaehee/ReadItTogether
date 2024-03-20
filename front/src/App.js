@@ -12,7 +12,7 @@ import DetailBook from "./pages/recomend/DetailBook";
 
 
 import SignUp from "./pages/accounts/SignUp";
-import Diary from "./components/modal/Diary";
+import Diary from "./components/modal/Diary/Diary";
 
 function App() {
   return (
