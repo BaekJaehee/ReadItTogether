@@ -46,6 +46,14 @@ import java.util.Arrays;
         }
 
         @Bean
+        public GroupedOpenApi booksAPI() {
+            return GroupedOpenApi.builder()
+                    .group("books-api")
+                    .pathsToMatch("/books/**")
+                    .build();
+        }
+
+        @Bean
         public OpenAPI openAPI(){
             SecurityScheme securityScheme = new SecurityScheme()
                     .type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")
@@ -56,4 +64,5 @@ import java.util.Arrays;
                     .components(new Components().addSecuritySchemes("bearerAuth", securityScheme))
                     .security(Arrays.asList(securityRequirement));
         }
+
     }
