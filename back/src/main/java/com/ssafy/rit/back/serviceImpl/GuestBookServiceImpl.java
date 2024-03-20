@@ -16,6 +16,7 @@ import com.ssafy.rit.back.repository.MemberRepository;
 import com.ssafy.rit.back.service.GuestBookService;
 import com.ssafy.rit.back.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class GuestBookServiceImpl implements GuestBookService {
     private final GuestBookRepository guestBookRepository;
     private final MemberRepository memberRepository;
     private final CommonUtil commonUtil;
+    private final ModelMapper modelMapper;
 
     // 방명록 생성
     @Override
@@ -47,20 +49,15 @@ public class GuestBookServiceImpl implements GuestBookService {
         }
 
         // 방명록 객체 생성 후 저장
-        GuestBook newGuestBook = GuestBook.builder()
-                .toMemberId(toMember)
-                .fromMemberId(currentMember)
-                .content(dto.getContent())
-                .createdAt(LocalDate.now())
-                .build();
+        GuestBook newGuestBook = modelMapper.map(dto, GuestBook.class);
+        newGuestBook.setToMemberId(toMember);
+        newGuestBook.setFromMemberId(currentMember);
+        newGuestBook.setCreatedAt(LocalDate.now());
 
         guestBookRepository.save(newGuestBook);
 
         // response 내에 dto를 넣어서 반환. 방명록 작성과 같이 작성 성공만 반환하면 될 경우 true 를 반환합니다.
-        GuestBookCreationResponse response = GuestBookCreationResponse.createGuestBookCreationResponse(
-                "방명록 작성 성공",
-                true
-        );
+        GuestBookCreationResponse response = new GuestBookCreationResponse("방명록 작성 성공", true);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -74,10 +71,9 @@ public class GuestBookServiceImpl implements GuestBookService {
         GuestBook currentGuestBook = guestBookRepository.findById(postId)
                 .orElseThrow(GuestBookNotFoundException::new);
 
-        GuestBookDetailResponse response = GuestBookDetailResponse.createGuestBookDetailResponse(
-                "방명록 조회 성공",
-                GuestBookDetailResponseDto.createGuestBookDetailResponseDto(currentGuestBook.getContent())
-        );
+        GuestBookDetailResponseDto detailDto = modelMapper.map(currentGuestBook, GuestBookDetailResponseDto.class);
+
+        GuestBookDetailResponse response = new GuestBookDetailResponse("방명록 조회 성공", detailDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -97,10 +93,7 @@ public class GuestBookServiceImpl implements GuestBookService {
 
         guestBookRepository.delete(currentGuestBook);
 
-        GuestBookRemovalResponse response = GuestBookRemovalResponse.createGuestBookRemovalResponse(
-                "방명록 삭제 성공",
-                true
-        );
+        GuestBookRemovalResponse response = new GuestBookRemovalResponse("방명록 삭제 성공", true);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
