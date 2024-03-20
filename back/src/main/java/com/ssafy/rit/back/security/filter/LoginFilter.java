@@ -84,7 +84,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         JsonObject jsonResponse = new JsonObject();
         jsonResponse.addProperty("message", "Login success");
-        jsonResponse.add("tokens", tokenData);
+        jsonResponse.add("data", tokenData);
 
         writer.print(jsonResponse.toString());
         writer.flush();
@@ -114,7 +114,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         }
 
         JsonObject jsonResponse = new JsonObject();
-        jsonResponse.addProperty("error", errorMessage);
+        jsonResponse.addProperty("errorMessage", errorMessage);
 
         PrintWriter writer = response.getWriter();
         writer.print(jsonResponse.toString());

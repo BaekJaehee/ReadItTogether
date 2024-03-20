@@ -62,7 +62,7 @@ public class ReissueServiceImpl implements ReissueService {
 
         JsonObject jsonResponse = new JsonObject();
         jsonResponse.addProperty("messages", "Login success");
-        jsonResponse.add("newTokens", tokenData);
+        jsonResponse.add("data", tokenData);
 
         writer.print(jsonResponse.toString());
         writer.flush();
