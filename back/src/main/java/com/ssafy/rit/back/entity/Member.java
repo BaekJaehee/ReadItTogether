@@ -7,10 +7,9 @@ import java.util.List;
 
 @Entity
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @EqualsAndHashCode()
 @Table(name = "member")
 public class Member {
@@ -32,9 +31,10 @@ public class Member {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "profile_image", nullable = false)
+    @Column(name = "profile_image")
     private String profileImage;
 
+    @Builder.Default
     @Column(name = "is_disabled")
     private int isDisabled = 0;
 
@@ -44,18 +44,22 @@ public class Member {
     @Column(name = "gender", nullable = false)
     private int gender;
 
+    @Builder.Default
     @Column(name = "is_receivable", nullable = false)
     private int isReceivable = 0;
 
+    @Builder.Default
     @Column(name = "intro")
     private String intro = "소개글을 입력하세요.";
 
     @Column(name = "naver_code")
     private String naverCode;
 
+    @Builder.Default
     @Column(name = "member_group")
     private int memberGroup = 0;
 
+    @Builder.Default
     @Column(name = "shelf_group")
     private int shelfGroup = 0;
 
