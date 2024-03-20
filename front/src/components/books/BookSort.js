@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import BookSortForm from '../../api/book/BookSortForm';
+// import BookSortForm from '../../api/book/BookSortForm';
+import getSortedBooks from '../../api/book/BookSortForm';
 
 const BookSort = () => {
   const [books, setBooks] = useState([]);
@@ -16,14 +17,14 @@ const BookSort = () => {
     setBooks(orderedBooks);
   };
 
-  const getSortedBooks = async (sortOption, orderOption) => {
-    const sortedBooks = await BookSortForm(sortOption, orderOption);
-    return sortedBooks;
-  };
+  // const getSortedBooks = async (sortOption, orderOption) => {
+  //   const sortedBooks = await BookSortForm(sortOption, orderOption);
+  //   return sortedBooks;
+  // };
 
   useEffect(() => {
     const initBooks = async () => {
-      const defaultSortedBooks = await getSortedBooks('default', 'desc'); // 기본적으로 등록순으로 오름차순 정렬된 책 가져오기
+      const defaultSortedBooks = await getSortedBooks('default', 'desc'); // 기본적으로 등록순으로 내림차순 정렬된 책 가져오기
       setBooks(defaultSortedBooks);
     };
     initBooks();

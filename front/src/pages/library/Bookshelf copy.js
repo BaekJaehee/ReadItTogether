@@ -37,11 +37,11 @@ const Bookshelf = () => {
           type="text" 
           className="border-2 w-96" 
           placeholder="제목을 입력하세요" 
-          // onChange={(e) => handleSearch(e.target.value)}
+          onChange={(e) => handleSearch(e.target.value)}
         />
-        <button className="rounded bg-blue-500 hover:bg-blue-700 text-white px-3 py-1">
+        {/* <button className="rounded bg-blue-500 hover:bg-blue-700 text-white px-3 py-1">
           검색
-        </button>
+        </button> */}
       </div>
       <div className="flex justify-end mx-24">
         {/* 정렬 기준 콤보박스 -> 백에서 줄거임*/}
