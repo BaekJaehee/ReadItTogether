@@ -18,13 +18,13 @@ public class CommonUtil {
     public Member getMember() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        Member currentMember = memberRepository.findByEmail(email);
-        if (currentMember == null) {
-            throw new MemberNotFoundException();
-        }
+        Member currentMember = memberRepository.findByEmail(email)
+                .orElseThrow(MemberNotFoundException::new);
+
         if (currentMember.getIsDisabled() == 1) {
             throw new MemberDisabledException();
         }
         return currentMember;
     }
+
 }
