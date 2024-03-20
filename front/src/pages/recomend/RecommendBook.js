@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import "../../App.css"
 
 // 이미지 파일 import
 import img1 from "../../assets/book/img1.PNG";
@@ -77,56 +79,62 @@ const RecommendBook = () => {
   const { width, height } = getImageSize();
 
   return (
-    <div>
-      <div className="flex flex-col p-20 relative">
-        <div className="flex flex-col items-start space-y-2">
-          <p className="mb-4 pl-4 text-2xl font-black">신간 베스트셀러 순위</p>
-          {index > 0 && (
-            <button onClick={moveLeft} className="slides border-2 rounded-full">
-              <img className="w-10 rounded-full" src={left} alt="왼쪽" />
-            </button>
-          )}
-          <div className="overflow-hidden" ref={constraintsRef}>
-            <AnimatePresence>
-              <motion.div
-                className="flex space-x-4"
-                key={index}
-                initial={{ x: "100%" }}
-                animate={{ x: 0 }}
-                exit={{ x: "-100%" }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
-              >
-                {images.map((img, i) => (
-                  <div
-                    key={i}
-                    className={`flex flex-col items-start ${
-                      i < index || i >= index + 5 ? "hidden" : ""
-                    }`}
-                  >
-                    <img
-                      src={img}
-                      alt={`book-${i}`}
-                      className={`object-cover ${width} ${height}`}
-                    />
-                    <div className="text-sm font-black mt-2 text-left">
-                      {titles[i]}
-                    </div>
-                  </div>
-                ))}
-              </motion.div>
-            </AnimatePresence>
-          </div>
-          {index < images.length - 5 && (
-            <button
-              onClick={moveRight}
-              className="slides border-2 rounded-full"
+    <div className="flex flex-col p-20 relative">
+  <p className="mb-4 pl-4 text-2xl font-black">신간 베스트셀러 순위</p>
+  <div className="flex items-center space-x-2 relative"> {/* 여기에 relative 추가 */}
+    {index > 0 && (
+      <button
+        onClick={moveLeft}
+        className="border-2 rounded-full absolute left-6 transform -translate-x-1/2" // 수정된 부분
+        style={{ top: '50%', transform: 'translate(-50%, -50%)' }} // 버튼을 세로 중앙에 위치시킵니다.
+      >
+        <img className="w-10 rounded-full" src={left} alt="왼쪽" />
+      </button>
+    )}
+    <div className="overflow-hidden" ref={constraintsRef}>
+      <AnimatePresence>
+        <motion.div
+          className="flex space-x-4"
+          key={index}
+          initial={{ x: "100%" }}
+          animate={{ x: 0 }}
+          exit={{ x: "-100%" }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
+        >
+          {images.map((img, i) => (
+            <Link to="/detail-book">
+            <div
+              key={i}
+              className={`flex flex-col items-start ${
+                i < index || i >= index + 5 ? "hidden" : ""
+              }`}
             >
-              <img className="w-10 rounded-full" src={right} alt="오른쪽" />
-            </button>
-          )}
-        </div>
-      </div>
+              <img
+                src={img}
+                alt={`book-${i}`}
+                className={`object-cover ${width} ${height}`}
+              />
+              <div className="text-sm font-black mt-2 text-left">
+                {titles[i]}
+              </div>
+            </div>
+            </Link>
+          ))}
+        </motion.div>
+      </AnimatePresence>
     </div>
+    {index < images.length - 5 && (
+      <button
+        onClick={moveRight}
+        className="border-2 rounded-full absolute right-6 transform translate-x-1/2" // 수정된 부분
+        style={{ top: '50%', transform: 'translate(50%, -50%)' }} // 버튼을 세로 중앙에 위치시킵니다.
+      >
+        <img className="w-10 rounded-full" src={right} alt="오른쪽" />
+      </button>
+    )}
+  </div>
+</div>
+
   );
 };
 
