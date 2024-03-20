@@ -1,4 +1,4 @@
-package com.ssafy.rit.back.dto.member;
+package com.ssafy.rit.back.dto.member.customDto;
 
 import com.ssafy.rit.back.entity.Member;
 import org.springframework.security.core.GrantedAuthority;
