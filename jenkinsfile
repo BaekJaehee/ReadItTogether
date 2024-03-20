@@ -158,7 +158,7 @@ pipeline {
 stage('Cleanup Unused Docker Images') {
     steps {
         script {
-            // 사용하지 않는 Docker 이미지 삭제 gg;;
+            // 사용하지 않는 Docker 이미지 삭제 gg;;;
             sh 'docker image prune -af'
         }
     }
