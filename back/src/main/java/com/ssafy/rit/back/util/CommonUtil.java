@@ -9,6 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class CommonUtil {
@@ -18,13 +20,13 @@ public class CommonUtil {
     public Member getMember() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        Member currentMember = memberRepository.findByEmail(email);
-        if (currentMember == null) {
-            throw new MemberNotFoundException();
-        }
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+        Member currentMember = optionalMember.orElseThrow(MemberNotFoundException::new);
+
         if (currentMember.getIsDisabled() == 1) {
             throw new MemberDisabledException();
         }
         return currentMember;
     }
+
 }
