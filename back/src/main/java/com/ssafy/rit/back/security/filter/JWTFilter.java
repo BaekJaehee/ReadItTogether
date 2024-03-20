@@ -30,14 +30,14 @@ public class JWTFilter extends OncePerRequestFilter  {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
 
-        String accessToken = request.getHeader("Authorization");
-        log.debug("----null이라면 이게 찍힐 것: {}----", accessToken);
-
-
-        if (accessToken == null) {
+        String authorization = request.getHeader("Authorization");
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            log.debug("-----문제있다이거-----{}----------", authorization);
             filterChain.doFilter(request, response);
             return;
         }
+
+        String accessToken = authorization.split(" ")[1];
 
 
         // 액세스 토큰 만료 체크
