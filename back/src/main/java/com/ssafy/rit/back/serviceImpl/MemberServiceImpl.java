@@ -1,11 +1,9 @@
 package com.ssafy.rit.back.serviceImpl;
 
-import com.ssafy.rit.back.dto.member.requestDto.MemberSignUpRequestDto;
+import com.ssafy.rit.back.dto.member.MemberRequestDto;
 import com.ssafy.rit.back.entity.Member;
 import com.ssafy.rit.back.repository.MemberRepository;
 import com.ssafy.rit.back.service.MemberService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,20 +13,13 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public MemberServiceImpl(MemberRepository memberRepository, PasswordEncoder passwordEncoder) {
+    public MemberServiceImpl(MemberRepository memberRepository, PasswordEncoder passwordEncoder){
         this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public Boolean existsByEmail(String email) {
-        return memberRepository.existsByEmail(email);
-    }
-
-
-
-    public void signUp(MemberSignUpRequestDto dto) {
+    public void signUp(MemberRequestDto dto) {
 
         String email = dto.getEmail();
         String password = dto.getPassword();
@@ -37,15 +28,12 @@ public class MemberServiceImpl implements MemberService {
         String birth = dto.getBirth();
         int gender = dto.getGender();
 
-
-        Boolean isExist = memberRepository.existsByEmail(email);
-
-        // 이미 가입한 유저는 return 처리
-        if (isExist) {
+        Boolean isJoined = memberRepository.existsByEmail(email);
+        if (isJoined) {
             return;
         }
 
-        Member memberData = Member.builder()
+        Member data = Member.builder()
                 .email(email)
                 .password(passwordEncoder.encode(password))
                 .name(name)
@@ -54,7 +42,11 @@ public class MemberServiceImpl implements MemberService {
                 .gender(gender)
                 .build();
 
+        memberRepository.save(data);
+    }
 
-        memberRepository.save(memberData);
+    @Override
+    public Member findByEmail(String email) {
+        return memberRepository.findByEmail(email);
     }
 }
