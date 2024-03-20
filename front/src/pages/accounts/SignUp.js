@@ -63,8 +63,8 @@ const SignUp = () => {
       setEmailMessage('올바른 형식이 아닙니다!')
     } else {
       setEmailMessage('')
-    }
-  }
+    };
+  };
 
   const onChangePassword = (e) => {
     const currentPassword = e.target.value;
@@ -75,8 +75,8 @@ const SignUp = () => {
       setPasswordMessage('올바른 형식이 아닙니다!')
     } else {
       setPasswordMessage('')
-    }
-  }
+    };
+  };
   
   const onChangePasswordConfirm = (e) => {
     const currentPasswordConfirm = e.target.value;
@@ -90,8 +90,8 @@ const SignUp = () => {
     } else {
       setPasswordConfirmMessage('비밀번호가 일치합니다.');
       setPasswordConfirmMessageClassName('text-blue-500');
-    }
-  }
+    };
+  };
 
   const onChangeNickname = (e) => {
     const currentNickname = e.target.value;
@@ -102,14 +102,14 @@ const SignUp = () => {
       setNicknameMessage('올바른 형식이 아닙니다!')
     } else {
       setNicknameMessage('')
-    }
-  }
+    };
+  };
 
   let now = new Date();
   let years = []
   for (let y = now.getFullYear(); y >= 1930; y -= 1) {
     years.push(y)
-  }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -118,7 +118,7 @@ const SignUp = () => {
       console.log(response);
     } catch (error) {
       throw error;
-    }
+    };
 
     // 회원가입 후 초기화
     setEmail('');
@@ -129,7 +129,7 @@ const SignUp = () => {
     setBirth('');
     setGender('');
     setPasswordConfirmMessage('');
-  }
+  };
 
   const checkEmailDuplicate = async (email) => {
     try {
@@ -140,8 +140,8 @@ const SignUp = () => {
     } catch (error) {
       console.log(error);
       return false; // 에러가 발생했을 경우 중복으로 처리
-    }
-  }
+    };
+  };
 
   const checkNicknameDuplicate = async (nickname) => {
     try {
@@ -152,8 +152,8 @@ const SignUp = () => {
     } catch (error) {
       console.log(error);
       return false; // 에러가 발생했을 경우 중복으로 처리
-    }
-  }
+    };
+  };
 
   const handleCheckEmail = async () => {
     try {
@@ -162,8 +162,8 @@ const SignUp = () => {
       setEmailStatusMessage(isEmailDuplicate ? '중복된 이메일입니다.' : '사용 가능한 이메일입니다.');
     } catch (error) {
       console.error(error);
-    }
-  }
+    };
+  };
 
   const handleCheckNickname = async () => {
     try {
@@ -172,8 +172,8 @@ const SignUp = () => {
       setNicknameStatusMessage(isNicknameDuplicate ? '중복된 닉네임입니다.' : '사용 가능한 닉네임입니다.');
     } catch (error) {
       console.log(error);
-    }
-  }
+    };
+  };
 
   return (
     <div className="max-w-md mx-auto my-8 p-4 border border-gray-300 rounded shadow">
@@ -232,8 +232,8 @@ const SignUp = () => {
         <div className="mb-4">
           <label className="block mb-1">성별</label>
           <div className="flex">
-            <label className="mr-4"><input type="radio" name="gender" value="남자" onChange={(e) => setGender(e.target.value)} className="mr-1 ml-1" /> 남자</label>
-            <label className="mr-4"><input type="radio" name="gender" value="여자" onChange={(e) => setGender(e.target.value)} className="mr-1 ml-1" /> 여자</label>
+            <label className="mr-4"><input type="radio" name="gender" value="0" onChange={(e) => setGender(e.target.value)} className="mr-1 ml-1" /> 남자</label>
+            <label className="mr-4"><input type="radio" name="gender" value="1" onChange={(e) => setGender(e.target.value)} className="mr-1 ml-1" /> 여자</label>
           </div>
         </div>
         <div className="flex justify-center">
