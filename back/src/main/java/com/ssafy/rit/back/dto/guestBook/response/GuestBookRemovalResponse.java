@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GuestBookCreationResponse {
+public class GuestBookRemovalResponse {
 
     private String message;
 
     private boolean data;
+
 }
