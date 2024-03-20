@@ -51,6 +51,7 @@ const FollowModal = ({ isFollowers, onClose }) => {
           </button>
         </div>
         <div className="max-h-[280px] bg-gray-200 py-0.5 rounded-b-lg rounded-r-lg overflow-y-auto">
+
           {/* 예시 목록, 실제 팔로워/팔로잉 목록 렌더링 로직에 따라 변경 필요 */}
           <div className="flex justify-between bg-white rounded-md px-2 py-1 m-2">
             <div className="flex items-center">
@@ -65,7 +66,11 @@ const FollowModal = ({ isFollowers, onClose }) => {
             </button>
           </div>
           {/* 팔로워/팔로잉 목록 렌더링 반복 */}
-          
+          {/* 팔로워/팔로잉 목록 렌더링 반복 */}
+          {/* 팔로워/팔로잉 목록 렌더링 반복 */}
+          {/* 팔로워/팔로잉 목록 렌더링 반복 */}
+          {/* 팔로워/팔로잉 목록 렌더링 반복 */}
+
         </div>
       </div>
     </div>,
