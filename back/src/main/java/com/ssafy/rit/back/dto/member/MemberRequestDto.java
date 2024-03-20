@@ -1,11 +1,15 @@
-package com.ssafy.rit.back.dto.member.requestDto;
+package com.ssafy.rit.back.dto.member;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
-public class MemberSignUpRequestDto {
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class MemberRequestDto {
 
     private String email;
     private String password;
@@ -13,5 +17,4 @@ public class MemberSignUpRequestDto {
     private String nickname;
     private String birth;
     private int gender;
-
 }

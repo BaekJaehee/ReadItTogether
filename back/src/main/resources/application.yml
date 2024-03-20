@@ -1,6 +1,7 @@
 spring:
   config:
     import: optional:classpath:env.yml
+  
   datasource:
     url: ${DATABASE_URL}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -9,12 +10,15 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         show_sql: false
         format_sql: true
         default_batch_fetch_size: 100
+  jwt:
+    secret: vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbblkjlkjkldfdhgfhjgkjb
+
   h2:
     console:
       enabled: false
@@ -42,3 +46,11 @@ logging:
 
 server:
   port: 8000
+
+cors:
+  allowed-origins: http://localhost:3000
+
+springdoc:
+  swagger-ui:
+    path: /v3/api-docs
+
