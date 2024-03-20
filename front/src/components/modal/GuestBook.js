@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 
 // 이미지
-import logo from "../../assets/navbar/logo.png";
+import logo from "../../assets/navbar/logo2.png";
+import deleteButton from "../../assets/profile/delete.png";
 
 const GuestBook = ({ onClose }) => {
   const [text, setText] = useState("");
@@ -31,21 +32,32 @@ const GuestBook = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-5 rounded w-96" ref={modalRef}>
-        <div className="flex justify-between">
-          <img className="w-32 mb-4" src={logo} alt="로고" />
-          <p className="font-extrabold text-sm">소개글 작성</p>
+      <div className="bg-white p-5 rounded w-[400px] h-[350px]" ref={modalRef}>
+        <div className="flex justify-between items-center text-gray-500 font-semibold text-sm font-serif italic leading-normal">
+          <div className="flex">
+            <img className="w-5 mr-1" src={logo} alt="로고" />
+            <p>Read-it Together</p>
+          </div>
+          <button onClick={onClose}>
+            <img className="w-3" src={deleteButton} alt="X" />
+          </button>
+        </div>
+        <hr className="mt-3 border-gray-300" />
+        <div className="flex items-center justify-between my-2">
+          <p className="text-gray-500 font-semibold text-sm font-serif italic leading-normal">
+            Guest Book
+          </p>
+          <button className="bg-white border border-gray-300 hover:bg-gray-300 hover:text-white rounded-lg text-gray-500 text-xs py-2 px-4 transition-colors duration-300">
+            등록
+          </button>
         </div>
         <form onSubmit={handleSubmit}>
-          <textarea
-            className="w-full h-40 p-2 border rounded resize-none"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          ></textarea>
-          <div className="flex justify-end space-x-2 mt-2">
-            <button className="w-full px-4 py-2 bg-blue-500 font-semibold text-white rounded hover:bg-blue-600">
-              확 인
-            </button>
+          <div className="bg-gray-200 rounded-lg p-2">
+            <textarea
+              className="w-full h-[200px] p-2 border rounded resize-none text-xs text-gray-600"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            ></textarea>
           </div>
         </form>
       </div>
