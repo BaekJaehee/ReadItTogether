@@ -1,5 +1,7 @@
 import React from "react";
 
+import diaryButton from "../../assets/library/diaryButton.png";
+
 const Card = ({ item, cardData, onClose }) => {
   // const { from_m_id, comment } = cardData;  // card 테이블에만 있는 정보
   // item은 card와 book에서 조인해서 받아온 정보
@@ -24,11 +26,8 @@ const Card = ({ item, cardData, onClose }) => {
       </div>
       {/* 뒤로가기 버튼(실제로는 컴포넌트 닫기) */}
       <div className="flex justify-center mt-4">
-        <button
-          className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
-          onClick={onClose}
-        >
-          뒤로가기
+        <button onClick={onClose}>
+          <img className="w-7 h-7" src={diaryButton} alt="뒤로가기"/>
         </button>
       </div>
     </div>

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-import PostItLauncher from "../../components/modal/PostItLauncher";
-import Diary from "../../components/modal/Diary";
+import PostItLauncher from "../../components/modal/PostIt/PostItLauncher";
+import Diary from "../../components/modal/Diary/Diary";
 import GuestBook from "../../components/modal/GuestBook";
+import MailBox from "../../components/modal/MailBox";
 
 // 이미지
 import table from "../../assets/library/table.png";
@@ -28,6 +29,11 @@ const Library = () => {
   const [isGuestBookOpen, setIsGuestBookOpen] = useState(false);
   const openGuestBook = () => setIsGuestBookOpen(true);
   const closeGuestBook = () => setIsGuestBookOpen(false);
+
+  // 우편함 상태
+  const [isMailBoxOpen, setIsMailBoxOpen] = useState(false);
+  const openMailBox = () => setIsMailBoxOpen(true);
+  const closeMailBox = () => setIsMailBoxOpen(false);
 
   return (
     <div className="min-h-screen min-w-full overflow-auto">
@@ -71,13 +77,14 @@ const Library = () => {
           {isGuestBookOpen && <GuestBook onClose={closeGuestBook} />}
         </div>
         <div className="group flex items-center justify-center  overflow-hidden">
-          <Link to="/">
+          <button onClick={openMailBox}>
             <img
               className="w-[278px] transform transition-transform duration-500 ease-in-out group-hover:scale-110"
               src={mailBox}
               alt="우편함"
             />
-          </Link>
+          </button>
+          {isMailBoxOpen && <MailBox onClose={closeMailBox}/>}
         </div>
         <div className="group absolute right-40 top-20 overflow-hidden">
           <button onClick={openModal}>

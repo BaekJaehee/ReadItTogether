@@ -1,6 +1,6 @@
 import React from "react";
 
-import TimeSince from "../datetime/TimeSince";
+import TimeSince from "../../datetime/TimeSince";
 
 const PostItView = ({ onClose, postItContent, createdAt }) => {
   return (
