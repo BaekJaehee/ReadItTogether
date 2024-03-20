@@ -50,6 +50,9 @@ public class Book {
     @Column(name = "isbn", nullable = false)
     private String isbn;
 
+    @Column(name = "genre", nullable = false)
+    private String genre;
+
 //    관계 설정
     @OneToMany(mappedBy = "bookId")
     private List<Comment> comments;
