@@ -2,6 +2,7 @@ package com.ssafy.rit.back.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -52,6 +53,10 @@ public class Book {
 
     @Column(name = "genre")
     private String genre;
+
+    @Lob
+    @Column(name = "info")
+    private String info;
 
 //    관계 설정
     @OneToMany(mappedBy = "bookId")
