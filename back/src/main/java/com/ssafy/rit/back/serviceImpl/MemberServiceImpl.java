@@ -7,8 +7,6 @@ import com.ssafy.rit.back.service.MemberService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.PrintWriter;
-
 @Service
 public class MemberServiceImpl implements MemberService {
 
@@ -47,8 +45,4 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(data);
     }
 
-    @Override
-    public Member findByEmail(String email) {
-        return memberRepository.findByEmail(email);
-    }
 }
