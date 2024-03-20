@@ -50,7 +50,7 @@ public class Book {
     @Column(name = "isbn", nullable = false)
     private String isbn;
 
-    @Column(name = "genre", nullable = false)
+    @Column(name = "genre")
     private String genre;
 
 //    관계 설정
