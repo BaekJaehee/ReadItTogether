@@ -3,8 +3,10 @@ package com.ssafy.rit.back.serviceImpl;
 import com.ssafy.rit.back.dto.guestBook.requestDto.GuestBookCreationRequestDto;
 import com.ssafy.rit.back.dto.guestBook.response.GuestBookCreationResponse;
 import com.ssafy.rit.back.dto.guestBook.response.GuestBookDetailResponse;
+import com.ssafy.rit.back.dto.guestBook.responseDto.GuestBookDetailResponseDto;
 import com.ssafy.rit.back.entity.GuestBook;
 import com.ssafy.rit.back.entity.Member;
+import com.ssafy.rit.back.exception.guestBook.GuestBookNotFoundException;
 import com.ssafy.rit.back.exception.guestBook.GuestBookResourceGoneException;
 import com.ssafy.rit.back.exception.member.MemberNotFoundException;
 import com.ssafy.rit.back.repository.GuestBookRepository;
@@ -64,8 +66,14 @@ public class GuestBookServiceImpl implements GuestBookService {
     @Override
     public ResponseEntity<GuestBookDetailResponse> readGuestBookDetail(Long postId) {
 
-        Optional<GuestBook> currentGuestBook = guestBookRepository.findById(postId);
+        GuestBook currentGuestBook = guestBookRepository.findById(postId)
+                .orElseThrow(GuestBookNotFoundException::new);
 
-        return null;
+        GuestBookDetailResponse response = GuestBookDetailResponse.createGuestBookDetailResponse(
+                "방명록 조회 성공",
+                GuestBookDetailResponseDto.createGuestBookDetailResponseDto(currentGuestBook.getContent())
+        );
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

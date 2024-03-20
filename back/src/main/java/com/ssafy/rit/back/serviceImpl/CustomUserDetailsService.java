@@ -2,11 +2,14 @@ package com.ssafy.rit.back.serviceImpl;
 
 import com.ssafy.rit.back.dto.member.CustomUserDetails;
 import com.ssafy.rit.back.entity.Member;
+import com.ssafy.rit.back.exception.member.MemberNotFoundException;
 import com.ssafy.rit.back.repository.MemberRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -19,12 +22,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Member memberData = memberRepository.findByEmail(email);
 
-        if (memberData != null) {
-            return new CustomUserDetails(memberData);
-        }
+        // findByEmail 로 Member 정보 가져올 때, 해당 유저가 null 일 경우의 예외 추가, 예외 통과 시 기존 CustomUserDetails 에 해당 Member 리턴
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
 
-        return null;
+        Member memberData = optionalMember.orElseThrow(MemberNotFoundException::new);
+
+        return new CustomUserDetails(memberData);
     }
 }

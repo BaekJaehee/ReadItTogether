@@ -11,4 +11,11 @@ public class GuestBookDetailResponse {
     private String message;
 
     private GuestBookDetailResponseDto data;
+
+    public static GuestBookDetailResponse createGuestBookDetailResponse(String message, GuestBookDetailResponseDto dto) {
+        return GuestBookDetailResponse.builder()
+                .message(message)
+                .data(dto)
+                .build();
+    }
 }
