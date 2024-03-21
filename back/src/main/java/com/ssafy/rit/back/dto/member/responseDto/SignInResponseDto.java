@@ -10,5 +10,5 @@ import lombok.Setter;
 public class SignInResponseDto {
 
     private String message;
-    private TokenDto data;
+    private DataDto data;
 }
