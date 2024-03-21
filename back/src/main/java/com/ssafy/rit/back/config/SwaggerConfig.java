@@ -32,7 +32,7 @@ import java.util.Arrays;
         @Bean
         public GroupedOpenApi guestBookApi() {
             return GroupedOpenApi.builder()
-                    .group("guestBook-api")
+                    .group("guestbook-api")
                     .pathsToMatch("/guestbook/**")
                     .build();
         }
@@ -42,6 +42,14 @@ import java.util.Arrays;
             return GroupedOpenApi.builder()
                     .group("login-api")
                     .pathsToMatch("/login")
+                    .build();
+        }
+
+        @Bean
+        public GroupedOpenApi booksAPI() {
+            return GroupedOpenApi.builder()
+                    .group("books-api")
+                    .pathsToMatch("/books/**")
                     .build();
         }
 
@@ -56,4 +64,5 @@ import java.util.Arrays;
                     .components(new Components().addSecuritySchemes("bearerAuth", securityScheme))
                     .security(Arrays.asList(securityRequirement));
         }
+
     }
