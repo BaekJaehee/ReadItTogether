@@ -99,7 +99,7 @@ public class Member {
 
 
     // 탈퇴 시 isDisable 값 갱신 처리
-    public void updateDisable(DisableRequestDto dto) {
+    public void updateDisable() {
 
         this.isDisabled = 1;
 

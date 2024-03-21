@@ -4,6 +4,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.ssafy.rit.back.dto.member.responseDto.SignInResponseDto;
+import com.ssafy.rit.back.dto.member.responseDto.TokenDto;
+import com.ssafy.rit.back.entity.Member;
+import com.ssafy.rit.back.exception.member.MemberNotFoundException;
+import com.ssafy.rit.back.repository.MemberRepository;
 import com.ssafy.rit.back.repository.RefreshRepository;
 import com.ssafy.rit.back.security.jwt.JWTUtil;
 import jakarta.servlet.FilterChain;
@@ -29,11 +34,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
+    private final MemberRepository memberRepository;
 
-    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshRepository refreshRepository) {
+    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshRepository refreshRepository, MemberRepository memberRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
+        this.memberRepository = memberRepository;
     }
 
     @Override
@@ -41,15 +48,21 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         System.out.println("-----------로그인 시도 중---------");
         try {
-            ObjectMapper om = new ObjectMapper();
 
+            ObjectMapper om = new ObjectMapper();
             JsonNode jsonNode = om.readTree(request.getInputStream());
 
             String email = jsonNode.get("email").asText();
             String password = jsonNode.get("password").asText();
 
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password, null);
+            Member member = memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
+            if (member.getIsDisabled() == 1) {
+                response.setStatus(401);
+                log.info("--------------Disabled된 유저염--------------");
+                return null;
+            }
 
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password, null);
             return authenticationManager.authenticate(authToken);
 
 
@@ -75,9 +88,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         response.setHeader("Authorization", accessToken);
         response.addCookie(createCookie("refresh", refreshToken));
         response.setStatus(HttpStatus.OK.value());
-
-        System.out.println("로그인 완료염");
-
         response.setContentType("application/json; charset=UTF-8");
 
         log.info("-----------------------로그인 완료염-----------------------");
@@ -90,7 +100,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         response.getWriter().write(jsonResponse);
 
+
         /*
+
         PrintWriter writer = response.getWriter();
 
         // 로그인 성공 시 프론트에게 토큰 전달(json형식)
@@ -104,6 +116,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         writer.print(jsonResponse.toString());
         writer.flush();
+
+        */
+
 
     }
 

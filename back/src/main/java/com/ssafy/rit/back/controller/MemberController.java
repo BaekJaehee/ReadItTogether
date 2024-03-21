@@ -87,12 +87,18 @@ public class MemberController {
 
     }
 
+    // 회원 탈퇴
+    @PostMapping("/disable")
+    public ResponseEntity<DisableResponseDto> disable(@RequestBody DisableRequestDto dto) throws JsonProcessingException {
 
-    @PostMapping("/disable")        // 회원 탈퇴
-    public ResponseEntity<DisableResponseDto> disable(@RequestBody DisableRequestDto dto) {
+        memberService.updateDisable(dto);
 
-        System.out.println(memberService.checkPassword(dto));
-        return null;
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResponse;
+        DisableResponseDto responseDto = new DisableResponseDto("Success", true);
+        jsonResponse = objectMapper.writeValueAsString(responseDto);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
 
