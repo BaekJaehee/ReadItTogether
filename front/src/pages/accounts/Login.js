@@ -79,7 +79,7 @@ const Login = () => {
               아이디가 없으신가요?
             </Link>
             <br />
-            <Link to="/find_password" className="text-white text-sm hover:underline">
+            <Link to="/find-password" className="text-white text-sm hover:underline">
               비밀번호를 잊으셨나요?
             </Link>
           </div>
