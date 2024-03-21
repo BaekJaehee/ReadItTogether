@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { handleSignUp } from "../../api/accounts/SignUp";
 import { checkEmailDuplicate } from "../../api/accounts/MailDuplicate";
 import { checkNicknameDuplicate } from "../../api/accounts/NicknameDuplicate";
@@ -6,6 +7,8 @@ import { checkNicknameDuplicate } from "../../api/accounts/NicknameDuplicate";
 // 닉네임, 이메일 중복처리 로직 확인 필요
 
 const SignUp = () => {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
@@ -68,6 +71,28 @@ const SignUp = () => {
       setEmailMessage('')
     };
   };
+  
+  useEffect(() => {
+    setEmailStatusMessage(''); // 이메일 상태 메시지 초기화
+  }, [email]); // email 상태가 변경될 때마다 useEffect 호출  
+  
+  const onChangeNickname = (e) => {
+    const currentNickname = e.target.value;
+    // setEmailStatusMessage('');
+    setIsNicknameValid(false);
+    setNickname(currentNickname);
+    const nicknameRegExp = /^[가-힣a-zA-Z0-9]{2,8}$/;
+    
+    if (!nicknameRegExp.test(currentNickname) && currentNickname.length !== 0) {
+      setNicknameMessage('올바른 형식이 아닙니다!')
+    } else {
+      setNicknameMessage('')
+    };
+  };
+
+  useEffect(() => {
+    setNicknameStatusMessage('');
+  }, [nickname]);
 
   const onChangePassword = (e) => {
     const currentPassword = e.target.value;
@@ -96,18 +121,9 @@ const SignUp = () => {
     };
   };
 
-  const onChangeNickname = (e) => {
-    const currentNickname = e.target.value;
-    setIsNicknameValid(false);
-    setNickname(currentNickname);
-    const nicknameRegExp = /^[가-힣a-zA-Z0-9]{2,8}$/;
-    
-    if (!nicknameRegExp.test(currentNickname) && currentNickname.length !== 0) {
-      setNicknameMessage('올바른 형식이 아닙니다!')
-    } else {
-      setNicknameMessage('')
-    };
-  };
+  useEffect(() => {
+    setPasswordConfirmMessage('');
+  }, [password]);
 
   let now = new Date();
   let years = []
@@ -120,19 +136,10 @@ const SignUp = () => {
     try {
       const response = await handleSignUp(name, email, password, nickname, birth, gender);
       console.log(response);
+      navigate("/login");
     } catch (error) {
       throw error;
     };
-
-    // 회원가입 후 초기화
-    setEmail('');
-    setPassword('');
-    setPasswordConfirm('');
-    setNickname('');
-    setName('');
-    setBirth('');
-    setGender('');
-    setPasswordConfirmMessage('');
   };
 
   const handleCheckEmail = async () => {

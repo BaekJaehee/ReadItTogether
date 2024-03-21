@@ -21,7 +21,7 @@ const handleSignUp = async (name, email, password, nickname, birth, gender) => {
       })
       console.log(response.data);
   } catch (error) {
-    console.error(error);
+    console.error(error.response.data.message);
     throw error;
   }
 }
