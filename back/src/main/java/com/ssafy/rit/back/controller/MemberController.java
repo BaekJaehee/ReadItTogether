@@ -46,7 +46,7 @@ public class MemberController {
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-    @GetMapping("/email")
+    @PostMapping("/email")
     public ResponseEntity<CheckResponseDto> checkEmail(@RequestBody CheckEmailRequestDto dto) throws JsonProcessingException {
 
         log.info("------------중복 이메일 확인: {} -----------------", dto.getEmail());
@@ -54,37 +54,34 @@ public class MemberController {
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonResponse;
 
-        try {
-            memberService.checkEmail(dto);
-            CheckResponseDto responseDto = new CheckResponseDto("Success", true);
-
-            jsonResponse = objectMapper.writeValueAsString(responseDto);
-            return new ResponseEntity<>(responseDto, HttpStatus.OK);
-        } catch (EmailAlreadyExistsException e) {
-            log.info("--------------이미 존재하는 이메일: {}------------------", dto.getEmail());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Boolean checked = memberService.checkEmail(dto);
+        if (!checked) {
+            log.info("-------------------이멜 중복염:{}", dto.getEmail());
+            throw new EmailAlreadyExistsException();
         }
+        CheckResponseDto responseDto = new CheckResponseDto("Success", true);
+        jsonResponse = objectMapper.writeValueAsString(responseDto);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
 
     }
 
-    @GetMapping("/nickname")
+    @PostMapping("/nickname")
     public ResponseEntity<CheckResponseDto> checkNickname(@RequestBody CheckNicknameRequestDto dto) throws JsonProcessingException {
 
         log.info("------------중복 닉네임 확인: {} -----------------", dto.getNickname());
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String jsonReponse;
+        String jsonResponse;
 
-        try {
-            memberService.checkNickname(dto);
-            CheckResponseDto responseDto = new CheckResponseDto("Success", true);
-
-            jsonReponse = objectMapper.writeValueAsString(responseDto);
-            return new ResponseEntity<>(responseDto, HttpStatus.OK);
-        } catch (NicknameAlreadyExistsException e) {
-            log.info("--------------이미 존재하는 닉네임: {}------------------", dto.getNickname());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Boolean checked = memberService.checkNickname(dto);
+        if (!checked) {
+            log.info("-------------------닉넴 중복염:{}", dto.getNickname());
+            throw new NicknameAlreadyExistsException();
         }
+
+        CheckResponseDto responseDto = new CheckResponseDto("Success", true);
+        jsonResponse = objectMapper.writeValueAsString(responseDto);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
 
     }
 

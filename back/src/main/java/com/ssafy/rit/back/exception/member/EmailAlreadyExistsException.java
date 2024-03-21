@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Email already exists")
 public class EmailAlreadyExistsException extends RuntimeException {
 
-    public EmailAlreadyExistsException(String errorMsg) {
-        super(errorMsg);
+    public EmailAlreadyExistsException() {
+        super("Duplicated Email");
     }
 }
