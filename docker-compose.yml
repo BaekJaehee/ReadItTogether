@@ -5,7 +5,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - /usr/share/nginx/html/build:/app/build
+      - /app/build:/build
     command: /bin/sh -c "npm run build && npm start"
   backend:
     image: ${BACK_IMAGE_NAME}:${BUILD_NUMBER}
