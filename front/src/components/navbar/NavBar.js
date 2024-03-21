@@ -58,7 +58,7 @@ const NavBar = () => {
 
         {/* 로고/홈 버튼 */}
         <Link to="/" className="font-extrabold mr-6">
-          <img className="w-44" src={logo} alt="" />
+          <img className="w-36" src={logo} alt="" />
         </Link>
       </div>
 
