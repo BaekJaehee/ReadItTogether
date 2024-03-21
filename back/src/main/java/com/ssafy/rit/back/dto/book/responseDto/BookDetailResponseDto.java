@@ -1,4 +1,4 @@
-package com.ssafy.rit.back.dto.guestBook.responseDto;
+package com.ssafy.rit.back.dto.book.responseDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
