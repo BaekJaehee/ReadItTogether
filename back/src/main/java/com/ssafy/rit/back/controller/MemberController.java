@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.rit.back.dto.member.requestDto.CheckEmailRequestDto;
 import com.ssafy.rit.back.dto.member.requestDto.CheckNicknameRequestDto;
+import com.ssafy.rit.back.dto.member.requestDto.DisableRequestDto;
 import com.ssafy.rit.back.dto.member.requestDto.MemberRequestDto;
 import com.ssafy.rit.back.dto.member.responseDto.CheckResponseDto;
+import com.ssafy.rit.back.dto.member.responseDto.DisableResponseDto;
 import com.ssafy.rit.back.dto.member.responseDto.SignUpResponseDto;
 import com.ssafy.rit.back.exception.member.EmailAlreadyExistsException;
 import com.ssafy.rit.back.exception.member.NicknameAlreadyExistsException;
@@ -83,6 +85,20 @@ public class MemberController {
         jsonResponse = objectMapper.writeValueAsString(responseDto);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
 
+    }
+
+    // 회원 탈퇴
+    @PostMapping("/disable")
+    public ResponseEntity<DisableResponseDto> disable(@RequestBody DisableRequestDto dto) throws JsonProcessingException {
+
+        memberService.updateDisable(dto);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResponse;
+        DisableResponseDto responseDto = new DisableResponseDto("Success", true);
+        jsonResponse = objectMapper.writeValueAsString(responseDto);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
 
