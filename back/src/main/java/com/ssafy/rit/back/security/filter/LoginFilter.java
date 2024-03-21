@@ -2,10 +2,9 @@ package com.ssafy.rit.back.security.filter;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.ssafy.rit.back.dto.member.responseDto.SignInResponseDto;
-import com.ssafy.rit.back.dto.member.responseDto.TokenDto;
+import com.ssafy.rit.back.dto.member.responseDto.DataDto;
 import com.ssafy.rit.back.entity.Member;
 import com.ssafy.rit.back.exception.member.MemberNotFoundException;
 import com.ssafy.rit.back.repository.MemberRepository;
@@ -18,11 +17,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
@@ -78,6 +75,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
 
         String email = authentication.getName();
+        Member member = memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
+        Long memberId = member.getId();
+
 
         String accessToken = jwtUtil.createJwt("Authorization", email, 600000L);
         String refreshToken = jwtUtil.createJwt("refresh", email, 86400000L);
@@ -92,8 +92,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         log.info("-----------------------로그인 완료염-----------------------");
 
-        TokenDto tokenDto = new TokenDto(accessToken, refreshToken);
-        SignInResponseDto responseDto = new SignInResponseDto("Login Success", tokenDto);
+        DataDto dataDto = new DataDto(accessToken, refreshToken, memberId);
+        SignInResponseDto responseDto = new SignInResponseDto("Login Success", dataDto);
 
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonResponse = objectMapper.writeValueAsString(responseDto);
