@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 public class SearchController {
 
-    private final SearchService searchService; // SearchService는 예시로 추가한 것입니다. 실제 구현 필요
+    private final SearchService searchService;
 
     @GetMapping("")
     public ResponseEntity<SearchResponse> search(@RequestParam("q") String query, @RequestParam("page") int page) {
