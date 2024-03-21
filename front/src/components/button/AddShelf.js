@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 // AddShelf 컴포넌트 정의
-const AddShelf = ({ onClose }) => {
+const AddShelf = () => {
   // 책장 추가 모달
   const [isAddShelfOpen, setIsAddShelfOpen] = useState(false);
   const openAddShelfModal = () => setIsAddShelfOpen(true);
@@ -18,11 +18,11 @@ const AddShelf = ({ onClose }) => {
         내 책장 등록하기
       </button>
       {isAddShelfOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50" onClick={closeAddShelfModal}>
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50" onClick={closeAddShelfModal}>
           <div className="modal p-4 bg-white rounded-lg" onClick={(e) => e.stopPropagation()}>
-            <span className="top-2 right-2 cursor-pointer" onClick={closeAddShelfModal}>
+            {/* <span className="top-2 right-2 cursor-pointer" onClick={closeAddShelfModal}>
               &times;
-            </span>
+            </span> */}
             <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
               <p className="">읽은책</p>
               <p>이 책을 읽으셨나요?</p>
