@@ -14,7 +14,8 @@ const checkNicknameDuplicate = async (nickname) => {
     console.log(response.data)
     return response.data;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
+    console.error(error.response.data.message)
     return false; // 에러가 발생했을 경우 중복으로 처리
   };
 }
