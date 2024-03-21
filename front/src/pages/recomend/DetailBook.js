@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import AddShelf from "../../components/button/AddShelf";
 import CreateCard from "../../components/button/CreateCard";
@@ -7,31 +7,7 @@ import Comments from "../../components/comments/Comments";
 
 import img1 from "../../assets/book/img1.PNG";
 
-const DetailBook = ({ onClose }) => {
-  const [isCreateCardOpen, setIsCreateCardOpen] = useState(false);
-  const openCreateCardModal = () => setIsCreateCardOpen(true);
-  const closeCreateCardModal = () => setIsCreateCardOpen(false);
-
-  const [isAddShelfOpen, setIsAddShelfOpen] = useState(false);
-  const openAddShelfModal = () => setIsAddShelfOpen(true);
-  const closeAddShelfModal = () => setIsAddShelfOpen(false);
-
-  const handleModalClick = (e) => {
-    e.stopPropagation(); // 버블링 방지
-  };
-    
-  const handleModalBackgroundClick = () => {
-    closeCreateCardModal();
-  };
-
-  const handleSubmit = () => {
-    // 전송 로직 처리 후 모달 닫기
-    // setTimeout으로 모달을 일정 시간 후에 닫도록 설정
-    setTimeout(() => {
-      closeCreateCardModal();
-    }, 2000); // 2초 후에 모달 닫힘
-  };
-
+const DetailBook = () => {
   return (
     <div>
       <div className="flex flex-wrap justify-center px-44 py-20">
@@ -46,18 +22,12 @@ const DetailBook = ({ onClose }) => {
             </div>
             <div className="flex-col">
               <div className="mb-2">
+                {/* 책장 추가 모달 */}
                 <AddShelf />
               </div>
               <div className="mb-2">
-                <button
-                  className="w-28 bg-sky-300 hover:bg-sky-500 text-white text-xs font-bold py-2 rounded"
-                  onClick={openCreateCardModal} // 모달 열기 버튼에 이벤트 핸들러 추가
-                >
-                  카드 작성하기
-                </button>
-                {isCreateCardOpen && (
-                  <CreateCard handleCloseModal={closeCreateCardModal} />
-                )}
+                {/* 카드 작성 모달 */}
+                <CreateCard />
               </div>
             </div>
           </div>
