@@ -65,8 +65,8 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/", "/members/signup", "/api/**", "/v3/api-docs/**", "/v3/swagger-ui/**", "/v3/swagger-resources/**").permitAll()
-                        .requestMatchers("/members/reissue").permitAll()
+                        .requestMatchers("/login", "/", "/members/signup", "/v3/api-docs/**", "/v3/swagger-ui/**", "/v3/swagger-resources/**").permitAll()
+                        .requestMatchers("/members/reissue", "/members/email", "/members/nickname").permitAll()
                         .anyRequest().authenticated());
 
         http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);

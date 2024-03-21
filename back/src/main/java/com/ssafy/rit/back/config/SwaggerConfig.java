@@ -54,6 +54,22 @@ import java.util.Arrays;
         }
 
         @Bean
+        public GroupedOpenApi libraryAPI() {
+            return GroupedOpenApi.builder()
+                    .group("library-api")
+                    .pathsToMatch("/library/**")
+                    .build();
+        }
+
+        @Bean
+        public GroupedOpenApi searchAPI() {
+            return GroupedOpenApi.builder()
+                    .group("search-api")
+                    .pathsToMatch("/search/**")
+                    .build();
+        }
+
+        @Bean
         public OpenAPI openAPI(){
             SecurityScheme securityScheme = new SecurityScheme()
                     .type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")
