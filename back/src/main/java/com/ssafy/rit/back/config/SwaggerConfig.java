@@ -70,6 +70,14 @@ import java.util.Arrays;
         }
 
         @Bean
+        public GroupedOpenApi postBoxAPI() {
+            return GroupedOpenApi.builder()
+                    .group("postbox-api")
+                    .pathsToMatch("/postbox/**")
+                    .build();
+        }
+
+        @Bean
         public OpenAPI openAPI(){
             SecurityScheme securityScheme = new SecurityScheme()
                     .type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")
