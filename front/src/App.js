@@ -12,7 +12,7 @@ import Profile from "./pages/accounts/Profile";
 import RecommendBook from "./pages/recomend/RecommendBook";
 import DetailBook from "./pages/recomend/DetailBook";
 
-import signUp from "./pages/accounts/signUp";
+import  SignUp from "./pages/accounts/SignUp";
 import Diary from "./components/modal/Diary/Diary";
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/find-password" element={<FindPassword />} />
             <Route path="/bookshelf" element={<Bookshelf />} />
-            <Route path="/signup" element={<signUp />} />
+            <Route path="/signup" element={<  SignUp />} />
             <Route path="/diary" element={<Diary />} />
             <Route path="/profile" element={<Profile />} />
           </Routes>
