@@ -12,14 +12,14 @@ RUN npm install
 COPY . .
 
 # # ARG 및 ENV 설정 추가
-# ARG REACT_APP_API_BASE_URL
-# ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
+ARG REACT_APP_API_BASE_URL
+ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
 
 # React 앱 빌드
-# RUN npm run build
+RUN npm run build
 
 # 애플리케이션이 사용할 포트 설정
 EXPOSE 3000
 
 # # 애플리케이션 실행
-# CMD ["npm", "start"]
+CMD ["npm", "start"]
