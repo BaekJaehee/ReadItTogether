@@ -12,7 +12,7 @@ import Profile from "./pages/accounts/Profile";
 import RecommendBook from "./pages/recomend/RecommendBook";
 import DetailBook from "./pages/recomend/DetailBook";
 
-import SignUp from "./pages/accounts/SignUp";
+import SignUp from "./pages/accounts/signUp";
 import Diary from "./components/modal/Diary/Diary";
 
 function App() {
