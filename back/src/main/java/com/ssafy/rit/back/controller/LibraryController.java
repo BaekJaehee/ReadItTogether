@@ -3,7 +3,6 @@ package com.ssafy.rit.back.controller;
 import com.ssafy.rit.back.dto.library.requestDto.LibraryIntroUpdateRequestDto;
 import com.ssafy.rit.back.dto.library.response.LibraryIntroResponse;
 import com.ssafy.rit.back.dto.library.response.LibraryIntroUpdateResponse;
-import com.ssafy.rit.back.dto.library.response.LibraryStatusResponse;
 import com.ssafy.rit.back.service.LibraryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +15,6 @@ import org.springframework.web.bind.annotation.*;
 public class LibraryController {
 
     private final LibraryService libraryService;
-
-    @GetMapping("")
-    public ResponseEntity<LibraryStatusResponse> readLibraryStatus() {
-        return libraryService.readLibraryStatus();
-    }
 
     @GetMapping("/{memberId}")
     public ResponseEntity<LibraryIntroResponse> readLibraryIntro(@PathVariable Long memberId) {
