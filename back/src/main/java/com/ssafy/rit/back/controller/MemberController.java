@@ -93,6 +93,9 @@ public class MemberController {
     @PutMapping("/update-password")
     public ResponseEntity<UpdatePasswordResponseDto> updatePassword(@RequestBody UpdatePasswordRequestDto dto) {
 
+        memberService.updatePassword(dto);
+
+
         return null;
     }
 
