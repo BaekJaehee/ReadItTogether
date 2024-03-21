@@ -14,6 +14,7 @@ import com.ssafy.rit.back.util.CommonUtil;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -82,7 +83,7 @@ public class MemberServiceImpl implements MemberService {
 
 
     // 회원 탈퇴 요청이 들어오면 비밀번호 검증
-    public Boolean checkPassword(DisableRequestDto dto) {
+    public Member checkPassword(DisableRequestDto dto) {
 
         // 현재 요청을 보내는 Member
         Member currentMember = commonUtil.getMember();
@@ -94,16 +95,25 @@ public class MemberServiceImpl implements MemberService {
         String rawPassword = dto.getPassword();
         String hashedPassword = member.getPassword();
 
-        log.info("------------------------------------------------------");
+        log.info("-------------------------------------------------------");
         log.info(".....................비밀번호 검증 중.....................");
-        log.info("------------------------------------------------------");
+        log.info("-------------------------------------------------------");
 
-        return passwordEncoder.matches(rawPassword, hashedPassword);
+        if (!passwordEncoder.matches(rawPassword, hashedPassword)) {
+            return null;
+        }
+
+        return member;
     }
 
+    @Transactional
     public void updateDisable(DisableRequestDto dto) {
-        if (checkPassword(dto)) {
 
+        Member targetMember = checkPassword(dto);
+        if (targetMember != null) {
+            log.info("--------------------변경 전: {}--------------------", targetMember.getIsDisabled());
+            targetMember.updateDisable();
+            log.info("--------------------변경 후: {}--------------------", targetMember.getIsDisabled());
         }
     }
 
