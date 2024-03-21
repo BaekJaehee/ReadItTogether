@@ -19,11 +19,13 @@ const SignUp = () => {
 
   const [emailMessage, setEmailMessage] = useState('');
   const [emailStatusMessage, setEmailStatusMessage] = useState('');
+  const [emailStatusMessageClassName, setEmailStatusMessageClassName] = useState('');
   const [passwordMessage, setPasswordMessage] = useState('');
   const [passwordConfirmMessage, setPasswordConfirmMessage] = useState('');
   const [passwordConfirmMessageClassName, setPasswordConfirmMessageClassName] = useState(''); // 글자 색 바꾸기 위함
   const [nicknameMessage, setNicknameMessage] = useState('');
   const [nicknameStatusMessage, setNicknameStatusMessage] = useState('');
+  const [nicknameStatusMessageClassName, setNicknameStatusMessageClassName] = useState('');
 
   // 중복체크용
   // const [isEmailValid, setIsEmailValid] = useState(false);
@@ -139,6 +141,7 @@ const SignUp = () => {
       const isEmailDuplicate = await checkEmailDuplicate(email);
       // setIsEmailValid(!isEmailDuplicate);
       setEmailStatusMessage(!isEmailDuplicate ? '중복된 이메일입니다.' : '사용 가능한 이메일입니다.');
+      setEmailStatusMessageClassName(!isEmailDuplicate ? 'text-red-500' : 'text-blue-500');
     } catch (error) {
       console.error(error);
     };
@@ -149,6 +152,7 @@ const SignUp = () => {
       const isNicknameDuplicate = await checkNicknameDuplicate(nickname);
       // setIsNicknameValid(!isNicknameDuplicate);
       setNicknameStatusMessage(!isNicknameDuplicate ? '중복된 닉네임입니다.' : '사용 가능한 닉네임입니다.');
+      setNicknameStatusMessageClassName(!isNicknameDuplicate ? 'text-red-500' : 'text-blue-500');
     } catch (error) {
       console.log(error);
     };
@@ -168,7 +172,7 @@ const SignUp = () => {
           <div className="flex justify-between">
             <label htmlFor="email" className="block mb-1">이메일</label>
             <p className="text-red-500 mr-32">{emailMessage}</p>
-            <p>{emailStatusMessage}</p>
+            <p className={emailStatusMessageClassName}>{emailStatusMessage}</p>
           </div>
           <div className="flex items-center">
             <input type="text" id="email" name="email" value={email} onChange={onChangeEmail} className="border border-gray-300 px-2 py-1 flex-grow mr-3" />
@@ -181,7 +185,7 @@ const SignUp = () => {
             <p className="text-red-500">{passwordMessage}</p>
           </div>
           <input type="password" id="password" name="password" value={password} onChange={onChangePassword} className="border border-gray-300 px-2 py-1 w-full" />
-          <p className="text-sm text-gray-500">영어 대문자, 소문자, 숫자, 특수문자가 1개 이상 있어야 합니다.</p>
+          <p className="text-sm text-gray-500">영어 대문자, 소문자, 숫자, 특수문자가 1개 이상 있어야 합니다(8~20git 자).</p>
         </div>
         <div className="mb-4">
           <div className="flex justify-between">
@@ -194,7 +198,7 @@ const SignUp = () => {
           <div className="flex justify-between">
             <label htmlFor="nickname" className="block mb-1">닉네임</label>
             <p className="text-red-500 mr-32">{nicknameMessage}</p>
-            <p>{nicknameStatusMessage}</p>
+            <p className={nicknameStatusMessageClassName}>{nicknameStatusMessage}</p>
           </div>
           <div className="flex items-center">
             <input type="text" id="nickname" name="nickname" value={nickname} onChange={onChangeNickname} className="border border-gray-300 px-2 py-1 flex-grow mr-3" />
