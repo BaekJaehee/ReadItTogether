@@ -94,7 +94,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
 
-//        response.setStatus(401);
+       response.setStatus(401);
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
