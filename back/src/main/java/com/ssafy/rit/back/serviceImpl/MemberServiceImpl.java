@@ -55,22 +55,22 @@ public class MemberServiceImpl implements MemberService {
     public Boolean checkEmail(CheckEmailRequestDto dto) {
 
         Optional<Member> optionalMember = memberRepository.findByEmail(dto.getEmail());
-        optionalMember.ifPresent(member -> {
-            throw new EmailAlreadyExistsException("Email already exists");
-        });
+        if (optionalMember.isPresent()) {
+            return false;
+        }
 
-        return false;
+        return true;
     }
 
 
     public Boolean checkNickname(CheckNicknameRequestDto dto) {
 
         Optional<Member> optionalMember = memberRepository.findByNickname(dto.getNickname());
-        optionalMember.ifPresent(member -> {
-            throw new NicknameAlreadyExistsException("Nickname already exists");
-        });
+        if (optionalMember.isPresent()) {
+            return false;
+        }
 
-        return false;
+        return true;
     }
 
 }
