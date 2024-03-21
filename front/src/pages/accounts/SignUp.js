@@ -4,8 +4,6 @@ import { handleSignUp } from "../../api/accounts/SignUp";
 import { checkEmailDuplicate } from "../../api/accounts/MailDuplicate";
 import { checkNicknameDuplicate } from "../../api/accounts/NicknameDuplicate";
 
-// 닉네임, 이메일 중복처리 로직 확인 필요
-
 const SignUp = () => {
   const navigate = useNavigate();
 
