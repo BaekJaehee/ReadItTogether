@@ -30,20 +30,13 @@ public class MemberController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<SignUpResponseDto> signUp(@RequestBody MemberRequestDto dto) {
+    public ResponseEntity<SignUpResponseDto> signUp(@RequestBody MemberRequestDto dto) throws JsonProcessingException {
         log.info("-------------가입 이메일: {}--------------", dto.getEmail());
         memberService.signUp(dto);
 
         SignUpResponseDto responseDto = new SignUpResponseDto("SignUp Success", true);
         ObjectMapper objectMapper = new ObjectMapper();
-        String jsonResponse;
-        try {
-            jsonResponse = objectMapper.writeValueAsString(responseDto);
-        } catch (JsonProcessingException e) {
-            jsonResponse = "{\"error\": \"Error occurred while processing JSON response\"}";
-            e.printStackTrace();
-        }
-
+        objectMapper.writeValueAsString(responseDto);
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
@@ -54,7 +47,6 @@ public class MemberController {
         log.info("------------중복 이메일 확인: {} -----------------", dto.getEmail());
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String jsonResponse;
 
         Boolean checked = memberService.checkEmail(dto);
         if (!checked) {
@@ -62,7 +54,7 @@ public class MemberController {
             throw new EmailAlreadyExistsException();
         }
         CheckResponseDto responseDto = new CheckResponseDto("Success", true);
-        jsonResponse = objectMapper.writeValueAsString(responseDto);
+        objectMapper.writeValueAsString(responseDto);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
 
     }
@@ -73,7 +65,6 @@ public class MemberController {
         log.info("------------중복 닉네임 확인: {} -----------------", dto.getNickname());
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String jsonResponse;
 
         Boolean checked = memberService.checkNickname(dto);
         if (!checked) {
@@ -82,7 +73,7 @@ public class MemberController {
         }
 
         CheckResponseDto responseDto = new CheckResponseDto("Success", true);
-        jsonResponse = objectMapper.writeValueAsString(responseDto);
+        objectMapper.writeValueAsString(responseDto);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
 
     }
@@ -94,9 +85,8 @@ public class MemberController {
         memberService.updateDisable(dto);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String jsonResponse;
         DisableResponseDto responseDto = new DisableResponseDto("Success", true);
-        jsonResponse = objectMapper.writeValueAsString(responseDto);
+        objectMapper.writeValueAsString(responseDto);
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
