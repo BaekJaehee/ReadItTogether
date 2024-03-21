@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { handleSignUp } from "../../api/accounts/signUp";
+import { handleSignUp } from "../../api/accounts/SignUp";
 import { checkEmailDuplicate } from "../../api/accounts/MailDuplicate";
 import { checkNicknameDuplicate } from "../../api/accounts/NicknameDuplicate";
 
