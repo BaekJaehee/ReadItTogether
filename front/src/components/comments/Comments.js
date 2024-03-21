@@ -82,7 +82,7 @@ const CommentCard = ({ comment }) => {
 const Comments = () => {
   return (
     <div className="px-44">
-      <h1 className="text-3xl font-bold text-left mb-10 ml-2">
+      <h1 className="text-3xl font-bold text-left mb-10 ml-8">
         코멘트 <span className="text-sky-500">+ 90</span>{" "}
       </h1>
       <div className="flex flex-wrap m-2 mb-10"> {/* 여기에 margin을 조정하여 카드 간의 간격을 조절합니다. */}
