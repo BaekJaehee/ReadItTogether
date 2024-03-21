@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.ssafy.rit.back.dto.member.responseDto.SignInResponseDto;
-import com.ssafy.rit.back.dto.member.responseDto.TokenDto;
 import com.ssafy.rit.back.repository.RefreshRepository;
 import com.ssafy.rit.back.security.jwt.JWTUtil;
 import jakarta.servlet.FilterChain;
@@ -42,7 +40,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
         System.out.println("-----------로그인 시도 중---------");
-
         try {
             ObjectMapper om = new ObjectMapper();
 
@@ -78,6 +75,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         response.setHeader("Authorization", accessToken);
         response.addCookie(createCookie("refresh", refreshToken));
         response.setStatus(HttpStatus.OK.value());
+
+        System.out.println("로그인 완료염");
+
         response.setContentType("application/json; charset=UTF-8");
 
         log.info("-----------------------로그인 완료염-----------------------");
@@ -105,16 +105,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         writer.print(jsonResponse.toString());
         writer.flush();
 
-        */
-
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
 
 //        response.setStatus(401);
-
-
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -133,7 +129,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         writer.print(jsonResponse.toString());
         writer.flush();
 
-
+        // 실패 시 적절한 상태 코드 반환
+        response.setStatus(statusCode);
     }
 
 

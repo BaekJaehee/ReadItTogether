@@ -10,9 +10,13 @@ const NormalLoginForm = async (email, password) => {
   const API_URL = process.env.REACT_APP_API_BASE_URL;
 
   try {
-    const response = await axios.post(`${API_URL}/members/login`, formData, {
+    const response = await axios.post(`${API_URL}/login`, formData, {
       withCredentials: true, 
       // 쿠키 등의 인증 정보를 요청과 함께 보내기 위한 옵션
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
 
     // 요청이 성공했다면, 응답 데이터를 반환합니다.

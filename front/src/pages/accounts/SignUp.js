@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { handleSignUp } from '../../api/accounts/signUp';
+import { checkEmailDuplicate } from "../../api/accounts/MailDuplicate";
+import { checkNicknameDuplicate } from "../../api/accounts/NicknameDuplicate";
+
 // 닉네임, 이메일 중복처리 로직 확인 필요
 
 const SignUp = () => {
@@ -23,8 +26,8 @@ const SignUp = () => {
   const [nicknameStatusMessage, setNicknameStatusMessage] = useState('');
 
   // 중복체크용
-  const [isEmailValid, setIsEmailValid] = useState(false);
-  const [isNicknameValid, setIsNicknameValid] = useState(false);
+  // const [isEmailValid, setIsEmailValid] = useState(false);
+  // const [isNicknameValid, setIsNicknameValid] = useState(false);
 
   // 가입하기 버튼
   const [isFormValid, setIsFormValid] = useState(false);
@@ -131,35 +134,11 @@ const SignUp = () => {
     setPasswordConfirmMessage('');
   };
 
-  const checkEmailDuplicate = async (email) => {
-    try {
-      const response = await axios.get(API_BASE_URL + "/members/email_duplicate", {
-        email: email
-      });
-      return response.data;
-    } catch (error) {
-      console.log(error);
-      return false; // 에러가 발생했을 경우 중복으로 처리
-    };
-  };
-
-  const checkNicknameDuplicate = async (nickname) => {
-    try {
-      const response = await axios.get(API_BASE_URL + "/members/nickname_duplicate", {
-        nickname: nickname
-      });
-      return response.data;
-    } catch (error) {
-      console.log(error);
-      return false; // 에러가 발생했을 경우 중복으로 처리
-    };
-  };
-
   const handleCheckEmail = async () => {
     try {
       const isEmailDuplicate = await checkEmailDuplicate(email);
-      setIsEmailValid(!isEmailDuplicate);
-      setEmailStatusMessage(isEmailDuplicate ? '중복된 이메일입니다.' : '사용 가능한 이메일입니다.');
+      // setIsEmailValid(!isEmailDuplicate);
+      setEmailStatusMessage(!isEmailDuplicate ? '중복된 이메일입니다.' : '사용 가능한 이메일입니다.');
     } catch (error) {
       console.error(error);
     };
@@ -168,8 +147,8 @@ const SignUp = () => {
   const handleCheckNickname = async () => {
     try {
       const isNicknameDuplicate = await checkNicknameDuplicate(nickname);
-      setIsNicknameValid(!isNicknameDuplicate);
-      setNicknameStatusMessage(isNicknameDuplicate ? '중복된 닉네임입니다.' : '사용 가능한 닉네임입니다.');
+      // setIsNicknameValid(!isNicknameDuplicate);
+      setNicknameStatusMessage(!isNicknameDuplicate ? '중복된 닉네임입니다.' : '사용 가능한 닉네임입니다.');
     } catch (error) {
       console.log(error);
     };
@@ -189,6 +168,7 @@ const SignUp = () => {
           <div className="flex justify-between">
             <label htmlFor="email" className="block mb-1">이메일</label>
             <p className="text-red-500 mr-32">{emailMessage}</p>
+            <p>{emailStatusMessage}</p>
           </div>
           <div className="flex items-center">
             <input type="text" id="email" name="email" value={email} onChange={onChangeEmail} className="border border-gray-300 px-2 py-1 flex-grow mr-3" />
@@ -214,6 +194,7 @@ const SignUp = () => {
           <div className="flex justify-between">
             <label htmlFor="nickname" className="block mb-1">닉네임</label>
             <p className="text-red-500 mr-32">{nicknameMessage}</p>
+            <p>{nicknameStatusMessage}</p>
           </div>
           <div className="flex items-center">
             <input type="text" id="nickname" name="nickname" value={nickname} onChange={onChangeNickname} className="border border-gray-300 px-2 py-1 flex-grow mr-3" />

@@ -15,7 +15,9 @@ pipeline {
         DATABASE_URL="${env.DATABASE_URL}"
         DATABASE_USERNAME="${env.DATABASE_USERNAME}"
         DATABASE_PASSWORD="${env.DATABASE_PASSWORD}"
-        DOCKER_COMPOSE_FILE = "docker-compose.yml"       
+        DOCKER_COMPOSE_FILE = "docker-compose.yml" 
+        BACK_URL="${env.BACK_URL}"
+            
     }
 
    
@@ -82,6 +84,7 @@ pipeline {
                                 backendImage = docker.build("${BACK_IMAGE_NAME}:${env.BUILD_NUMBER}", 
                                 "--build-arg DATABASE_URL='${env.DATABASE_URL}' " +
                                 "--build-arg DATABASE_USERNAME='${env.DATABASE_USERNAME}' " +
+                                "--build-arg BACK_URL='${env.BACK_URL}' " +
                                 "--build-arg DATABASE_PASSWORD='${env.DATABASE_PASSWORD}' .")
 
 

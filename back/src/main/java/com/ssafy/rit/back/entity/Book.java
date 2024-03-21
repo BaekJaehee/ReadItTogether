@@ -13,7 +13,10 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode()
-@Table(name = "book")
+@Table(name = "book", indexes = {
+        @Index(name = "idx_books_title", columnList = "title"),
+        @Index(name = "idx_books_author", columnList = "author")
+})
 public class Book {
 
     @Id
