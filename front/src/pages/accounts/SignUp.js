@@ -27,25 +27,25 @@ const SignUp = () => {
   const [nicknameStatusMessage, setNicknameStatusMessage] = useState('');
   const [nicknameStatusMessageClassName, setNicknameStatusMessageClassName] = useState('');
 
-  // 중복체크용
-  // const [isEmailValid, setIsEmailValid] = useState(false);
-  // const [isNicknameValid, setIsNicknameValid] = useState(false);
-
-  // 가입하기 버튼
+  // 가입하기 버튼 활성화
   const [isFormValid, setIsFormValid] = useState(false);
+  // 중복 확인을 안하면 가입하기 버튼 활성화 안됨
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [isNicknameValid, setIsNicknameValid] = useState(false);
+
   // 중복 확인 버튼
   const [isCorrectEmail, setIsCorrectEmail] = useState(false);
   const [isCorrectNickname, setIsCorrectNickname] = useState(false);
 
   useEffect(() => {
-    // 모든 입력란이 채워졌는지 확인
+    // 모든 입력란이 채워졌는지 + 중복 검사를 했는지 확인
     const emailRegExp = /^[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+(?:\.[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+)*@(?:[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?$/;
     const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+\\|[\]{};:'",.<>/?]).{8,20}$/;
     const nicknameRegExp = /^[가-힣a-zA-Z0-9]{2,8}$/;
 
-    const isValid = email && emailRegExp.test(email) && password && passwordConfirm && (password === passwordConfirm) && passwordRegExp.test(password) && passwordRegExp.test(passwordConfirm) && nickname && nicknameRegExp.test(nickname) && birth && gender;
+    const isValid = email && emailRegExp.test(email) && password && passwordConfirm && (password === passwordConfirm) && passwordRegExp.test(password) && passwordRegExp.test(passwordConfirm) && nickname && nicknameRegExp.test(nickname) && birth && gender && isEmailValid && isNicknameValid;
     setIsFormValid(isValid);
-  }, [email, password, passwordConfirm, nickname, birth, gender]);
+  }, [email, password, passwordConfirm, nickname, birth, gender, isEmailValid, isNicknameValid]);
 
   useEffect(() => {
     const emailRegExp = /^[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+(?:\.[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+)*@(?:[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?$/;
@@ -61,6 +61,7 @@ const SignUp = () => {
 
   const onChangeEmail = (e) => {
     const currentEmail = e.target.value;
+    setIsEmailValid(false);
     setEmail(currentEmail);
     const emailRegExp = /^[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+(?:\.[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+)*@(?:[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?$/;
 
@@ -100,6 +101,7 @@ const SignUp = () => {
 
   const onChangeNickname = (e) => {
     const currentNickname = e.target.value;
+    setIsNicknameValid(false);
     setNickname(currentNickname);
     const nicknameRegExp = /^[가-힣a-zA-Z0-9]{2,8}$/;
     
@@ -139,7 +141,7 @@ const SignUp = () => {
   const handleCheckEmail = async () => {
     try {
       const isEmailDuplicate = await checkEmailDuplicate(email);
-      // setIsEmailValid(!isEmailDuplicate);
+      setIsEmailValid(isEmailDuplicate);
       setEmailStatusMessage(!isEmailDuplicate ? '중복된 이메일입니다.' : '사용 가능한 이메일입니다.');
       setEmailStatusMessageClassName(!isEmailDuplicate ? 'text-red-500' : 'text-blue-500');
     } catch (error) {
@@ -150,7 +152,7 @@ const SignUp = () => {
   const handleCheckNickname = async () => {
     try {
       const isNicknameDuplicate = await checkNicknameDuplicate(nickname);
-      // setIsNicknameValid(!isNicknameDuplicate);
+      setIsNicknameValid(isNicknameDuplicate);
       setNicknameStatusMessage(!isNicknameDuplicate ? '중복된 닉네임입니다.' : '사용 가능한 닉네임입니다.');
       setNicknameStatusMessageClassName(!isNicknameDuplicate ? 'text-red-500' : 'text-blue-500');
     } catch (error) {
@@ -185,7 +187,7 @@ const SignUp = () => {
             <p className="text-red-500">{passwordMessage}</p>
           </div>
           <input type="password" id="password" name="password" value={password} onChange={onChangePassword} className="border border-gray-300 px-2 py-1 w-full" />
-          <p className="text-sm text-gray-500">영어 대문자, 소문자, 숫자, 특수문자가 1개 이상 있어야 합니다(8~20git 자).</p>
+          <p className="text-sm text-gray-500">영어 대문자, 소문자, 숫자, 특수문자가 1개 이상 있어야 합니다(8~20자).</p>
         </div>
         <div className="mb-4">
           <div className="flex justify-between">
