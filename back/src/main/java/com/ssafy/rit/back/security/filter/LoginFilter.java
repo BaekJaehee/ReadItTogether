@@ -2,7 +2,6 @@ package com.ssafy.rit.back.security.filter;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.ssafy.rit.back.repository.RefreshRepository;
 import com.ssafy.rit.back.security.jwt.JWTUtil;
@@ -52,7 +51,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
 
         } catch (Exception e) {
-            e.printStackTrace();
+            response.setStatus(401);
         }
 
         return null;
