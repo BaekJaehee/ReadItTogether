@@ -31,6 +31,7 @@ const Login = () => {
       navigate("/");
     } catch (error) {
       console.log("로그인 실패:", error); // 로그인 실패 시
+      alert("계정을 재확인 해주세요")
 
       // 로그인 실패 처리 작성해야댐
     }
