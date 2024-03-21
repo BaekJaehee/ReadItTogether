@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { handleSignUp } from '../../api/accounts/SignUp';
 import { checkEmailDuplicate } from "../../api/accounts/MailDuplicate";
 import { checkNicknameDuplicate } from "../../api/accounts/NicknameDuplicate";
@@ -7,8 +6,6 @@ import { checkNicknameDuplicate } from "../../api/accounts/NicknameDuplicate";
 // 닉네임, 이메일 중복처리 로직 확인 필요
 
 const SignUp = () => {
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
