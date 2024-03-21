@@ -1,27 +1,34 @@
 package com.ssafy.rit.back.serviceImpl;
 
 import com.ssafy.rit.back.dto.member.requestDto.CheckEmailRequestDto;
+import com.ssafy.rit.back.dto.member.requestDto.DisableRequestDto;
 import com.ssafy.rit.back.dto.member.requestDto.MemberRequestDto;
 import com.ssafy.rit.back.dto.member.requestDto.CheckNicknameRequestDto;
 import com.ssafy.rit.back.entity.Member;
 import com.ssafy.rit.back.exception.member.EmailAlreadyExistsException;
+import com.ssafy.rit.back.exception.member.MemberNotFoundException;
 import com.ssafy.rit.back.exception.member.NicknameAlreadyExistsException;
 import com.ssafy.rit.back.repository.MemberRepository;
 import com.ssafy.rit.back.service.MemberService;
+import com.ssafy.rit.back.util.CommonUtil;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@Log4j2
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CommonUtil commonUtil;
 
-    public MemberServiceImpl(MemberRepository memberRepository, PasswordEncoder passwordEncoder){
+    public MemberServiceImpl(MemberRepository memberRepository, PasswordEncoder passwordEncoder, CommonUtil commonUtil){
         this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
+        this.commonUtil = commonUtil;
     }
 
     @Override
@@ -71,6 +78,33 @@ public class MemberServiceImpl implements MemberService {
         }
 
         return true;
+    }
+
+
+    // 회원 탈퇴 요청이 들어오면 비밀번호 검증
+    public Boolean checkPassword(DisableRequestDto dto) {
+
+        // 현재 요청을 보내는 Member
+        Member currentMember = commonUtil.getMember();
+        String currentEmail = currentMember.getEmail();
+
+        // DB에서 email을 통해 찾은 Member
+        Member member = memberRepository.findByEmail(currentEmail).orElseThrow(MemberNotFoundException::new);
+
+        String rawPassword = dto.getPassword();
+        String hashedPassword = member.getPassword();
+
+        log.info("------------------------------------------------------");
+        log.info(".....................비밀번호 검증 중.....................");
+        log.info("------------------------------------------------------");
+
+        return passwordEncoder.matches(rawPassword, hashedPassword);
+    }
+
+    public void updateDisable(DisableRequestDto dto) {
+        if (checkPassword(dto)) {
+
+        }
     }
 
 }
