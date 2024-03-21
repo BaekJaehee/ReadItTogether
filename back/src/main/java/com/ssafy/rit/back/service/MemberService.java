@@ -1,7 +1,6 @@
 package com.ssafy.rit.back.service;
 
-import com.ssafy.rit.back.dto.member.MemberRequestDto;
-import com.ssafy.rit.back.entity.Member;
+import com.ssafy.rit.back.dto.member.requestDto.MemberRequestDto;
 
 public interface MemberService {
 
