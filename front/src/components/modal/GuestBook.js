@@ -33,7 +33,7 @@ const GuestBook = ({ onClose }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-5 rounded w-[400px] h-[350px]" ref={modalRef}>
-        <div className="flex justify-between items-center text-gray-500 font-semibold text-sm font-serif italic leading-normal">
+        <div className="flex justify-between items-center text-gray-500 font-semibold text-sm font-serif italic">
           <div className="flex">
             <img className="w-5 mr-1" src={logo} alt="로고" />
             <p>Read-it Together</p>
