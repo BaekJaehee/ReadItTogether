@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchResponseDto {
-
-    private List<BookDto> books;
+public class BookDto {
+    private int bId;
+    private String cover;
+    private String title;
+    private String author;
+    private Integer ratings;
+    private String pubDate;
 }
