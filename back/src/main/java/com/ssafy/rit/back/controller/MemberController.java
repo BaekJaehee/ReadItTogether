@@ -2,10 +2,14 @@ package com.ssafy.rit.back.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.rit.back.dto.member.MemberRequestDto;
+import com.ssafy.rit.back.dto.member.requestDto.CheckEmailRequestDto;
+import com.ssafy.rit.back.dto.member.requestDto.CheckNicknameRequestDto;
+import com.ssafy.rit.back.dto.member.requestDto.MemberRequestDto;
+import com.ssafy.rit.back.dto.member.responseDto.CheckResponseDto;
 import com.ssafy.rit.back.dto.member.responseDto.SignUpResponseDto;
+import com.ssafy.rit.back.exception.member.EmailAlreadyExistsException;
+import com.ssafy.rit.back.exception.member.NicknameAlreadyExistsException;
 import com.ssafy.rit.back.serviceImpl.MemberServiceImpl;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +45,47 @@ public class MemberController {
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
+
+    @PostMapping("/email")
+    public ResponseEntity<CheckResponseDto> checkEmail(@RequestBody CheckEmailRequestDto dto) throws JsonProcessingException {
+
+        log.info("------------중복 이메일 확인: {} -----------------", dto.getEmail());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResponse;
+
+        Boolean checked = memberService.checkEmail(dto);
+        if (!checked) {
+            log.info("-------------------이멜 중복염:{}", dto.getEmail());
+            throw new EmailAlreadyExistsException();
+        }
+        CheckResponseDto responseDto = new CheckResponseDto("Success", true);
+        jsonResponse = objectMapper.writeValueAsString(responseDto);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+
+    }
+
+    @PostMapping("/nickname")
+    public ResponseEntity<CheckResponseDto> checkNickname(@RequestBody CheckNicknameRequestDto dto) throws JsonProcessingException {
+
+        log.info("------------중복 닉네임 확인: {} -----------------", dto.getNickname());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResponse;
+
+        Boolean checked = memberService.checkNickname(dto);
+        if (!checked) {
+            log.info("-------------------닉넴 중복염:{}", dto.getNickname());
+            throw new NicknameAlreadyExistsException();
+        }
+
+        CheckResponseDto responseDto = new CheckResponseDto("Success", true);
+        jsonResponse = objectMapper.writeValueAsString(responseDto);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+
+    }
+
+
 
     @GetMapping("/test")
     public String test() {

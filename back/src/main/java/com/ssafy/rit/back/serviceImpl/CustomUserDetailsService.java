@@ -1,6 +1,6 @@
 package com.ssafy.rit.back.serviceImpl;
 
-import com.ssafy.rit.back.dto.member.CustomUserDetails;
+import com.ssafy.rit.back.dto.member.customDto.CustomUserDetails;
 import com.ssafy.rit.back.entity.Member;
 import com.ssafy.rit.back.exception.member.MemberNotFoundException;
 import com.ssafy.rit.back.repository.MemberRepository;

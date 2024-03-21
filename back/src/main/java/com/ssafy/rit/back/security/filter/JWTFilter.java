@@ -1,6 +1,6 @@
 package com.ssafy.rit.back.security.filter;
 
-import com.ssafy.rit.back.dto.member.CustomUserDetails;
+import com.ssafy.rit.back.dto.member.customDto.CustomUserDetails;
 import com.ssafy.rit.back.entity.Member;
 import com.ssafy.rit.back.security.jwt.JWTUtil;
 import io.jsonwebtoken.ExpiredJwtException;
