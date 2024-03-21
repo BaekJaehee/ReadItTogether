@@ -1,13 +1,17 @@
 package com.ssafy.rit.back.dto.library.responseDto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder
 public class LibraryIntroResponseDto {
 
     private String intro;
+
+    private int isMine;
+
+    private int isReceive;
 }
