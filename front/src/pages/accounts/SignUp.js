@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { handleSignUp } from '../../api/accounts/SignUp';
+import { handleSignUp } from "../../api/accounts/SignUp";
 import { checkEmailDuplicate } from "../../api/accounts/MailDuplicate";
 import { checkNicknameDuplicate } from "../../api/accounts/NicknameDuplicate";
 
