@@ -1,5 +1,6 @@
 package com.ssafy.rit.back.entity;
 
+import com.ssafy.rit.back.dto.member.requestDto.DisableRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -95,5 +96,13 @@ public class Member {
     @OneToMany(mappedBy = "toMemberId")
     private List<GuestBook> toGuestBooks;
 
+
+
+    // 탈퇴 시 isDisable 값 갱신 처리
+    public void updateDisable() {
+
+        this.isDisabled = 1;
+
+    }
 
 }

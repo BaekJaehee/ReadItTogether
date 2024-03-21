@@ -32,6 +32,8 @@ public class MemberGlobalExceptionHandler {
                 .body(stringToGson(e.getMessage()));
     }
 
+
+
     @ExceptionHandler(MemberDisabledException.class)
     public ResponseEntity<String> handleMemberDisabledException(MemberDisabledException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
