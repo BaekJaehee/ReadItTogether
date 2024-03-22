@@ -1,8 +1,10 @@
 package com.ssafy.rit.back.entity;
 
 import com.ssafy.rit.back.dto.member.requestDto.DisableRequestDto;
+import com.ssafy.rit.back.dto.member.requestDto.UpdatePasswordRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -103,6 +105,15 @@ public class Member {
 
         this.isDisabled = 1;
 
+    }
+
+    public void updatePassword(String newPassword) {
+
+        this.password = newPassword;
+    }
+
+    public void updateNickname(String newNickname) {
+        this.nickname = newNickname;
     }
 
 }

@@ -3,10 +3,13 @@ package com.ssafy.rit.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.rit.back.dto.member.requestDto.*;
+import com.ssafy.rit.back.dto.member.response.PassingCertificationResponse;
+import com.ssafy.rit.back.dto.member.response.SendingCertificationResponse;
+import com.ssafy.rit.back.dto.member.response.SendingTemporaryPasswordResponse;
 import com.ssafy.rit.back.dto.member.responseDto.CheckResponseDto;
 import com.ssafy.rit.back.dto.member.responseDto.DisableResponseDto;
 import com.ssafy.rit.back.dto.member.responseDto.SignUpResponseDto;
-import com.ssafy.rit.back.dto.member.responseDto.UpdatePasswordResponseDto;
+import com.ssafy.rit.back.dto.member.responseDto.UpdatePasswordAndNicknameResponseDto;
 import com.ssafy.rit.back.exception.member.EmailAlreadyExistsException;
 import com.ssafy.rit.back.exception.member.NicknameAlreadyExistsException;
 import com.ssafy.rit.back.serviceImpl.MemberServiceImpl;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class MemberController {
 
+    ObjectMapper objectMapper = new ObjectMapper();
     private final MemberServiceImpl memberService;
 
     public MemberController(MemberServiceImpl memberService) {
@@ -33,7 +37,6 @@ public class MemberController {
         memberService.signUp(dto);
 
         SignUpResponseDto responseDto = new SignUpResponseDto("SignUp Success", true);
-        ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.writeValueAsString(responseDto);
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
@@ -44,7 +47,6 @@ public class MemberController {
 
         log.info("------------중복 이메일 확인: {} -----------------", dto.getEmail());
 
-        ObjectMapper objectMapper = new ObjectMapper();
 
         Boolean checked = memberService.checkEmail(dto);
         if (!checked) {
@@ -62,7 +64,6 @@ public class MemberController {
 
         log.info("------------중복 닉네임 확인: {} -----------------", dto.getNickname());
 
-        ObjectMapper objectMapper = new ObjectMapper();
 
         Boolean checked = memberService.checkNickname(dto);
         if (!checked) {
@@ -82,7 +83,6 @@ public class MemberController {
 
         memberService.updateDisable(dto);
 
-        ObjectMapper objectMapper = new ObjectMapper();
         DisableResponseDto responseDto = new DisableResponseDto("Success", true);
         objectMapper.writeValueAsString(responseDto);
 
@@ -91,12 +91,25 @@ public class MemberController {
 
 
     @PutMapping("/update-password")
-    public ResponseEntity<UpdatePasswordResponseDto> updatePassword(@RequestBody UpdatePasswordRequestDto dto) {
+    public ResponseEntity<UpdatePasswordAndNicknameResponseDto> updatePassword(@RequestBody UpdatePasswordRequestDto dto) throws JsonProcessingException {
 
-        return null;
+        memberService.updatePassword(dto);
+
+        UpdatePasswordAndNicknameResponseDto responseDto = new UpdatePasswordAndNicknameResponseDto("Success", true);
+        objectMapper.writeValueAsString(responseDto);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
+    @PutMapping("/update-nickname")
+    public ResponseEntity<UpdatePasswordAndNicknameResponseDto> updateNickname(@RequestBody UpdateNicknameRequestDto dto) throws JsonProcessingException {
 
+        memberService.updateNickname(dto);
+        UpdatePasswordAndNicknameResponseDto responseDto = new UpdatePasswordAndNicknameResponseDto("Success", true);
+        objectMapper.writeValueAsString(responseDto);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
 
     @GetMapping("/test")
     public String test() {
@@ -104,5 +117,22 @@ public class MemberController {
         return "테통. 테스트 통과라는 뜻";
     }
 
+    // 인증 메일 발송
+    @PostMapping("/send-certification")
+    public ResponseEntity<SendingCertificationResponse> sendEmailCertificate(@RequestBody SendingCertificationRequestDto sendingCertificationRequestDto) {
+        return memberService.sendEmailCertificate(sendingCertificationRequestDto);
+    }
+
+    // 인증 코드 검증
+    @PostMapping("/pass-certification")
+    public ResponseEntity<PassingCertificationResponse> passEmailCertificate(@RequestBody PassingCertificationRequestDto passingCertificationRequestDto) {
+        return memberService.passEmailCertificate(passingCertificationRequestDto);
+    }
+
+    // 임시비밀번호 발급
+    @PostMapping("/temporary-password")
+    public ResponseEntity<SendingTemporaryPasswordResponse> sendTemporaryPassword(@RequestBody SendingTemporaryPasswordRequestDto sendingTemporaryPasswordRequestDto) {
+        return memberService.sendTemporaryPassword(sendingTemporaryPasswordRequestDto);
+    }
 
 }
