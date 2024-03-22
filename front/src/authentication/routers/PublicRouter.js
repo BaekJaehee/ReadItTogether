@@ -1,11 +1,12 @@
-import React from "react";
+import { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../AuthContext";
+import { AuthContext } from "../AuthContext";
 
 const PublicRoute = () => {
-  const { authState } = useAuth();
+  const { setUserState } = useContext(AuthContext);
+  const memberId = localStorage.getItem("memberId");
 
-  return authState.status === "loggedOut" ? <Outlet /> : <Navigate to="/" />;
+  return setUserState.status === "loggedOut" ? <Outlet /> : <Navigate to={`/${memberId}`} />;
 };
 
 export default PublicRoute;
