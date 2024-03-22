@@ -8,6 +8,7 @@ import java.util.Date;
 
 @Entity
 @Getter @Setter
+@Builder
 @NoArgsConstructor @AllArgsConstructor
 @EqualsAndHashCode
 @Table(name = "postbox")
