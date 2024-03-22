@@ -1,13 +1,17 @@
 package com.ssafy.rit.back.entity;
 
+import com.ssafy.rit.back.dto.member.requestDto.DisableRequestDto;
+import com.ssafy.rit.back.dto.member.requestDto.UpdatePasswordRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
 @Entity
 @Builder
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode()
@@ -94,5 +98,22 @@ public class Member {
     @OneToMany(mappedBy = "toMemberId")
     private List<GuestBook> toGuestBooks;
 
+
+
+    // 탈퇴 시 isDisable 값 갱신 처리
+    public void updateDisable() {
+
+        this.isDisabled = 1;
+
+    }
+
+    public void updatePassword(String newPassword) {
+
+        this.password = newPassword;
+    }
+
+    public void updateNickname(String newNickname) {
+        this.nickname = newNickname;
+    }
 
 }

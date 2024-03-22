@@ -1,8 +1,10 @@
 package com.ssafy.rit.back.exception.handler;
 
 import com.google.gson.Gson;
+import com.ssafy.rit.back.exception.member.EmailAlreadyExistsException;
 import com.ssafy.rit.back.exception.member.MemberDisabledException;
 import com.ssafy.rit.back.exception.member.MemberNotFoundException;
+import com.ssafy.rit.back.exception.member.NicknameAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,9 +32,25 @@ public class MemberGlobalExceptionHandler {
                 .body(stringToGson(e.getMessage()));
     }
 
+
+
     @ExceptionHandler(MemberDisabledException.class)
     public ResponseEntity<String> handleMemberDisabledException(MemberDisabledException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .headers(JSON_HEADERS)
+                .body(stringToGson(e.getMessage()));
+    }
+
+    @ExceptionHandler(NicknameAlreadyExistsException.class)
+    public ResponseEntity<String> handleNicknameAlreadyExistsException(NicknameAlreadyExistsException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .headers(JSON_HEADERS)
+                .body(stringToGson(e.getMessage()));
+    }
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<String> handleEmailAlreadyExistsException(EmailAlreadyExistsException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .headers(JSON_HEADERS)
                 .body(stringToGson(e.getMessage()));
     }

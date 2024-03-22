@@ -1,21 +1,32 @@
 package com.ssafy.rit.back.serviceImpl;
 
-import com.ssafy.rit.back.dto.member.MemberRequestDto;
+import com.ssafy.rit.back.dto.member.requestDto.*;
 import com.ssafy.rit.back.entity.Member;
+import com.ssafy.rit.back.exception.member.EmailAlreadyExistsException;
+import com.ssafy.rit.back.exception.member.MemberNotFoundException;
+import com.ssafy.rit.back.exception.member.NicknameAlreadyExistsException;
 import com.ssafy.rit.back.repository.MemberRepository;
 import com.ssafy.rit.back.service.MemberService;
+import com.ssafy.rit.back.util.CommonUtil;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
+@Log4j2
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CommonUtil commonUtil;
 
-    public MemberServiceImpl(MemberRepository memberRepository, PasswordEncoder passwordEncoder){
+    public MemberServiceImpl(MemberRepository memberRepository, PasswordEncoder passwordEncoder, CommonUtil commonUtil){
         this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
+        this.commonUtil = commonUtil;
     }
 
     @Override
@@ -43,6 +54,112 @@ public class MemberServiceImpl implements MemberService {
                 .build();
 
         memberRepository.save(data);
+    }
+
+
+    public Boolean checkEmail(CheckEmailRequestDto dto) {
+
+        Optional<Member> optionalMember = memberRepository.findByEmail(dto.getEmail());
+        if (optionalMember.isPresent()) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    public Boolean checkNickname(CheckNicknameRequestDto dto) {
+
+        Optional<Member> optionalMember = memberRepository.findByNickname(dto.getNickname());
+        if (optionalMember.isPresent()) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    // 회원 탈퇴 요청이 들어오면 비밀번호 검증
+    public Member checkPasswordBeforeDisable(DisableRequestDto dto) {
+
+        // 현재 요청을 보내는 Member
+        Member currentMember = commonUtil.getMember();
+        String currentEmail = currentMember.getEmail();
+
+        // DB에서 email을 통해 찾은 Member
+        Member member = memberRepository.findByEmail(currentEmail).orElseThrow(MemberNotFoundException::new);
+
+        String rawPassword = dto.getPassword();
+        String hashedPassword = member.getPassword();
+
+        log.info("-------------------------------------------------------");
+        log.info(".....................비밀번호 검증 중.....................");
+        log.info("-------------------------------------------------------");
+
+        if (!passwordEncoder.matches(rawPassword, hashedPassword)) {
+            return null;
+        }
+
+        return member;
+    }
+
+
+
+    @Transactional
+    public void updatePassword(UpdatePasswordRequestDto dto) {
+
+
+        Member currentMember = commonUtil.getMember();
+        Member targetMember = memberRepository.findByEmail(currentMember.getEmail()).orElseThrow(MemberNotFoundException::new);
+
+        String inputOldPassword = dto.getOldPassword();
+        String savedOldPassword = targetMember.getPassword();
+        String newHashedPassword = encodePassword(dto);
+
+
+        // 패스워드 업데이트 전 비밀번호 검증
+        if (passwordEncoder.matches(inputOldPassword, savedOldPassword)) {
+            targetMember.updatePassword(newHashedPassword);
+            log.info("----------------비밀번호 일치염. 진행시켜!----------------");
+        }
+
+        log.info("-------------------비밀번호 변경 완료-------------------");
+
+    }
+
+
+    @Transactional
+    public void updateDisable(DisableRequestDto dto) {
+
+        Member targetMember = checkPasswordBeforeDisable(dto);
+        if (targetMember != null) {
+            log.info("--------------------변경 전 상태: {}--------------------", targetMember.getIsDisabled());
+            targetMember.updateDisable();
+            log.info("--------------------변경 후 상태: {}--------------------", targetMember.getIsDisabled());
+        }
+    }
+
+
+    @Transactional
+    public void updateNickname(UpdateNicknameRequestDto dto) {
+
+        Member targetMember = memberRepository.findByEmail(commonUtil.getMember().getEmail()).orElseThrow(MemberNotFoundException::new);
+
+        log.info("------------------------------------------------------------------");
+        log.info("---------------------변경 전 닉네임: {}---------------------", targetMember.getNickname());
+        log.info("------------------------------------------------------------------");
+
+        targetMember.updateNickname(dto.getNewNickname());
+
+        log.info("---------------------변경 후 닉네임: {}---------------------", targetMember.getNickname());
+
+    }
+
+
+    String encodePassword(UpdatePasswordRequestDto dto) {
+
+        return passwordEncoder.encode(dto.getNewPassword());
+
     }
 
 }

@@ -10,7 +10,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: false
@@ -48,7 +48,7 @@ server:
   port: 8000
 
 cors:
-  allowed-origins: http://localhost:3000
+  allowed-origins: ${BACK_URL}
 
 springdoc:
   swagger-ui:
