@@ -33,12 +33,12 @@ public class Bookshelf {
     @Column(name = "created_at")
     private LocalDate createdAt;
 
+    @Column(name = "cover")
+    private String cover;
+
 //  관계 설정
     @OneToOne
     @JoinColumn(name = "member_id")
     private Member memberId;
-
-    @OneToMany(mappedBy = "bookshelfId")
-    private List<BookBookshelf> bookBookshelves;
 
 }
