@@ -1,13 +1,14 @@
 package com.ssafy.rit.back.serviceImpl;
 
-import com.ssafy.rit.back.dto.postBox.requestDto.PostBoxCreationRequestDto;
-import com.ssafy.rit.back.dto.postBox.response.PostBoxCreationResponse;
+import com.ssafy.rit.back.dto.postBox.requestDto.PostBoxToCardCreationRequestDto;
+import com.ssafy.rit.back.dto.postBox.response.PostBoxToCardCreationResponse;
 import com.ssafy.rit.back.dto.postBox.response.PostBoxListResponse;
 import com.ssafy.rit.back.dto.postBox.responseDto.PostBoxListResponseDto;
 import com.ssafy.rit.back.dto.postBox.responseDto.ReceiveCardsDto;
 import com.ssafy.rit.back.entity.Card;
 import com.ssafy.rit.back.entity.Member;
 import com.ssafy.rit.back.entity.Postbox;
+import com.ssafy.rit.back.exception.card.CardNotFoundException;
 import com.ssafy.rit.back.repository.CardRepository;
 import com.ssafy.rit.back.repository.PostBoxRepository;
 import com.ssafy.rit.back.service.PostBoxService;
@@ -21,6 +22,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,9 +71,28 @@ public class PostBoxServiceImpl implements PostBoxService {
         }
     }
 
+    // 우편함에 있는 카드를 내 다이어리에 저장
     @Override
-    public ResponseEntity<PostBoxCreationResponse> createPostBox(PostBoxCreationRequestDto postBoxCreationRequestDto) {
-        return null;
+    public ResponseEntity<PostBoxToCardCreationResponse> createPostBoxToCard(PostBoxToCardCreationRequestDto postBoxToCardCreationRequestDto) {
+
+        Member currentMember = commonUtil.getMember();
+
+        Card currentCard = cardRepository.findById(postBoxToCardCreationRequestDto.getCardId())
+                .orElseThrow(CardNotFoundException::new);
+
+        Card saveCard = Card.builder()
+                .comment(currentCard.getComment())
+                .createdAt(LocalDate.now())
+                .fromMemberId(currentCard.getFromMemberId())
+                .toMemberId(currentMember)
+                .bookId(currentCard.getBookId())
+                .build();
+
+        cardRepository.save(saveCard);
+
+        PostBoxToCardCreationResponse response = new PostBoxToCardCreationResponse("다이어리에 카드가 저장되었습니다.", true);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     private ReceiveCardsDto convertPostboxToDto(Postbox postbox) {

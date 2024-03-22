@@ -1,7 +1,7 @@
 package com.ssafy.rit.back.controller;
 
-import com.ssafy.rit.back.dto.postBox.requestDto.PostBoxCreationRequestDto;
-import com.ssafy.rit.back.dto.postBox.response.PostBoxCreationResponse;
+import com.ssafy.rit.back.dto.postBox.requestDto.PostBoxToCardCreationRequestDto;
+import com.ssafy.rit.back.dto.postBox.response.PostBoxToCardCreationResponse;
 import com.ssafy.rit.back.dto.postBox.response.PostBoxListResponse;
 import com.ssafy.rit.back.service.PostBoxService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class PostBoxController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<PostBoxCreationResponse> createPostBox(@RequestBody PostBoxCreationRequestDto postBoxCreationRequestDto) {
-        return postBoxService.createPostBox(postBoxCreationRequestDto);
+    public ResponseEntity<PostBoxToCardCreationResponse> createPostBoxToCard(@RequestBody PostBoxToCardCreationRequestDto postBoxToCardCreationRequestDto) {
+        return postBoxService.createPostBoxToCard(postBoxToCardCreationRequestDto);
     }
 }

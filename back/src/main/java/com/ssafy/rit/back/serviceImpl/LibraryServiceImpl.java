@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 public class LibraryServiceImpl implements LibraryService {
 
     private final MemberRepository memberRepository;
-    private final ModelMapper modelMapper;
     private final CommonUtil commonUtil;
 
     // 다른 사람 서재 방문 시 받을 intro 데이터
