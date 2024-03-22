@@ -1,7 +1,9 @@
 package com.ssafy.rit.back.config;
 
 
+import com.ssafy.rit.back.repository.MemberRepository;
 import com.ssafy.rit.back.repository.RefreshRepository;
+import com.ssafy.rit.back.security.filter.CustomLogoutFilter;
 import com.ssafy.rit.back.security.filter.JWTFilter;
 import com.ssafy.rit.back.security.filter.LoginFilter;
 import com.ssafy.rit.back.security.jwt.JWTUtil;
@@ -18,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -30,15 +33,17 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
+    private final MemberRepository memberRepository;
 
     @Value("${cors.allowed-origins}")
     private String allowedOrigins;
 
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RefreshRepository refreshRepository) {
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RefreshRepository refreshRepository, MemberRepository memberRepository) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
+        this.memberRepository = memberRepository;
     }
 
     @Bean
@@ -66,12 +71,14 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/login", "/", "/members/signup", "/v3/api-docs/**", "/v3/swagger-ui/**", "/v3/swagger-resources/**").permitAll()
-                        .requestMatchers("/members/reissue", "/members/email", "/members/nickname").permitAll()
+                        .requestMatchers("/members/reissue", "/members/email", "/members/nickname", "/members/pass-certification", "/members/send-certification", "/members/temporary-password").permitAll()
                         .anyRequest().authenticated());
 
         http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
-        http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository, memberRepository), UsernamePasswordAuthenticationFilter.class);
+
+        http.addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
 
         http
                 .sessionManagement((session) -> session

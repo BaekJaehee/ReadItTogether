@@ -12,6 +12,7 @@ import java.util.List;
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @EqualsAndHashCode
+@Builder
 public class Card {
 
     @Id
@@ -26,15 +27,15 @@ public class Card {
     private LocalDate createdAt;
 
 //    관계 설정
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_member_id")
     private Member fromMemberId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_member_id")
     private Member toMemberId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book bookId;
 

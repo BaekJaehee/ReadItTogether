@@ -27,7 +27,7 @@ public class GroupRecommendBook {
     private LocalDate createdAt;
 
 //    관계 설정
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book bookId;
 }

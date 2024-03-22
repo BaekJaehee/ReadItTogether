@@ -8,6 +8,7 @@ import java.util.Date;
 
 @Entity
 @Getter @Setter
+@Builder
 @NoArgsConstructor @AllArgsConstructor
 @EqualsAndHashCode
 @Table(name = "postbox")
@@ -22,11 +23,11 @@ public class Postbox {
     private LocalDate createdAt;
 
 //    관계 설정
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_id")
     private Card cardId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member memberId;
 

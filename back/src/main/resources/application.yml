@@ -54,3 +54,31 @@ springdoc:
   swagger-ui:
     path: /v3/api-docs
 
+
+---
+spring:
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    port: 587
+    username: ${SMTP_USERNAME}
+    password: ${SMTP_PASSWORD}
+    pㅍroperties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          mime:
+            charset: UTF-8
+          transport:
+            protocol: smtp
+          debug: true
+---
+
+
+spring:
+  data:
+    redis:
+      host: ${HOST_URL}
+      port: 6379
