@@ -1,4 +1,4 @@
-package com.ssafy.rit.back.dto.member;
+package com.ssafy.rit.back.dto.member.customDto;
 
 import com.ssafy.rit.back.entity.Member;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,7 +9,6 @@ import java.util.Collection;
 public class CustomUserDetails implements UserDetails {
 
     private final Member member;
-
 
     public CustomUserDetails(Member member) {
         this.member = member;

@@ -1,10 +1,11 @@
 import axios from 'axios';
 
-const BookSortForm = async (sortOption) => {
+const BookSortForm = async (sortOption, orderOption) => {
   const API_URL = process.env.REACT_APP_API_BASE_URL; // 환경 변수에서 API 기본 URL을 가져옴
 
   const formData = new FormData();
   formData.append('sort', sortOption); // sortOption을 FormData에 추가
+  formData.append('order', orderOption); // orderOption을 FormData에 추가
 
   try {
     // axios.post를 사용하여 FormData와 함께 POST 요청을 보냄

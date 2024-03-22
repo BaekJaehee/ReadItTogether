@@ -14,11 +14,11 @@ const handleSignUp = async (name, email, password, nickname, birth, gender) => {
     const response = await axios.post(
       `${API_BASE_URL}/member/signup`,
       formData
-      // , {
-      //   headers: {
-      //     'Content-Type': 'application/json'
-      //   }
-      // }
+      , {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
       )
       console.log(response.data);
 

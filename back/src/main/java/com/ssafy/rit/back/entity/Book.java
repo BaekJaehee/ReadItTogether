@@ -2,6 +2,7 @@ package com.ssafy.rit.back.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -12,7 +13,10 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode()
-@Table(name = "book")
+@Table(name = "book", indexes = {
+        @Index(name = "idx_books_title", columnList = "title"),
+        @Index(name = "idx_books_author", columnList = "author")
+})
 public class Book {
 
     @Id
@@ -53,6 +57,10 @@ public class Book {
     @Column(name = "genre")
     private String genre;
 
+    @Lob
+    @Column(name = "info")
+    private String info;
+
 //    관계 설정
     @OneToMany(mappedBy = "bookId")
     private List<Comment> comments;
@@ -68,8 +76,5 @@ public class Book {
 
     @OneToMany(mappedBy = "bookId")
     private List<MemberRecommendBook> memberRecommendBooks;
-
-    @OneToMany(mappedBy = "bookId")
-    private List<BookBookshelf> bookBookshelves;
 
 }
