@@ -1,9 +1,6 @@
 package com.ssafy.rit.back.serviceImpl;
 
-import com.ssafy.rit.back.dto.member.requestDto.CheckEmailRequestDto;
-import com.ssafy.rit.back.dto.member.requestDto.DisableRequestDto;
-import com.ssafy.rit.back.dto.member.requestDto.MemberRequestDto;
-import com.ssafy.rit.back.dto.member.requestDto.CheckNicknameRequestDto;
+import com.ssafy.rit.back.dto.member.requestDto.*;
 import com.ssafy.rit.back.entity.Member;
 import com.ssafy.rit.back.exception.member.EmailAlreadyExistsException;
 import com.ssafy.rit.back.exception.member.MemberNotFoundException;
@@ -83,7 +80,7 @@ public class MemberServiceImpl implements MemberService {
 
 
     // 회원 탈퇴 요청이 들어오면 비밀번호 검증
-    public Member checkPassword(DisableRequestDto dto) {
+    public Member checkPasswordBeforeDisable(DisableRequestDto dto) {
 
         // 현재 요청을 보내는 Member
         Member currentMember = commonUtil.getMember();
@@ -106,15 +103,49 @@ public class MemberServiceImpl implements MemberService {
         return member;
     }
 
+
+
+    @Transactional
+    public void updatePassword(UpdatePasswordRequestDto dto) {
+
+
+        Member currentMember = commonUtil.getMember();
+        Member targetMember = memberRepository.findByEmail(currentMember.getEmail()).orElseThrow(MemberNotFoundException::new);
+
+        String inputOldPassword = dto.getOldPassword();
+        String savedOldPassword = targetMember.getPassword();
+        String newHashedPassword = encodePassword(dto);
+
+
+        // 패스워드 업데이트 전 비밀번호 검증
+        if (passwordEncoder.matches(inputOldPassword, savedOldPassword)) {
+            targetMember.updatePassword(newHashedPassword);
+            log.info("----------------비밀번호 일치염. 진행시켜!----------------");
+        }
+
+        log.info("-------------------비밀번호 변경 완료-------------------");
+
+    }
+
+
     @Transactional
     public void updateDisable(DisableRequestDto dto) {
 
-        Member targetMember = checkPassword(dto);
+        Member targetMember = checkPasswordBeforeDisable(dto);
         if (targetMember != null) {
-            log.info("--------------------변경 전: {}--------------------", targetMember.getIsDisabled());
+            log.info("--------------------변경 전 상태: {}--------------------", targetMember.getIsDisabled());
             targetMember.updateDisable();
-            log.info("--------------------변경 후: {}--------------------", targetMember.getIsDisabled());
+            log.info("--------------------변경 후 상태: {}--------------------", targetMember.getIsDisabled());
         }
+
+
+    }
+
+
+    String encodePassword(UpdatePasswordRequestDto dto) {
+
+        return passwordEncoder.encode(dto.getNewPassword());
+
     }
 
 }

@@ -10,6 +10,7 @@ import com.ssafy.rit.back.dto.member.responseDto.UpdatePasswordResponseDto;
 import com.ssafy.rit.back.exception.member.EmailAlreadyExistsException;
 import com.ssafy.rit.back.exception.member.NicknameAlreadyExistsException;
 import com.ssafy.rit.back.serviceImpl.MemberServiceImpl;
+import io.jsonwebtoken.security.Password;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -91,9 +92,15 @@ public class MemberController {
 
 
     @PutMapping("/update-password")
-    public ResponseEntity<UpdatePasswordResponseDto> updatePassword(@RequestBody UpdatePasswordRequestDto dto) {
+    public ResponseEntity<UpdatePasswordResponseDto> updatePassword(@RequestBody UpdatePasswordRequestDto dto) throws JsonProcessingException {
 
-        return null;
+        memberService.updatePassword(dto);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        UpdatePasswordResponseDto responseDto = new UpdatePasswordResponseDto("Success", true);
+        objectMapper.writeValueAsString(responseDto);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
 
