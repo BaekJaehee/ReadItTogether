@@ -33,11 +33,11 @@ public class SearchServiceImpl implements SearchService {
         Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by("title").ascending());
         Page<Book> books = bookRepository.findAll(BookSpecifications.titleOrAuthorContainsIgnoreCase(query), pageable);
 
-        List<BookDto> bookDtos = books.getContent().stream()
+        List<BookDto> booksDto = books.getContent().stream()
                 .map(book -> modelMapper.map(book, BookDto.class))
                 .collect(Collectors.toList());
 
-        SearchResponseDto detailDto = new SearchResponseDto(bookDtos);
+        SearchResponseDto detailDto = new SearchResponseDto(booksDto);
 
         SearchResponse response = new SearchResponse("검색 결과 반환 성공", detailDto);
 

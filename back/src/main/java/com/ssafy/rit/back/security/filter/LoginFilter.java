@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.ssafy.rit.back.dto.member.responseDto.SignInResponseDto;
 import com.ssafy.rit.back.dto.member.responseDto.DataDto;
 import com.ssafy.rit.back.entity.Member;
+import com.ssafy.rit.back.entity.RefreshEntity;
 import com.ssafy.rit.back.exception.member.MemberNotFoundException;
 import com.ssafy.rit.back.repository.MemberRepository;
 import com.ssafy.rit.back.repository.RefreshRepository;
@@ -15,6 +16,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.aot.hint.annotation.ReflectiveRuntimeHintsRegistrar;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +26,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 
 @Log4j2
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
@@ -83,7 +86,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String refreshToken = jwtUtil.createJwt("refresh", email, 86400000L);
 
         // refreshToken를 서버에 저장
-//        addRefreshEntity(email, refreshToken, 86400000L);
+        addRefreshEntity(email, refreshToken, 86400000L);
 
         response.setHeader("Authorization", accessToken);
         response.addCookie(createCookie("refresh", refreshToken));
@@ -158,16 +161,17 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         return cookie;
     }
 
-    /*
-    private void addRefreshEntity(String email, String refreshToken, Long expiredMs) {
+
+    private void addRefreshEntity(String email, String refresh, Long expiredMs) {
         Date date = new Date(System.currentTimeMillis() + expiredMs);
 
-        RefreshEntity refreshEntity = new RefreshEntity();
-        refreshEntity.setEmail(email);
-        refreshEntity.setRefresh(refreshToken);
-        refreshEntity.setExpiration(date.toString());
+        RefreshEntity refreshEntity = RefreshEntity.builder()
+                        .email(email)
+                                .refresh(refresh)
+                                        .expiration(date.toString())
+                                                .build();
 
         refreshRepository.save(refreshEntity);
     }
-    */
+
 }

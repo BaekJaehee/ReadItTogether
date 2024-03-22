@@ -77,7 +77,4 @@ public class Book {
     @OneToMany(mappedBy = "bookId")
     private List<MemberRecommendBook> memberRecommendBooks;
 
-    @OneToMany(mappedBy = "bookId")
-    private List<BookBookshelf> bookBookshelves;
-
 }
