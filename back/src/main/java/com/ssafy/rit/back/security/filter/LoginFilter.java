@@ -3,34 +3,44 @@ package com.ssafy.rit.back.security.filter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
+import com.ssafy.rit.back.dto.member.responseDto.SignInResponseDto;
+import com.ssafy.rit.back.dto.member.responseDto.DataDto;
+import com.ssafy.rit.back.entity.Member;
+import com.ssafy.rit.back.entity.RefreshEntity;
+import com.ssafy.rit.back.exception.member.MemberNotFoundException;
+import com.ssafy.rit.back.repository.MemberRepository;
 import com.ssafy.rit.back.repository.RefreshRepository;
 import com.ssafy.rit.back.security.jwt.JWTUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.aot.hint.annotation.ReflectiveRuntimeHintsRegistrar;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 
+@Log4j2
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
+    private final MemberRepository memberRepository;
 
-    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshRepository refreshRepository) {
+    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshRepository refreshRepository, MemberRepository memberRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
+        this.memberRepository = memberRepository;
     }
 
     @Override
@@ -38,19 +48,26 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         System.out.println("-----------로그인 시도 중---------");
         try {
-            ObjectMapper om = new ObjectMapper();
 
+            ObjectMapper om = new ObjectMapper();
             JsonNode jsonNode = om.readTree(request.getInputStream());
 
             String email = jsonNode.get("email").asText();
             String password = jsonNode.get("password").asText();
 
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password, null);
+            Member member = memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
+            if (member.getIsDisabled() == 1) {
+                response.setStatus(401);
+                log.info("--------------Disabled된 유저염--------------");
+                return null;
+            }
 
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password, null);
             return authenticationManager.authenticate(authToken);
 
 
         } catch (Exception e) {
+            log.info("--------------------------------걸림--------------------------------");
             response.setStatus(401);
         }
 
@@ -61,19 +78,34 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
 
         String email = authentication.getName();
+        Member member = memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
+        Long memberId = member.getId();
+
 
         String accessToken = jwtUtil.createJwt("Authorization", email, 600000L);
         String refreshToken = jwtUtil.createJwt("refresh", email, 86400000L);
 
-//        addRefreshEntity(email, refreshToken, 86400000L);
+        // refreshToken를 서버에 저장
+        addRefreshEntity(email, refreshToken, 86400000L);
 
         response.setHeader("Authorization", accessToken);
         response.addCookie(createCookie("refresh", refreshToken));
         response.setStatus(HttpStatus.OK.value());
-
-        System.out.println("로그인 완료염");
-
         response.setContentType("application/json; charset=UTF-8");
+
+        log.info("-----------------------로그인 완료염-----------------------");
+
+        DataDto dataDto = new DataDto(accessToken, refreshToken, memberId);
+        SignInResponseDto responseDto = new SignInResponseDto("Login Success", dataDto);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResponse = objectMapper.writeValueAsString(responseDto);
+
+        response.getWriter().write(jsonResponse);
+
+
+        /*
+
         PrintWriter writer = response.getWriter();
 
         // 로그인 성공 시 프론트에게 토큰 전달(json형식)
@@ -88,6 +120,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         writer.print(jsonResponse.toString());
         writer.flush();
 
+        */
+
+
     }
 
     @Override
@@ -98,19 +133,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        String errorMessage;
-        int statusCode;
+        String errorMessage = "Not Found User";
+        int statusCode = 404;
 
-        if (failed instanceof UsernameNotFoundException) {
-            errorMessage = "User not found";
-            statusCode = HttpServletResponse.SC_NOT_FOUND;
-        } else if (failed instanceof BadCredentialsException) {
-            errorMessage = "Password does not match";
-            statusCode = HttpServletResponse.SC_UNAUTHORIZED;
-        } else {
-            errorMessage = "Authentication failed";
-            statusCode = HttpServletResponse.SC_UNAUTHORIZED;
-        }
+
+        // 실패 시 적절한 상태 코드 반환
+        response.setStatus(statusCode);
 
         JsonObject jsonResponse = new JsonObject();
         jsonResponse.addProperty("errorMessage", errorMessage);
@@ -133,16 +161,17 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         return cookie;
     }
 
-    /*
-    private void addRefreshEntity(String email, String refreshToken, Long expiredMs) {
+
+    private void addRefreshEntity(String email, String refresh, Long expiredMs) {
         Date date = new Date(System.currentTimeMillis() + expiredMs);
 
-        RefreshEntity refreshEntity = new RefreshEntity();
-        refreshEntity.setEmail(email);
-        refreshEntity.setRefresh(refreshToken);
-        refreshEntity.setExpiration(date.toString());
+        RefreshEntity refreshEntity = RefreshEntity.builder()
+                        .email(email)
+                                .refresh(refresh)
+                                        .expiration(date.toString())
+                                                .build();
 
         refreshRepository.save(refreshEntity);
     }
-    */
+
 }

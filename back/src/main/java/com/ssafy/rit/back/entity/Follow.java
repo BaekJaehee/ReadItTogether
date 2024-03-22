@@ -20,12 +20,12 @@ public class Follow {
 
 //    관계 설정
     // 내가 팔로우
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "following")
     private Member followingMember;
 
     // 나를 팔로우
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "follower")
     private Member followerMember;
 
