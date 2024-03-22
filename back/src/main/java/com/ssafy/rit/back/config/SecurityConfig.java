@@ -3,6 +3,7 @@ package com.ssafy.rit.back.config;
 
 import com.ssafy.rit.back.repository.MemberRepository;
 import com.ssafy.rit.back.repository.RefreshRepository;
+import com.ssafy.rit.back.security.filter.CustomLogoutFilter;
 import com.ssafy.rit.back.security.filter.JWTFilter;
 import com.ssafy.rit.back.security.filter.LoginFilter;
 import com.ssafy.rit.back.security.jwt.JWTUtil;
@@ -19,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -75,6 +77,8 @@ public class SecurityConfig {
         http.addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
         http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository, memberRepository), UsernamePasswordAuthenticationFilter.class);
+
+        http.addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
 
         http
                 .sessionManagement((session) -> session
