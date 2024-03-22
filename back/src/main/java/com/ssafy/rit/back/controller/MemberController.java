@@ -6,11 +6,10 @@ import com.ssafy.rit.back.dto.member.requestDto.*;
 import com.ssafy.rit.back.dto.member.responseDto.CheckResponseDto;
 import com.ssafy.rit.back.dto.member.responseDto.DisableResponseDto;
 import com.ssafy.rit.back.dto.member.responseDto.SignUpResponseDto;
-import com.ssafy.rit.back.dto.member.responseDto.UpdatePasswordResponseDto;
+import com.ssafy.rit.back.dto.member.responseDto.UpdatePasswordAndNicknameResponseDto;
 import com.ssafy.rit.back.exception.member.EmailAlreadyExistsException;
 import com.ssafy.rit.back.exception.member.NicknameAlreadyExistsException;
 import com.ssafy.rit.back.serviceImpl.MemberServiceImpl;
-import io.jsonwebtoken.security.Password;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class MemberController {
 
+    ObjectMapper objectMapper = new ObjectMapper();
     private final MemberServiceImpl memberService;
 
     public MemberController(MemberServiceImpl memberService) {
@@ -34,7 +34,6 @@ public class MemberController {
         memberService.signUp(dto);
 
         SignUpResponseDto responseDto = new SignUpResponseDto("SignUp Success", true);
-        ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.writeValueAsString(responseDto);
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
@@ -45,7 +44,6 @@ public class MemberController {
 
         log.info("------------중복 이메일 확인: {} -----------------", dto.getEmail());
 
-        ObjectMapper objectMapper = new ObjectMapper();
 
         Boolean checked = memberService.checkEmail(dto);
         if (!checked) {
@@ -63,7 +61,6 @@ public class MemberController {
 
         log.info("------------중복 닉네임 확인: {} -----------------", dto.getNickname());
 
-        ObjectMapper objectMapper = new ObjectMapper();
 
         Boolean checked = memberService.checkNickname(dto);
         if (!checked) {
@@ -83,7 +80,6 @@ public class MemberController {
 
         memberService.updateDisable(dto);
 
-        ObjectMapper objectMapper = new ObjectMapper();
         DisableResponseDto responseDto = new DisableResponseDto("Success", true);
         objectMapper.writeValueAsString(responseDto);
 
@@ -92,16 +88,26 @@ public class MemberController {
 
 
     @PutMapping("/update-password")
-    public ResponseEntity<UpdatePasswordResponseDto> updatePassword(@RequestBody UpdatePasswordRequestDto dto) throws JsonProcessingException {
+    public ResponseEntity<UpdatePasswordAndNicknameResponseDto> updatePassword(@RequestBody UpdatePasswordRequestDto dto) throws JsonProcessingException {
 
         memberService.updatePassword(dto);
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        UpdatePasswordResponseDto responseDto = new UpdatePasswordResponseDto("Success", true);
+        UpdatePasswordAndNicknameResponseDto responseDto = new UpdatePasswordAndNicknameResponseDto("Success", true);
         objectMapper.writeValueAsString(responseDto);
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
+
+    @PutMapping("/update-nickname")
+    public ResponseEntity<UpdatePasswordAndNicknameResponseDto> updateNickname(@RequestBody UpdateNicknameRequestDto dto) throws JsonProcessingException {
+
+        memberService.updateNickname(dto);
+        UpdatePasswordAndNicknameResponseDto responseDto = new UpdatePasswordAndNicknameResponseDto("Success", true);
+        objectMapper.writeValueAsString(responseDto);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+
 
 
 

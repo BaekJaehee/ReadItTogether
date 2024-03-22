@@ -109,7 +109,11 @@ public class Member {
 
     public void updatePassword(String newPassword) {
 
-        this.password = newPassword;       // 암호화 해야 하니까 따로 메서드 ?
+        this.password = newPassword;
+    }
+
+    public void updateNickname(String newNickname) {
+        this.nickname = newNickname;
     }
 
 }
