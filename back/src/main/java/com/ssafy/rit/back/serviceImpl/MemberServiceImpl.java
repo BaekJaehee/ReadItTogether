@@ -108,16 +108,22 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public void updatePassword(UpdatePasswordRequestDto dto) {
 
-        String newHashedPassword = encodePassword(dto);
 
         Member currentMember = commonUtil.getMember();
         Member targetMember = memberRepository.findByEmail(currentMember.getEmail()).orElseThrow(MemberNotFoundException::new);
 
-        targetMember.updatePassword(newHashedPassword);
+        String inputOldPassword = dto.getOldPassword();
+        String savedOldPassword = targetMember.getPassword();
+        String newHashedPassword = encodePassword(dto);
 
-        log.info("-------------------변경 전 비밀번호: {}-------------------", dto.getOldPassword());
-        log.info("-------------------변경된 비밀번호: {}-------------------", dto.getNewPassword());
-        log.info("--------------해시된 변경 비밀번호: {}--------------", newHashedPassword);
+
+        // 패스워드 업데이트 전 비밀번호 검증
+        if (passwordEncoder.matches(inputOldPassword, savedOldPassword)) {
+            targetMember.updatePassword(newHashedPassword);
+            log.info("----------------비밀번호 일치염. 진행시켜!----------------");
+        }
+
+        log.info("-------------------비밀번호 변경 완료-------------------");
 
     }
 
@@ -127,9 +133,9 @@ public class MemberServiceImpl implements MemberService {
 
         Member targetMember = checkPasswordBeforeDisable(dto);
         if (targetMember != null) {
-            log.info("--------------------변경 전: {}--------------------", targetMember.getIsDisabled());
+            log.info("--------------------변경 전 상태: {}--------------------", targetMember.getIsDisabled());
             targetMember.updateDisable();
-            log.info("--------------------변경 후: {}--------------------", targetMember.getIsDisabled());
+            log.info("--------------------변경 후 상태: {}--------------------", targetMember.getIsDisabled());
         }
 
 
