@@ -22,11 +22,11 @@ const DetailBook = () => {
             </div>
             <div className="flex-col">
               <div className="mb-2">
-                {/* 책장 추가 모달 */}
+                {/* 책장 추가 버튼 + 모달 */}
                 <AddShelf />
               </div>
               <div className="mb-2">
-                {/* 카드 작성 모달 */}
+                {/* 카드 작성 버튼 + 모달 */}
                 <CreateCard />
               </div>
             </div>

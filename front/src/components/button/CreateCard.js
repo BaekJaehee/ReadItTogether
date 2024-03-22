@@ -2,13 +2,16 @@ import React, { useEffect, useState } from 'react';
 import img1 from "../../assets/book/img1.PNG"
 
 const CreateCard = ({ onClose }) => {
+  const [comment, setComment] = useState('');
+  const [isValid, setIsValid] = useState(false);
+  
   // 카드 작성 모달
   const [isCreateCardOpen, setIsCreateCardOpen] = useState(false);
   const openCreateCardModal = () => setIsCreateCardOpen(true);
-  const closeCreateCardModal = () => setIsCreateCardOpen(false);
-
-  const [comment, setComment] = useState('');
-  const [isValid, setIsValid] = useState(false);
+  const closeCreateCardModal = () => {
+    setIsCreateCardOpen(false);
+    setComment(''); // 모달이 닫히면 입력 내용 초기화
+  };
 
   useEffect(() => {
     if (comment.length >= 10) {
@@ -42,16 +45,38 @@ const CreateCard = ({ onClose }) => {
       </button>
       {isCreateCardOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50" onClick={closeCreateCardModal}>
-        <div className="modal p-4 bg-white rounded-lg" onClick={(e) => e.stopPropagation()}>
-          {/* <span className="top-2 right-2 cursor-pointer" onClick={closeCreateCardModal}>
-            &times;
-          </span> */}
-          <img src={img1} alt="cover"/>
-          <input type="text" className="border border-gray-300 p-2 rounded mb-2" onClick={(e) => e.stopPropagation()} />
-          <button className={`bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 ${!isValid && 'opacity-50 cursor-not-allowed'}`} onClick={handleSubmit} disabled={!isValid}>전송</button>
-          {/* <button className={`bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 ${!isValid && 'opacity-50 cursor-not-allowed'}`} onClick={handleSubmit} disabled={!isValid}>전송</button> */}
+          <div className="modal p-8 bg-white rounded-lg flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              {/* 왼쪽 열 */}
+              <div className="col-span-1">
+                <img src={img1} alt="cover" className="mb-4" />
+              </div>
+              {/* 오른쪽 열 */}
+              <div className="col-span-1">
+                <p className="mb-2 text-lg font-bold">제목</p>
+                <p className="mb-2 text-lg font-bold">출판사</p>
+                <input 
+                  type="text" 
+                  id="comment" 
+                  name="comment" 
+                  value={comment} 
+                  onChange={(e) => setComment(e.target.value)} 
+                  className="border border-gray-300 p-2 rounded w-full mb-4" 
+                  placeholder="추천사를 10자 이상 입력해주세요" 
+                />
+              </div>
+            </div>
+            <div className="flex justify-center">
+              <button 
+                className={`bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 ${!isValid && 'opacity-50 cursor-not-allowed'}`} 
+                onClick={handleSubmit} 
+                disabled={!isValid}
+              >
+                전송
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
       )}
     </div>
   );
