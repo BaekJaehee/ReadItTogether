@@ -1,5 +1,7 @@
 package com.ssafy.rit.back.serviceImpl;
 
+import com.ssafy.rit.back.dto.postBox.requestDto.PostBoxCreationRequestDto;
+import com.ssafy.rit.back.dto.postBox.response.PostBoxCreationResponse;
 import com.ssafy.rit.back.dto.postBox.response.PostBoxListResponse;
 import com.ssafy.rit.back.dto.postBox.responseDto.PostBoxListResponseDto;
 import com.ssafy.rit.back.dto.postBox.responseDto.ReceiveCardsDto;
@@ -65,6 +67,11 @@ public class PostBoxServiceImpl implements PostBoxService {
 
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
+    }
+
+    @Override
+    public ResponseEntity<PostBoxCreationResponse> createPostBox(PostBoxCreationRequestDto postBoxCreationRequestDto) {
+        return null;
     }
 
     private ReceiveCardsDto convertPostboxToDto(Postbox postbox) {
