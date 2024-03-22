@@ -137,7 +137,21 @@ public class MemberServiceImpl implements MemberService {
             targetMember.updateDisable();
             log.info("--------------------변경 후 상태: {}--------------------", targetMember.getIsDisabled());
         }
+    }
 
+
+    @Transactional
+    public void updateNickname(UpdateNicknameRequestDto dto) {
+
+        Member targetMember = memberRepository.findByEmail(commonUtil.getMember().getEmail()).orElseThrow(MemberNotFoundException::new);
+
+        log.info("------------------------------------------------------------------");
+        log.info("---------------------변경 전 닉네임: {}---------------------", targetMember.getNickname());
+        log.info("------------------------------------------------------------------");
+
+        targetMember.updateNickname(dto.getNewNickname());
+
+        log.info("---------------------변경 후 닉네임: {}---------------------", targetMember.getNickname());
 
     }
 
