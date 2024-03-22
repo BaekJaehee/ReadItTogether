@@ -147,7 +147,7 @@ public class MemberController {
 
         VerifyAccessResponseDto responseDto = new VerifyAccessResponseDto("Success", true);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
-
+        // git checkout -t origin/back
     }
 
 }
