@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostBoxCreationRequestDto {
+public class PostBoxToCardCreationRequestDto {
 
     private Long cardId;
 }

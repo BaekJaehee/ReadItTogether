@@ -12,6 +12,7 @@ import java.util.List;
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @EqualsAndHashCode
+@Builder
 public class Card {
 
     @Id
