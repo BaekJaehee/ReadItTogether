@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class UpdatePasswordResponseDto {
+public class UpdatePasswordAndNicknameResponseDto {
 
     private String message;
     private Boolean data;
