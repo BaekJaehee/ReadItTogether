@@ -3,6 +3,9 @@ package com.ssafy.rit.back.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.rit.back.dto.member.requestDto.*;
+import com.ssafy.rit.back.dto.member.response.PassingCertificationResponse;
+import com.ssafy.rit.back.dto.member.response.SendingCertificationResponse;
+import com.ssafy.rit.back.dto.member.response.SendingTemporaryPasswordResponse;
 import com.ssafy.rit.back.dto.member.responseDto.CheckResponseDto;
 import com.ssafy.rit.back.dto.member.responseDto.DisableResponseDto;
 import com.ssafy.rit.back.dto.member.responseDto.SignUpResponseDto;
@@ -108,14 +111,28 @@ public class MemberController {
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-
-
-
     @GetMapping("/test")
     public String test() {
         log.info("테스트입니당나라송나라");
         return "테통. 테스트 통과라는 뜻";
     }
 
+    // 인증 메일 발송
+    @PostMapping("/send-certification")
+    public ResponseEntity<SendingCertificationResponse> sendEmailCertificate(@RequestBody SendingCertificationRequestDto sendingCertificationRequestDto) {
+        return memberService.sendEmailCertificate(sendingCertificationRequestDto);
+    }
+
+    // 인증 코드 검증
+    @PostMapping("/pass-certification")
+    public ResponseEntity<PassingCertificationResponse> passEmailCertificate(@RequestBody PassingCertificationRequestDto passingCertificationRequestDto) {
+        return memberService.passEmailCertificate(passingCertificationRequestDto);
+    }
+
+    // 임시비밀번호 발급
+    @PostMapping("/temporary-password")
+    public ResponseEntity<SendingTemporaryPasswordResponse> sendTemporaryPassword(@RequestBody SendingTemporaryPasswordRequestDto sendingTemporaryPasswordRequestDto) {
+        return memberService.sendTemporaryPassword(sendingTemporaryPasswordRequestDto);
+    }
 
 }
