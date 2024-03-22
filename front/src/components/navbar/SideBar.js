@@ -9,11 +9,12 @@ import man from "../../assets/profile/man.png";
 
 const SideBar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const memberId = localStorage.getItem('memberId')
 
   return (
     <nav className="flex flex-col h-full">
       <div className="bg-stone-100 py-12 flex flex-col items-center justify-center">
-        <Link to="/" className="flex flex-col items-center">
+        <Link to={`/${memberId}`} className="flex flex-col items-center">
           <img className="w-20 mb-4" src={logo} alt="로고" />
           <div className="text-gray-500 font-serif italic text-xs text-center leading-normal">
             <p>You can make anything</p>
@@ -31,7 +32,7 @@ const SideBar = () => {
       </div>
       <div className="py- flex flex-col items-center justify-center flex-grow">
         {/* 유저 프로필 바로가기 */}
-        <Link to="/profile">
+        <Link to={`/profile/${memberId}`}>
           <div className="flex flex-col items-center mb-4">
             <img
               className="w-20 h-20 rounded-full mb-2"

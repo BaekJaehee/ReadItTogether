@@ -1,29 +1,44 @@
-import React, { createContext, useContext, useState } from "react";
+import axios from "axios";
+import React, { createContext, useContext, useState, useEffect } from "react";
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const AuthContext = createContext();
 
-const useAuth = () => {
-  return useContext(AuthContext);
-};
-
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [userState, setUserState] = useState({ status: "loggedOut" });
+  const accessToken = localStorage.getItem("accessToken");
 
-  const login = (userData) => {
-    setUser(userData);
-  };
+  useEffect(() => {
+    if (accessToken) {
+      axios
+        .post(
+          `${API_BASE_URL}/members/verify-token`,
+          {
+            token: accessToken,
+          },
+          {
+            withCredentials: true,
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          setUserState({ status: "loggedIn" });
+        })
+        .catch((err) => {
+          console.log(err);
+          setUserState({ status: "loggedOut" });
+        });
+    } else {
+      setUserState({ status: "loggedOut" });
+    }
+  }, [accessToken]);
 
-  const logout = () => {
-    setUser(null);
-  };
-
-  const value = {
-    user,
-    login,
-    logout,
-  };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ userState, setUserState }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
-export { useAuth, AuthProvider };
+export { AuthContext, AuthProvider };
