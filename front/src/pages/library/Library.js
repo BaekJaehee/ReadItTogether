@@ -51,7 +51,6 @@ const Library = () => {
     // URL에서 memberId 추출하기 (예시로, 도메인/library/{memberId} 형태의 URL을 가정)
     const pathArray = window.location.pathname.split("/");
     const memberIdFromURL = pathArray[pathArray.length - 1];
-    console.log(`URL에서 추출한 memberId: ${memberIdFromURL}`);
 
     // 두 memberId가 일치하는지 확인하고, 불일치할 경우 경고 또는 처리
     if (storedMemberId && storedMemberId !== memberIdFromURL) {

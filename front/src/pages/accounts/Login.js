@@ -42,7 +42,7 @@ const Login = () => {
       }
 
       setUserState({ status: "loggedIn" });
-      console.log(userState)
+      console.log("로그인 성공", userState)
 
       navigate(`/${memberId}`);
     } catch (error) {
