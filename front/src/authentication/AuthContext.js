@@ -10,25 +10,24 @@ const AuthProvider = ({ children }) => {
   const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
+    const verifyAccessToken = async () => {
+      try {
+        const response = await axios.post(
+          `${API_BASE_URL}/members/verify-access`,
+          { accessToken: `Bearer ${accessToken}` },
+          { withCredentials: true }
+        );
+        console.log(response);
+        setUserState({ status: "loggedIn" });
+      } catch (err) {
+        console.error(err);
+        setUserState({ status: "loggedOut" });
+      }
+    };
+
+    // accessToken이 존재하는 경우에만 API 호출
     if (accessToken) {
-      axios
-        .post(
-          `${API_BASE_URL}/members/verify-token`,
-          {
-            token: accessToken,
-          },
-          {
-            withCredentials: true,
-          }
-        )
-        .then((response) => {
-          console.log(response);
-          setUserState({ status: "loggedIn" });
-        })
-        .catch((err) => {
-          console.log(err);
-          setUserState({ status: "loggedOut" });
-        });
+      verifyAccessToken();
     } else {
       setUserState({ status: "loggedOut" });
     }

@@ -8,6 +8,7 @@ import settings from "../../assets/profile/settings.png";
 
 const Profile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div className="flex items-center justify-center pt-32">
       <div className="flex items-center justify-center bg-sky-100 w-[1000px] p-12">

@@ -15,7 +15,7 @@ const Logout = () => {
         // 로컬 스토리지에서 사용자 정보 삭제
         localStorage.removeItem(`memberId`);
         localStorage.removeItem(`accessToken`);
-
+        console.log(1);
         // 로그아웃 API 호출
         await axios.post(
           `${API_BASE_URL}/logout`,
@@ -30,12 +30,12 @@ const Logout = () => {
         // 로그인 페이지로 리디렉션
         navigate("/login");
       } catch (error) {
-        console.log("로그아웃 성공");
+        console.warn("로그아웃 성공?");
       }
     };
 
     logout();
-  }, []);
+  });
 
   return null; // 로그아웃은 UI를 렌더링 안함
 };
