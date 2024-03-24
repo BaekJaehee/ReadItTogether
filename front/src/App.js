@@ -15,7 +15,7 @@ import RecommendBook from "./pages/recomend/RecommendBook";
 import DetailBook from "./pages/recomend/DetailBook";
 import Logout from "./api/accounts/Logout";
 
-import SignUp from "./pages/accounts/SignUp";
+import  SignUp from "./pages/accounts/SignUp";
 import Diary from "./components/modal/Diary/Diary";
 
 function App() {
