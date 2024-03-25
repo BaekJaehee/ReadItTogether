@@ -7,8 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class UpdatePasswordAndNicknameResponseDto {
+public class UpdateNicknameResponseDto {
 
-    private String message;
-    private Boolean data;
+    String message;
+    Boolean data;
 }
