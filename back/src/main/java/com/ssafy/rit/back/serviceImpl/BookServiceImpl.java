@@ -17,16 +17,18 @@ import com.ssafy.rit.back.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 
 @Service
@@ -44,7 +46,7 @@ public class BookServiceImpl implements BookService {
 
     // 책 상세 조회
     @Override
-    public ResponseEntity<BookDetailResponse> readBookDetail(int bookId) {
+    public ResponseEntity<BookDetailResponse> readBookDetail(int bookId, int page, int size) {
 
         Book currentBook = bookRepository.findById(bookId).orElseThrow(BookNotFoundException::new);
 
@@ -61,9 +63,30 @@ public class BookServiceImpl implements BookService {
                                                 .map(Genre::getCategory)
                                                 .toList();
 
+        // ------------------------ 댓글 넣기 -----------------------------------
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        Page<Comment> commentPage = commentRepository.findByBookId(currentBook, pageable);
+
+
+        List<CommentListResponseDto> commentListResponseDtos = commentPage.stream()
+                .map(comment -> {
+                    Member member = comment.getMemberId();
+                    String nickname = member.getNickname();
+
+                    return CommentListResponseDto.builder()
+                            .nickname(nickname)
+                            .rating(comment.getRating())
+                            .comment(comment.getComment())
+                            .createAt(comment.getCreatedAt())
+                            .build();
+                }).toList();
+        // ---------------------- 댓글 넣기 ----------------------------------
+
         // 가져온 정보들을 dto클래스에 매핑 시켜줍니다.
         BookDetailResponseDto detailDto = modelMapper.map(currentBook, BookDetailResponseDto.class);
         detailDto.setGenres(categories);
+        detailDto.setCommentListResponseDtos(commentListResponseDtos);
+
 
         BookDetailResponse response = new BookDetailResponse("책 정보 조회 성공", detailDto);
         log.info("(BookServiceImpl) 책 조회 결과 {}", response);
@@ -115,35 +138,37 @@ public class BookServiceImpl implements BookService {
 
 
     // 코멘트 조회
-    @Override
-    public ResponseEntity<CommentListResponse> readCommentList(int bookId) {
-
-        // 책이 있는지 확인
-        Book currentBook = bookRepository.findById(bookId)
-                .orElseThrow(BookNotFoundException::new);
-
-        List<Comment> comments = commentRepository.findByBookId(currentBook);
-
-        List<CommentListResponseDto> commentListResponseDtos = comments.stream()
-                .map(comment -> {
-                    Member member = comment.getMemberId();
-                    String nickname = member.getNickname();
-
-                    return CommentListResponseDto.builder()
-                            .nickname(nickname)
-                            .rating(comment.getRating())
-                            .comment(comment.getComment())
-                            .createAt(comment.getCreatedAt())
-                            .build();
-                }).toList();
-
-        CommentListResponse response = CommentListResponse.builder()
-                .message("코멘트 조회 완료")
-                .comments(commentListResponseDtos)
-                .build();
-
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
+//    @Override
+//    public ResponseEntity<CommentListResponse> readCommentList(int bookId, int page, int size) {
+//
+//        // 책이 있는지 확인
+//        Book currentBook = bookRepository.findById(bookId)
+//                .orElseThrow(BookNotFoundException::new);
+//
+//        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+//        Page<Comment> commentPage = commentRepository.findByBookId(currentBook, pageable);
+//
+//
+//        List<CommentListResponseDto> commentListResponseDtos = commentPage.stream()
+//                .map(comment -> {
+//                    Member member = comment.getMemberId();
+//                    String nickname = member.getNickname();
+//
+//                    return CommentListResponseDto.builder()
+//                            .nickname(nickname)
+//                            .rating(comment.getRating())
+//                            .comment(comment.getComment())
+//                            .createAt(comment.getCreatedAt())
+//                            .build();
+//                }).toList();
+//
+//        CommentListResponse response = CommentListResponse.builder()
+//                .message("코멘트 조회 완료")
+//                .comments(commentListResponseDtos)
+//                .build();
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(response);
+//    }
 
     // 코멘트 수정
     @Override
@@ -207,6 +232,21 @@ public class BookServiceImpl implements BookService {
             throw CommentException.memberNotEqualException();
         }
 
+
+        // comment entity 에 저장되어있는 BookId는 사실 Book 전체 정보이다 (추후에 객체 이름 수정 필요)
+        Book currentBook = comment.getBookId();
+
+        // 댓글 갯수 및 평점 갱신
+        currentBook.setReviewerCnt(currentBook.getReviewerCnt() - 1);
+
+        if (currentBook.getReviewerCnt() == 0) {
+            currentBook.setRating(0);
+        } else {
+        currentBook.setRating(
+                ((currentBook.getRating() * currentBook.getComments().size()) - comment.getRating()) / (currentBook.getComments().size())
+            );
+        }
+
         // 삭제
         commentRepository.delete(comment);
 
@@ -215,10 +255,7 @@ public class BookServiceImpl implements BookService {
                 .data(true)
                 .build();
 
-
-        // 댓글 갯수 및 평점 갱신
-
-
+        bookRepository.save(currentBook);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
