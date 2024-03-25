@@ -4,9 +4,10 @@ import { handleSignUp } from "../../api/accounts/SignUp";
 import { checkEmailDuplicate } from "../../api/accounts/MailDuplicate";
 import { checkNicknameDuplicate } from "../../api/accounts/NicknameDuplicate";
 
-import iconVisible from "../../../src/assets/signup/visible.png"
-// import iconInvisible from "../../../src/assets/signup/invisible.png";
-import iconInvisible from "../../../src/assets/signup/invisible.png";
+import iconVisible1 from "../../assets/signup/visible1.png"
+import iconVisible2 from "../../assets/signup/visible2.png"
+import iconInvisible1 from "../../assets/signup/invisible1.png";
+import iconInvisible2 from "../../assets/signup/invisible2.png";
 
 // 이메일 형식 검사만 하는 게 아니라 실제 존재하는 이메일인지 확인 -> API 사용 필요
 
@@ -55,8 +56,8 @@ const SignUp = () => {
     setIsPasswordConfirmVisible(!isPasswordConfirmVisible);
   }
 
-  const toggleVisibilityIcon1 = !isPasswordVisible ? iconVisible : iconInvisible;
-  const toggleVisibilityIcon2 = !isPasswordConfirmVisible ? iconVisible : iconInvisible;
+  const toggleVisibilityIcon1 = !isPasswordVisible ? iconVisible1 : iconInvisible1;
+  const toggleVisibilityIcon2 = !isPasswordConfirmVisible ? iconVisible2 : iconInvisible2;
 
   useEffect(() => {
     // 모든 입력란이 채워졌는지 + 중복 검사를 했는지 확인
