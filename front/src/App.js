@@ -17,7 +17,7 @@ import Logout from "./api/accounts/Logout";
 
 import SignUp from "./pages/accounts/SignUp";
 import Diary from "./components/modal/Diary/Diary";
-import ModifyProfile from "./pages/accounts/ModifyProfile";
+// import ModifyProfile from "./pages/accounts/ModifyProfile";
 
 function App() {
   return (
