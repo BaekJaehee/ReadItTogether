@@ -17,6 +17,7 @@ import Logout from "./api/accounts/Logout";
 
 import  SignUp from "./pages/accounts/SignUp";
 import Diary from "./components/modal/Diary/Diary";
+import ModifyProfile from "./pages/accounts/ModifyProfile";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
             <Route path="/detail-book/:bookId" element={<DetailBook />} />
             <Route path="/bookshelf" element={<Bookshelf />} />
             <Route path="/diary/:memberId" element={<Diary />} />
+            <Route path="/modify/:memberId" element={<ModifyProfile/>} />
 
             {/* 유저 인증 상태 관리 */}
             {/* 미완성 .. */}
