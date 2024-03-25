@@ -65,7 +65,7 @@ public class ReissueServiceImpl implements ReissueService {
         String newRefresh = jwtUtil.createJwt("refresh", email, 86400000L);
 
 
-        /*
+
 
         // 기존의 리프레시 토큰 쿠키를 삭제
         Cookie oldRefreshCookie = createCookie("refresh", "");
@@ -80,14 +80,15 @@ public class ReissueServiceImpl implements ReissueService {
         newRefreshCookie.setMaxAge(86400); // 쿠키의 유효 기간 설정 (초 단위, 예: 1일)
         response.addCookie(newRefreshCookie); // 새로운 쿠키를 응답에 추가
 
-        */
+
+
 
         // refresh 재발급 시 기존 DB에서 refresh 삭제 후 새로 저장
         refreshRepository.deleteByRefresh(refresh);
         addRefreshEntity(email, newRefresh, 86400000L);
 
         response.setHeader("Authorization", newAccess);
-        response.addCookie(createCookie("refresh", newRefresh));
+//        response.addCookie(createCookie("refresh", newRefresh));
 
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter writer = response.getWriter();
