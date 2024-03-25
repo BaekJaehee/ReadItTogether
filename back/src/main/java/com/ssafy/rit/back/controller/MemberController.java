@@ -91,7 +91,7 @@ public class MemberController {
     }
 
 
-    @PutMapping("/update-password")
+    @PutMapping("/password")
     public ResponseEntity<UpdatePasswordAndNicknameResponseDto> updatePassword(@RequestBody UpdatePasswordRequestDto dto) throws JsonProcessingException {
 
         memberService.updatePassword(dto);
@@ -102,7 +102,7 @@ public class MemberController {
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-    @PutMapping("/update-nickname")
+    @PutMapping("/nickname")
     public ResponseEntity<UpdatePasswordAndNicknameResponseDto> updateNickname(@RequestBody UpdateNicknameRequestDto dto) throws JsonProcessingException {
 
         memberService.updateNickname(dto);
@@ -147,7 +147,7 @@ public class MemberController {
 
         VerifyAccessResponseDto responseDto = new VerifyAccessResponseDto("Success", true);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
-
+        // git checkout -t origin/back
     }
 
 }
