@@ -7,15 +7,13 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const Logout = () => {
   const navigate = useNavigate();
-  const { userState, setUserState } = useContext(AuthContext);
+  const { setUserState } = useContext(AuthContext);
+  localStorage.removeItem(`memberId`);
+  localStorage.removeItem(`accessToken`);
 
   useEffect(() => {
     const logout = async () => {
       try {
-        // 로컬 스토리지에서 사용자 정보 삭제
-        localStorage.removeItem(`memberId`);
-        localStorage.removeItem(`accessToken`);
-        console.log(1);
         // 로그아웃 API 호출
         await axios.post(
           `${API_BASE_URL}/logout`,
@@ -25,7 +23,7 @@ const Logout = () => {
           }
         );
         setUserState({ status: "loggedOut" });
-        console.log(userState);
+
 
         // 로그인 페이지로 리디렉션
         navigate("/login");
