@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface MemberService {
 
-    public void signUp(MemberRequestDto dto);
+    void signUp(MemberRequestDto dto);
 
     ResponseEntity<SendingCertificationResponse> sendEmailCertificate(SendingCertificationRequestDto sendingCertificationRequestDto);
 

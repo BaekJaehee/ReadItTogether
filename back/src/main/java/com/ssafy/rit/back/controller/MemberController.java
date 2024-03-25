@@ -6,6 +6,7 @@ import com.ssafy.rit.back.dto.member.requestDto.*;
 import com.ssafy.rit.back.dto.member.response.PassingCertificationResponse;
 import com.ssafy.rit.back.dto.member.response.SendingCertificationResponse;
 import com.ssafy.rit.back.dto.member.response.SendingTemporaryPasswordResponse;
+import com.ssafy.rit.back.dto.member.responseDto.VerifyAccessResponseDto;
 import com.ssafy.rit.back.dto.member.responseDto.CheckResponseDto;
 import com.ssafy.rit.back.dto.member.responseDto.DisableResponseDto;
 import com.ssafy.rit.back.dto.member.responseDto.SignUpResponseDto;
@@ -90,7 +91,7 @@ public class MemberController {
     }
 
 
-    @PutMapping("/update-password")
+    @PutMapping("/password")
     public ResponseEntity<UpdatePasswordAndNicknameResponseDto> updatePassword(@RequestBody UpdatePasswordRequestDto dto) throws JsonProcessingException {
 
         memberService.updatePassword(dto);
@@ -101,7 +102,7 @@ public class MemberController {
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-    @PutMapping("/update-nickname")
+    @PutMapping("/nickname")
     public ResponseEntity<UpdatePasswordAndNicknameResponseDto> updateNickname(@RequestBody UpdateNicknameRequestDto dto) throws JsonProcessingException {
 
         memberService.updateNickname(dto);
@@ -133,6 +134,20 @@ public class MemberController {
     @PostMapping("/temporary-password")
     public ResponseEntity<SendingTemporaryPasswordResponse> sendTemporaryPassword(@RequestBody SendingTemporaryPasswordRequestDto sendingTemporaryPasswordRequestDto) {
         return memberService.sendTemporaryPassword(sendingTemporaryPasswordRequestDto);
+    }
+
+    @PostMapping("/verify-access")
+    public ResponseEntity<VerifyAccessResponseDto> verifyAccess(@RequestBody VerifyAccessRequestDto dto) {
+
+        Boolean isVerified = memberService.verifyAccess(dto);
+        if (!isVerified) {
+            VerifyAccessResponseDto responseDto = new VerifyAccessResponseDto("failed to verified", false);
+            return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
+        }
+
+        VerifyAccessResponseDto responseDto = new VerifyAccessResponseDto("Success", true);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+        // git checkout -t origin/back
     }
 
 }
