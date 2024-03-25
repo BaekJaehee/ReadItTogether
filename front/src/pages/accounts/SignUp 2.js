@@ -4,6 +4,11 @@ import { handleSignUp } from "../../api/accounts/SignUp";
 import { checkEmailDuplicate } from "../../api/accounts/MailDuplicate";
 import { checkNicknameDuplicate } from "../../api/accounts/NicknameDuplicate";
 
+import iconVisible1 from "../../assets/signup/visible1.png"
+import iconVisible2 from "../../assets/signup/visible2.png"
+import iconInvisible1 from "../../assets/signup/invisible1.png";
+import iconInvisible2 from "../../assets/signup/invisible2.png";
+
 // 이메일 형식 검사만 하는 게 아니라 실제 존재하는 이메일인지 확인 -> API 사용 필요
 
 const SignUp = () => {
@@ -36,6 +41,23 @@ const SignUp = () => {
   // 중복 확인 버튼
   const [isCorrectEmail, setIsCorrectEmail] = useState(false);
   const [isCorrectNickname, setIsCorrectNickname] = useState(false);
+
+  // 비밀번호 보이기/숨기기
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isPasswordConfirmVisible, setIsPasswordConfirmVisible] = useState(false);
+
+  // 비밀번호 가시성 함수
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  }
+
+  // 비밀번호 확인 가시성 함수
+  const togglePasswordConfirmVisibility = () => {
+    setIsPasswordConfirmVisible(!isPasswordConfirmVisible);
+  }
+
+  const toggleVisibilityIcon1 = !isPasswordVisible ? iconVisible1 : iconInvisible1;
+  const toggleVisibilityIcon2 = !isPasswordConfirmVisible ? iconVisible2 : iconInvisible2;
 
   useEffect(() => {
     // 모든 입력란이 채워졌는지 + 중복 검사를 했는지 확인
@@ -177,8 +199,7 @@ const SignUp = () => {
         <div className="mb-4">
           <div className="flex justify-between">
             <label htmlFor="email" className="block mb-1">이메일</label>
-            <p className="text-red-500 mr-32 text-sm">{emailMessage}</p>
-            <p className={emailStatusMessageClassName}>{emailStatusMessage}</p>
+            <p className="text-red-500 text-sm">{emailMessage}</p>
           </div>
           <div className="flex items-center">
             <input type="text" id="email" name="email" value={email} onChange={onChangeEmail} className="border border-gray-300 px-2 py-1 flex-grow mr-3" />
@@ -190,7 +211,12 @@ const SignUp = () => {
             <label htmlFor="password" className="block mb-1">비밀번호</label>
             <p className="text-red-500 text-sm">{passwordMessage}</p>
           </div>
-          <input type="password" id="password" name="password" value={password} onChange={onChangePassword} className="border border-gray-300 px-2 py-1 w-full" />
+          <div className="flex justify-between">
+            <input type={isPasswordVisible ? "text" : "password"} id="password" name="password" value={password} onChange={onChangePassword} className="border border-gray-300 px-2 py-1 w-full" />
+            <button onClick={togglePasswordVisibility}>
+              <img src={toggleVisibilityIcon1} alt="visibility" className="w-8 h-8 mx-1"/>
+            </button>
+          </div>
           <p className="text-sm text-gray-500">영문·숫자·특수문자를 포함한 8~20자</p>
         </div>
         <div className="mb-4">
@@ -198,19 +224,23 @@ const SignUp = () => {
             <label htmlFor="passwordConfirm" className="block mb-1">비밀번호 확인</label>
             <p className={passwordConfirmMessageClassName}>{passwordConfirmMessage}</p>
           </div>
-          <input type="password" id="passwordConfirm" name="passwordConfirm" value={passwordConfirm} onChange={onChangePasswordConfirm} className="border border-gray-300 px-2 py-1 w-full" />
+          <div className="flex justify-between">
+            <input type={isPasswordConfirmVisible ? "text" : "password"} id="passwordConfirm" name="passwordConfirm" value={passwordConfirm} onChange={onChangePasswordConfirm} className="border border-gray-300 px-2 py-1 w-full" />
+            <button onClick={togglePasswordConfirmVisibility}>
+              <img src={toggleVisibilityIcon2} alt="visibility" className="w-8 h-8 mx-1"/>
+            </button>
+          </div>
         </div>
         <div className="mb-4">
           <div className="flex justify-between">
             <label htmlFor="nickname" className="block mb-1">닉네임</label>
-            <p className="text-red-500 mr-32 text-sm">{nicknameMessage}</p>
-            <p className={nicknameStatusMessageClassName}>{nicknameStatusMessage}</p>
+            <p className="text-red-500 text-sm">{nicknameMessage}</p>
           </div>
           <div className="flex items-center">
             <input type="text" id="nickname" name="nickname" value={nickname} onChange={onChangeNickname} className="border border-gray-300 px-2 py-1 flex-grow mr-3" />
-            <button type='button' onClick={handleCheckNickname} className={`bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded ml-2 ${!isCorrectNickname && 'opacity-50 cursor-not-allowed'}`} disabled={!isCorrectNickname}>중복 확인</button>
+            <button type="button" onClick={handleCheckNickname} className={`bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded ml-2 ${!isCorrectNickname && 'opacity-50 cursor-not-allowed'}`} disabled={!isCorrectNickname}>중복 확인</button>
           </div>
-            <p className="text-sm text-gray-500">한글·영문·숫자를 포함한 2~8자(공백 허용X)</p>
+          <p className="text-sm text-gray-500">한글·영문·숫자를 포함한 2~8자(공백 허용X)</p>
         </div>
         <div className="mb-4">
           <label htmlFor="birth" className="block mb-1">출생년도</label>
