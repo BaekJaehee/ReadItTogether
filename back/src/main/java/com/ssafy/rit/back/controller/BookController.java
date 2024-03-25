@@ -20,8 +20,10 @@ public class BookController {
 
     // 책 상세 보기
     @GetMapping("/{bookId}")
-    public ResponseEntity<BookDetailResponse> readBookDetail(@PathVariable("bookId") int bookId) {
-        return bookService.readBookDetail(bookId);
+    public ResponseEntity<BookDetailResponse> readBookDetail(@PathVariable("bookId") int bookId,
+                                                             @RequestParam(value = "page", defaultValue = "0") int page,
+                                                             @RequestParam(value = "size", defaultValue = "8") int size) {
+        return bookService.readBookDetail(bookId, page, size);
     }
 
     // 코멘트(리뷰) 관련 CRUD
@@ -31,10 +33,12 @@ public class BookController {
         return bookService.createComment(dto);
     }
     // 코멘트 조회
-    @GetMapping("/comment/{bookId}")
-    public ResponseEntity<CommentListResponse> readCommentList(@PathVariable("bookId") int bookId) {
-        return bookService.readCommentList(bookId);
-    }
+//    @GetMapping("/comment/{bookId}")
+//    public ResponseEntity<CommentListResponse> readCommentList(@PathVariable("bookId") int bookId,
+//                                                               @RequestParam(value = "page", defaultValue = "0") int page,
+//                                                               @RequestParam(value = "size", defaultValue = "8") int size) {
+//        return bookService.readCommentList(bookId, page, size);
+//    }
     // 코멘트 수정
     @PatchMapping("/comment")
     public ResponseEntity<CommentUpdateResponse> updateComment(CommentUpdateRequestDto dto) {

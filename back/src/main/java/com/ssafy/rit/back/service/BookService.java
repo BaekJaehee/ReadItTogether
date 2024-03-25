@@ -8,11 +8,11 @@ import org.springframework.http.ResponseEntity;
 
 public interface BookService {
 
-    ResponseEntity<BookDetailResponse> readBookDetail(int bookId);
+    ResponseEntity<BookDetailResponse> readBookDetail(int bookId, int page, int size);
 
     ResponseEntity<CommentCreationResponse> createComment(CommentCreationRequestDto dto);
 
-    ResponseEntity<CommentListResponse> readCommentList(int bookId);
+//    ResponseEntity<CommentListResponse> readCommentList(int bookId, int page, int size);
 
     ResponseEntity<CommentUpdateResponse> updateComment(CommentUpdateRequestDto dto);
 
