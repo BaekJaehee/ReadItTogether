@@ -26,11 +26,13 @@ const ModifyProfile = () => {
     
       if (!passwordRegExp.test(newPassword)) {
         console.error('비밀번호가 유효하지 않습니다.');
+        alert('비밀번호가 유효하지 않습니다.');
         return;
       }
 
       if (oldPassword === newPassword) {
         console.error("새 비밀번호는 현재 사용중인 비밀번호와 달라야 합니다.");
+        alert("새 비밀번호는 현재 사용중인 비밀번호와 달라야 합니다.");
         return;
       }
       console.log(response);
