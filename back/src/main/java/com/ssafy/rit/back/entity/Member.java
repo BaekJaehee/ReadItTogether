@@ -7,6 +7,7 @@ import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Builder
@@ -114,6 +115,22 @@ public class Member {
 
     public void updateNickname(String newNickname) {
         this.nickname = newNickname;
+    }
+
+    // 이미지 파일 확장자 추출
+    private String extractExtension(String originName) {
+        int index = originName.lastIndexOf(".");
+        return originName.substring(index);
+    }
+
+    // 이미지 파일 이름을 저장하기 위한 이름으로 변환
+    private String getFileName(String originName) {
+        return UUID.randomUUID() + extractExtension(originName);
+    }
+
+    // 이미지 경로 저장
+    public void setImageUrl(String originName) {
+        this.profileImage = getFileName(originName);
     }
 
 }
