@@ -4,6 +4,7 @@ import com.ssafy.rit.back.dto.member.requestDto.*;
 import com.ssafy.rit.back.dto.member.response.PassingCertificationResponse;
 import com.ssafy.rit.back.dto.member.response.SendingCertificationResponse;
 import com.ssafy.rit.back.dto.member.response.SendingTemporaryPasswordResponse;
+import com.ssafy.rit.back.dto.member.responseDto.VerifyAccessResponseDto;
 import com.ssafy.rit.back.entity.EmailCode;
 import com.ssafy.rit.back.entity.Member;
 import com.ssafy.rit.back.exception.member.EmailAlreadyExistsException;
@@ -12,8 +13,10 @@ import com.ssafy.rit.back.exception.member.MemberNotFoundException;
 import com.ssafy.rit.back.exception.member.NicknameAlreadyExistsException;
 import com.ssafy.rit.back.repository.EmailCodeRepository;
 import com.ssafy.rit.back.repository.MemberRepository;
+import com.ssafy.rit.back.security.jwt.JWTUtil;
 import com.ssafy.rit.back.service.MemberService;
 import com.ssafy.rit.back.util.CommonUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -38,19 +41,22 @@ public class MemberServiceImpl implements MemberService {
     private final EmailCodeRepository emailCodeRepository;
     private final JavaMailSender javaMailSender;
     private final RedisTemplate<String, String> redisTemplate;
+    private final JWTUtil jwtUtil;
 
     public MemberServiceImpl(MemberRepository memberRepository,
                              PasswordEncoder passwordEncoder,
                              CommonUtil commonUtil,
                              JavaMailSender javaMailSender,
                              EmailCodeRepository emailCodeRepository,
-                             RedisTemplate<String, String> redisTemplate){
+                             RedisTemplate<String, String> redisTemplate,
+                             JWTUtil jwtUtil){
         this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
         this.commonUtil = commonUtil;
         this.javaMailSender = javaMailSender;
         this.emailCodeRepository = emailCodeRepository;
         this.redisTemplate = redisTemplate;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
@@ -177,6 +183,28 @@ public class MemberServiceImpl implements MemberService {
         log.info("---------------------변경 후 닉네임: {}---------------------", targetMember.getNickname());
 
     }
+
+
+    public Boolean verifyAccess(VerifyAccessRequestDto dto) {
+
+        if (!dto.getAccessToken().startsWith("Bearer ")) {
+            log.info(dto.getAccessToken());
+            log.info("Bearer로 시작 안 함");
+            return false;
+        }
+
+        String accessToken = dto.getAccessToken().split(" ")[1];
+        log.info("Bearer 뗀 액세스염");
+
+        try {
+            jwtUtil.isExpired(accessToken);
+        } catch (ExpiredJwtException e) {
+            return false;
+        }
+
+        return true;
+    }
+
 
 
     String encodePassword(UpdatePasswordRequestDto dto) {

@@ -1,13 +1,12 @@
 package com.ssafy.rit.back.controller;
 
+import com.ssafy.rit.back.dto.postBox.requestDto.PostBoxToCardCreationRequestDto;
+import com.ssafy.rit.back.dto.postBox.response.PostBoxToCardCreationResponse;
 import com.ssafy.rit.back.dto.postBox.response.PostBoxListResponse;
 import com.ssafy.rit.back.service.PostBoxService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,5 +19,10 @@ public class PostBoxController {
     @GetMapping("/list")
     public ResponseEntity<PostBoxListResponse> readPostBoxList() {
         return postBoxService.readPostBoxList();
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<PostBoxToCardCreationResponse> createPostBoxToCard(@RequestBody PostBoxToCardCreationRequestDto postBoxToCardCreationRequestDto) {
+        return postBoxService.createPostBoxToCard(postBoxToCardCreationRequestDto);
     }
 }
