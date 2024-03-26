@@ -110,11 +110,11 @@ public class GuestBookServiceImpl implements GuestBookService {
 
     // 해당 유저 방명록 리스트 조회
     @Override
-    public ResponseEntity<GuestBookListResponse> readGuestBookList(Long fromMemberId) {
+    public ResponseEntity<GuestBookListResponse> readGuestBookList(Long toMemberId) {
 
         commonUtil.getMember();
 
-        Member currentMember = memberRepository.findById(fromMemberId)
+        Member currentMember = memberRepository.findById(toMemberId)
                 .orElseThrow(MemberNotFoundException::new);
 
         List<Long> guestBookIds = guestBookRepository.findIdsByToMemberId(currentMember);
