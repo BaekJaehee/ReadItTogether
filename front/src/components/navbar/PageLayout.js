@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import NavBar from './NavBar';
 
 // 네브바와 사이드바를 숨기고 싶은 경로 목록
-const hideLayoutPaths = ['/login', '/signup', '/find-password'];
+const hideLayoutPaths = ['/', '/login', '/signup', '/find-password'];
 
 const PageLayout = ({ children }) => {
   const location = useLocation();
