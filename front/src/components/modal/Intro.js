@@ -5,8 +5,8 @@ import IntroForm from "../../api/llibrary/intro/IntroForm";
 import logo from "../../assets/navbar/logo2.png";
 import deleteButton from "../../assets/profile/delete.png";
 
-const Intro = ({ onClose }) => {
-  const [text, setText] = useState("ㅋㅋㅋㅋ");
+const Intro = ({ onClose, onUpdate }) => {
+  const [text, setText] = useState("");
   const modalRef = useRef();
 
   const handleSubmit = async (event) => {
@@ -14,6 +14,7 @@ const Intro = ({ onClose }) => {
     try {
       // API 호출
       await IntroForm(text);
+      onUpdate(text)
       onClose(); // 모달 닫기
     } catch (error) {
       console.error("방명록 에러:", error);
