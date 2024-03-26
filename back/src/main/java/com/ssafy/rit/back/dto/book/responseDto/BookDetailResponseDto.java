@@ -35,4 +35,6 @@ public class BookDetailResponseDto {
 
     private List<String> genres;
 
+    private List<CommentListResponseDto> commentListResponseDtos;
+
 }
