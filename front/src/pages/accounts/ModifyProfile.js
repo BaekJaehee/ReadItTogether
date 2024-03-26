@@ -170,6 +170,9 @@ const ModifyProfile = () => {
           닉네임 변경
         </button>
       </form>
+      <button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+        탈퇴하기
+      </button>
     </div>
   );
 }

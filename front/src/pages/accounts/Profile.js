@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import FollowModal from "../../components/modal/FollowModal";
 import EditNicknameModal from "../../components/modal/EditNicknameModal";
+import EditImageModal from "../../components/modal/EditImageModal";
 
 import man from "../../assets/profile/man.png";
 import grahp from "../../assets/profile/grahp.png";
@@ -13,6 +14,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNicknameEditOpen, setIsNicknameEditOpen] = useState(false);
+  const [isImageEditOpen, setIsImageEditOpen] = useState(false);
   const [memberId, setMemberId] = useState(null);
 
   useEffect(() => {
@@ -49,9 +51,12 @@ const Profile = () => {
                   src={man}
                   alt="헤키레키 잇센"
                 />
-                <button className="absolute bottom-1 right-56 cursor-pointer">
+                <button className="absolute bottom-1 right-56 cursor-pointer" onClick={() => setIsImageEditOpen(true)}>
                   <img src={edit} alt="edit" className="w-5 h-5"/>
                 </button>
+                {isImageEditOpen && (
+                  <EditImageModal onClose={() => setIsImageEditOpen(false)}/>
+                )}
               </div>
               <div className="flex items-center">
                 <span className="font-semibold text-xl mb-2"> 닉네임 </span>
