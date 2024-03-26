@@ -15,5 +15,6 @@ public class GuestBookDetailResponseDto {
     private String profileImg;
     private String nickname;
     private String content;
+    private String createdAt;
 
 }
