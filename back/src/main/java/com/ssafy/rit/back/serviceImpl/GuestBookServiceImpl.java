@@ -76,6 +76,7 @@ public class GuestBookServiceImpl implements GuestBookService {
                 .nickname(currentGuestBook.getFromMemberId().getNickname())
                 .fromMemberId(currentGuestBook.getFromMemberId().getId())
                 .profileImg(currentGuestBook.getFromMemberId().getProfileImage())
+                .createdAt(String.valueOf(currentGuestBook.getCreatedAt()))
                 .build();
 
         GuestBookDetailResponse response = new GuestBookDetailResponse("방명록 조회 성공", detailDto);
