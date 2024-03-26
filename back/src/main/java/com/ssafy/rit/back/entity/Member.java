@@ -71,8 +71,8 @@ public class Member {
     @OneToMany(mappedBy = "memberId")
     private List<Comment> comments;
 
-    @OneToOne(mappedBy = "memberId")
-    private Bookshelf bookshelf;
+    @OneToMany(mappedBy = "memberId")
+    private List<Bookshelf> bookshelf;
 
     @OneToMany(mappedBy = "followingMember")
     private List<Follow> followings;
