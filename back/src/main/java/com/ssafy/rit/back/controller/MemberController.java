@@ -6,14 +6,14 @@ import com.ssafy.rit.back.dto.member.requestDto.*;
 import com.ssafy.rit.back.dto.member.response.PassingCertificationResponse;
 import com.ssafy.rit.back.dto.member.response.SendingCertificationResponse;
 import com.ssafy.rit.back.dto.member.response.SendingTemporaryPasswordResponse;
-import com.ssafy.rit.back.dto.member.responseDto.VerifyAccessResponseDto;
-import com.ssafy.rit.back.dto.member.responseDto.CheckResponseDto;
-import com.ssafy.rit.back.dto.member.responseDto.DisableResponseDto;
-import com.ssafy.rit.back.dto.member.responseDto.SignUpResponseDto;
-import com.ssafy.rit.back.dto.member.responseDto.UpdatePasswordAndNicknameResponseDto;
+import com.ssafy.rit.back.dto.member.responseDto.*;
+import com.ssafy.rit.back.entity.Member;
 import com.ssafy.rit.back.exception.member.EmailAlreadyExistsException;
+import com.ssafy.rit.back.exception.member.MemberNotFoundException;
 import com.ssafy.rit.back.exception.member.NicknameAlreadyExistsException;
+import com.ssafy.rit.back.repository.MemberRepository;
 import com.ssafy.rit.back.serviceImpl.MemberServiceImpl;
+import com.ssafy.rit.back.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +27,14 @@ public class MemberController {
 
     ObjectMapper objectMapper = new ObjectMapper();
     private final MemberServiceImpl memberService;
+    private final MemberRepository memberRepository;
+    private final CommonUtil commonUtil;
 
-    public MemberController(MemberServiceImpl memberService) {
+
+    public MemberController(MemberServiceImpl memberService, MemberRepository memberRepository, CommonUtil commonUtil) {
         this.memberService = memberService;
+        this.memberRepository = memberRepository;
+        this.commonUtil = commonUtil;
     }
 
     @PostMapping("/signup")
@@ -91,22 +96,38 @@ public class MemberController {
     }
 
 
-    @PutMapping("/update-password")
-    public ResponseEntity<UpdatePasswordAndNicknameResponseDto> updatePassword(@RequestBody UpdatePasswordRequestDto dto) throws JsonProcessingException {
+    @PutMapping("/password")
+    public ResponseEntity<UpdatePasswordResponseDto> updatePassword(@RequestBody UpdatePasswordRequestDto dto) throws JsonProcessingException {
 
-        memberService.updatePassword(dto);
+        Boolean isPossible = memberService.updatePassword(dto);
 
-        UpdatePasswordAndNicknameResponseDto responseDto = new UpdatePasswordAndNicknameResponseDto("Success", true);
+        if(!isPossible) {
+            UpdatePasswordResponseDto responseDto = new UpdatePasswordResponseDto("Fail", false);
+            objectMapper.writeValueAsString(responseDto);
+            return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
+        }
+
+        UpdatePasswordResponseDto responseDto = new UpdatePasswordResponseDto("Success", true);
         objectMapper.writeValueAsString(responseDto);
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-    @PutMapping("/update-nickname")
-    public ResponseEntity<UpdatePasswordAndNicknameResponseDto> updateNickname(@RequestBody UpdateNicknameRequestDto dto) throws JsonProcessingException {
+    @PutMapping("/nickname")
+    public ResponseEntity<UpdateNicknameResponseDto> updateNickname(@RequestBody UpdateNicknameRequestDto dto) throws JsonProcessingException {
 
-        memberService.updateNickname(dto);
-        UpdatePasswordAndNicknameResponseDto responseDto = new UpdatePasswordAndNicknameResponseDto("Success", true);
+        Member targetMember = memberRepository.findByEmail(commonUtil.getMember().getEmail()).orElseThrow(MemberNotFoundException::new);
+        String oldNickname = memberService.getOldNickname(targetMember);
+        Boolean isPossible = memberService.updateNickname(dto);
+
+        if (!isPossible) {
+            UpdateNicknameResponseDto responseDto = new UpdateNicknameResponseDto("Fail",false);
+            objectMapper.writeValueAsString(responseDto);
+            return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
+        }
+
+
+        UpdateNicknameResponseDto responseDto = new UpdateNicknameResponseDto("Success",true);
         objectMapper.writeValueAsString(responseDto);
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
@@ -147,7 +168,7 @@ public class MemberController {
 
         VerifyAccessResponseDto responseDto = new VerifyAccessResponseDto("Success", true);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
-
+        // git checkout -t origin/back
     }
 
 }

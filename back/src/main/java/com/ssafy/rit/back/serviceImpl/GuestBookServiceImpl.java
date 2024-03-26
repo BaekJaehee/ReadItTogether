@@ -71,7 +71,13 @@ public class GuestBookServiceImpl implements GuestBookService {
         GuestBook currentGuestBook = guestBookRepository.findById(postId)
                 .orElseThrow(GuestBookNotFoundException::new);
 
-        GuestBookDetailResponseDto detailDto = modelMapper.map(currentGuestBook, GuestBookDetailResponseDto.class);
+        GuestBookDetailResponseDto detailDto = GuestBookDetailResponseDto.builder()
+                .content(currentGuestBook.getContent())
+                .nickname(currentGuestBook.getFromMemberId().getNickname())
+                .fromMemberId(currentGuestBook.getFromMemberId().getId())
+                .profileImg(currentGuestBook.getFromMemberId().getProfileImage())
+                .createdAt(String.valueOf(currentGuestBook.getCreatedAt()))
+                .build();
 
         GuestBookDetailResponse response = new GuestBookDetailResponse("방명록 조회 성공", detailDto);
 
