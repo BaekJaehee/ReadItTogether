@@ -55,8 +55,9 @@ public class MyPageServiceImpl implements MyPageService {
         List<Member> followList = followService.getFollowingList(member);
         List<Member> followerList = followService.getFollowerList(member);
 
-        List<FollowMemberResponseDto> followDto = new ArrayList<>();
-        List<FollowMemberResponseDto> followerDto = new ArrayList<>();
+        List<FollowMemberResponseDto> followings = makeFollowListResponseDto(followList);
+        List<FollowMemberResponseDto> followers = makeFollowListResponseDto(followerList);
+
 
         log.info(followList);
 
@@ -65,16 +66,28 @@ public class MyPageServiceImpl implements MyPageService {
                 .profileImage(member.getProfileImage())
                 .nickname(member.getNickname())
                 .email(member.getEmail())
-
+                .followList(followings)
+                .followerList(followers)
                 .build();
+
         return responseDto;
     }
 
 
     private List<FollowMemberResponseDto> makeFollowListResponseDto(List<Member> followList) {
 
-//        FollowMemberResponseDto followMemberResponseDto = new FollowMemberResponseDto();
+        List<FollowMemberResponseDto> list = new ArrayList<>();
 
-        return null;
+        for (Member f : followList) {
+            FollowMemberResponseDto dto = FollowMemberResponseDto.builder()
+                    .memberId(f.getId())
+                    .profileImage(f.getProfileImage())
+                    .nickname(f.getNickname())
+                    .build();
+
+            list.add(dto);
+        }
+
+        return list;
     }
 }
