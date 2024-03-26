@@ -33,6 +33,8 @@ const EditNicknameModal = ({ onClose }) => {
     try {
       const response = await changeNickname(newNickname);
       console.log(response);
+      onClose();
+      alert('닉네임이 변경되었습니다.');
       return response;
     } catch (error) {
       console.error(error);
