@@ -2,16 +2,16 @@ import axios from "axios";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-const changeNickname = async (newNickname) => {
+const disable = async (password) => {
   const requestBody = {
-    newNickname: newNickname
+    password: password
   }
-  
+
   const accessToken = localStorage.getItem('accessToken');
 
   try {
-    const response = await axios.put(
-      `${API_BASE_URL}/members/nickname`,
+    const response = await axios.post(
+      `${API_BASE_URL}/members/disable`,
       requestBody,
       {
         withCredentials: true,
@@ -21,13 +21,17 @@ const changeNickname = async (newNickname) => {
         },
       }
     )
+
+    // 탈퇴 성공 시 로그아웃
+    localStorage.removeItem(`memberId`);
+    localStorage.removeItem(`accessToken`);
+
     console.log(requestBody);
-    // console.log(response.data);
-    return response;
+    return response
   } catch (error) {
-    console.error("닉네임 변경 실패", error);
+    console.log(error);
     throw error;
   }
 }
 
-export default changeNickname;
+export default disable;
