@@ -8,7 +8,7 @@ const EditImageModal = ({ onClose }) => {
   // const nickname = localStorage.getItem('nickname');
   // const nickname = localStorage.getItem('memberId');
   // 닉네임 어디서 받아오는지 모르겠는데 일단 닉네임이라는 멤버 아이디로 ㄱ
-  const nickname = '수정';
+  const nickname = '임규환';  // 닉네임을 기준으로 db에 있는 닉네임의 프로필에 이미지 업데이트
 
   const onChangeImage = e => {
     const file = e.target.files[0];
