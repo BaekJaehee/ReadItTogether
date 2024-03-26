@@ -11,6 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GuestBookDetailResponseDto {
 
+    private Long fromMemberId;
+    private String profileImg;
+    private String nickname;
     private String content;
+    private String createdAt;
 
 }
