@@ -34,9 +34,9 @@ public class GuestBookController {
         return guestBookService.deleteGuestBook(postId);
     }
 
-    @GetMapping("/list/{fromMemberId}")
-    public ResponseEntity<GuestBookListResponse> readGuestBookList(@PathVariable("fromMemberId") Long fromMemberId) {
-        return guestBookService.readGuestBookList(fromMemberId);
+    @GetMapping("/list/{toMemberId}")
+    public ResponseEntity<GuestBookListResponse> readGuestBookList(@PathVariable("toMemberId") Long toMemberId) {
+        return guestBookService.readGuestBookList(toMemberId);
     }
 
 }
