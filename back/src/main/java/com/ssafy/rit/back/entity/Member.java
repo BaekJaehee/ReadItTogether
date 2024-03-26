@@ -5,8 +5,10 @@ import com.ssafy.rit.back.dto.member.requestDto.UpdatePasswordRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Builder
@@ -114,6 +116,11 @@ public class Member {
 
     public void updateNickname(String newNickname) {
         this.nickname = newNickname;
+    }
+
+
+    public void updateProfile(String baseUrl) {
+        this.profileImage = baseUrl;
     }
 
 }
