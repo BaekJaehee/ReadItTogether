@@ -117,7 +117,7 @@ const Library = () => {
               </div>
             </div>
           </button>
-          {isIntroOpen && <Intro onClose={closeIntro} />}
+          {isIntroOpen && <Intro onClose={closeIntro} onUpdate={(updatedText) => setIntroText(updatedText)} />}
         </div>
 
         <div className="group flex items-center justify-center  overflow-hidden">
