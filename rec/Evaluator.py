@@ -45,33 +45,41 @@ class Evaluator:
             print("Diversity: 1-S, where S is the average similarity score between every possible pair of recommendations")
             print("           for a given user. Higher means more diverse.")
             print("Novelty:   Average popularity rank of recommended items. Higher means more novel.")
-        
+
     def SampleTopNRecs(self, ml, testSubject=2, k=10):
-        
+        recommendations_list = []
+
         for algo in self.algorithms:
-            print("\nUsing recommender ", algo.GetName())
-            
-            print("\nBuilding recommendation model...")
+            # 알고리즘 이름을 기록합니다. 이후 클라이언트에게 어떤 알고리즘이 사용되었는지 알릴 수 있습니다.
+            algorithm_name = algo.GetName()
+
+            # 추천 모델을 훈련시킵니다.
             trainSet = self.dataset.GetFullTrainSet()
             algo.GetAlgorithm().fit(trainSet)
-            
-            print("Computing recommendations...")
+
+            # 사용자에 대한 추천을 계산합니다.
             testSet = self.dataset.GetAntiTestSetForUser(testSubject)
-        
             predictions = algo.GetAlgorithm().test(testSet)
-            
+
             recommendations = []
-            
-            print ("\nWe recommend:")
-            for userID, movieID, actualRating, estimatedRating, _ in predictions:
-                intMovieID = int(movieID)
+
+            # 예측된 평점을 바탕으로 추천을 정렬합니다.
+            for userID, bookId, actualRating, estimatedRating, _ in predictions:
+                intMovieID = int(bookId)
                 recommendations.append((intMovieID, estimatedRating))
-            
+
             recommendations.sort(key=lambda x: x[1], reverse=True)
-            
-            for ratings in recommendations[:10]:
-                print(ratings[0], ratings[1])
-                
+
+            # 상위 k개의 추천 결과를 리스트에 추가합니다.
+            top_recommendations = recommendations[:k]
+            recommendations_list.append({
+                "algorithm": algorithm_name,
+                "recommendations": [{"bookId": bookId, "estimatedRating": rating} for bookId, rating in
+                                    top_recommendations]
+            })
+
+        return recommendations_list
+
 
             
             

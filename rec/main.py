@@ -20,16 +20,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.on_event("startup")
-async def startup():
-    if not database.is_connected:
-        await database.connect()
-
-@app.on_event("shutdown")
-async def shutdown():
-    if database.is_connected:
-        await database.disconnect()
-
 def LoadBookData():
     ml = BookUserData()
     print("Loading book ratings...")
@@ -38,17 +28,24 @@ def LoadBookData():
     rankings = ml.getPopularityRanks()
     return (ml, data, rankings)
 
-np.random.seed(0)
-random.seed(0)
 
-# Load up common data set for the recommender algorithms
+
 (ml, evaluationData, rankings) = LoadBookData()
-
-# Construct an Evaluator to, you know, evaluate them
 evaluator = Evaluator(evaluationData, rankings)
+SVDAlgorithm = SVD()
 
-# SVD
-SVD = SVD()
-evaluator.AddAlgorithm(SVD, "SVD")
+@app.on_event("startup")
+async def startup():
+    evaluator.AddAlgorithm(SVDAlgorithm, "SVD")
+    print("API 준비 완료")
+    if not database.is_connected:
+        await database.connect()
 
-evaluator.SampleTopNRecs(ml)
+@app.on_event("shutdown")
+async def shutdown():
+    if database.is_connected:
+        await database.disconnect()
+@app.get("/recommendations")
+async def get_recommendations():
+    recommendations = evaluator.SampleTopNRecs(ml)
+    return {"recommendations": recommendations}
