@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from db.Database import database
+from db.database import database
 
 from BookUserData import BookUserData
 from surprise import SVD
