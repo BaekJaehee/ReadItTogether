@@ -7,6 +7,7 @@ const changePassword = async (oldPassword, newPassword) => {
     oldPassword: oldPassword,
     newPassword: newPassword
   }
+  const accessToken = localStorage.getItem("accessToken")
 
   try {
     const response = await axios.put(
@@ -16,7 +17,7 @@ const changePassword = async (oldPassword, newPassword) => {
         withCredentials: true,
         headers: {
           "Content-Type": "application/json",
-          // "Authorization": `Bearer ${accessToken}`
+          "Authorization": `Bearer ${accessToken}`
         },
       }
     )
