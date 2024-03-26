@@ -58,7 +58,7 @@ public class Book {
     private String genre;
 
     @Lob
-    @Column(name = "info")
+    @Column(name = "info", columnDefinition = "MEDIUMTEXT")
     private String info;
 
 //    관계 설정
