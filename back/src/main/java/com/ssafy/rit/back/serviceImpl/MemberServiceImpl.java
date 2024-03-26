@@ -57,7 +57,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void signUp(MemberRequestDto dto) {
+    public Boolean signUp(MemberRequestDto dto) {
 
         String email = dto.getEmail();
         String password = dto.getPassword();
@@ -68,7 +68,7 @@ public class MemberServiceImpl implements MemberService {
 
         Boolean isJoined = memberRepository.existsByEmail(email);
         if (isJoined) {
-            return;
+            return false;
         }
 
         Member data = Member.builder()
@@ -81,6 +81,8 @@ public class MemberServiceImpl implements MemberService {
                 .build();
 
         memberRepository.save(data);
+
+        return true;
     }
 
     public Boolean checkEmail(CheckEmailRequestDto dto) {

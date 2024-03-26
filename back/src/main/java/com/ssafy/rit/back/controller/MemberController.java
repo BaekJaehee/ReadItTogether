@@ -43,7 +43,13 @@ public class MemberController {
     @PostMapping("/signup")
     public ResponseEntity<SignUpResponseDto> signUp(@RequestBody MemberRequestDto dto) throws JsonProcessingException {
         log.info("-------------가입 이메일: {}--------------", dto.getEmail());
-        memberService.signUp(dto);
+
+        Boolean check = memberService.signUp(dto);
+
+        if (!check) {
+            SignUpResponseDto responseDto = new SignUpResponseDto("SignUp Fail. Already registered", false);
+            return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
+        }
 
         SignUpResponseDto responseDto = new SignUpResponseDto("SignUp Success", true);
         objectMapper.writeValueAsString(responseDto);
@@ -178,7 +184,6 @@ public class MemberController {
     public ResponseEntity<MyPageResponseDto> myPage() {
 
         MyPageResponseDto responseDto = myPageService.getMyPage();
-
 
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
