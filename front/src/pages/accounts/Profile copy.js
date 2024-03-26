@@ -1,39 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 
 import FollowModal from "../../components/modal/FollowModal";
-import EditNicknameModal from "../../components/modal/EditNicknameModal";
 
 import man from "../../assets/profile/man.png";
 import grahp from "../../assets/profile/grahp.png";
 import settings from "../../assets/profile/settings.png";
-import edit from "../../assets/profile/edit.png"
 
 const Profile = () => {
-  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isNicknameEditOpen, setIsNicknameEditOpen] = useState(false);
-  const [memberId, setMemberId] = useState(null);
-
-  useEffect(() => {
-    const storedMemberId = localStorage.getItem("memberId");
-    setMemberId(storedMemberId);
-
-    // URL에서 memberId 추출하기 (예시로, 도메인/library/{memberId} 형태의 URL을 가정)
-    const pathArray = window.location.pathname.split("/");
-    const memberIdFromURL = pathArray[pathArray.length - 1];
-
-    // 두 memberId가 일치하는지 확인하고, 불일치할 경우 경고 또는 처리
-    if (storedMemberId && storedMemberId !== memberIdFromURL) {
-      console.warn(
-        "URL의 memberId와 로컬 스토리지의 memberId가 일치하지 않습니다."
-      );
-    }
-  }, []);
-  
-  const handleSettingsClick = () => {
-    navigate(`/modify/${memberId}`);
-  };
 
   return (
     <div className="flex items-center justify-center pt-32">
@@ -43,25 +17,14 @@ const Profile = () => {
           <div className="flex">
             {/* 유저 정보 */}
             <div className="flex-1">
-              <div className="relative">
+              <div>
                 <img
                   className="w-52 h-52 rounded-full mb-2"
                   src={man}
                   alt="헤키레키 잇센"
                 />
-                <button className="absolute bottom-1 right-56 cursor-pointer">
-                  <img src={edit} alt="edit" className="w-5 h-5"/>
-                </button>
               </div>
-              <div className="flex items-center">
-                <span className="font-semibold text-xl mb-2"> 닉네임 </span>
-                <button className="cursor-pointer p-0 mx-1" onClick={() => setIsNicknameEditOpen(true)}>
-                  <img src={edit} alt="edit" className="w-4 h-4"/>
-                </button>
-                {isNicknameEditOpen && (
-                  <EditNicknameModal onClose={() => setIsNicknameEditOpen(false)}/>
-                )}
-              </div>
+              <p className="font-semibold text-xl mb-2"> 닉네임 </p>
               <p className="underline text-gray-500 text-xs mb-2">
                 example@naver.com
               </p>
@@ -93,7 +56,7 @@ const Profile = () => {
               <img src={grahp} alt="임시 그래프" />
             </div>
             {/* 설정 톱니바퀴 */}
-            <div className="relative right-0" onClick={ handleSettingsClick }>
+            <div className="relative right-0">
               <img className="w-5" src={settings} alt="" />
             </div>
           </div>
