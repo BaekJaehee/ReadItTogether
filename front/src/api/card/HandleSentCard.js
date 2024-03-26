@@ -16,4 +16,4 @@ const handleSentCard = async (comment) => {
   }
 }
 
-export { handleSentCard }
+export default handleSentCard;
