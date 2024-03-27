@@ -11,6 +11,7 @@ import man from "../../assets/profile/man.png";
 import grahp from "../../assets/profile/grahp.png";
 import settings from "../../assets/profile/settings.png";
 import edit from "../../assets/profile/edit.png"
+import noImg from "../../assets/profile/noImg.png"
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -33,6 +34,9 @@ const Profile = () => {
   
   let followCount = profileInfo.followList.length
   let follwerCount = profileInfo.followerList.length
+
+  // 프로필 이미지가 없는 경우 기본 이미지로 대체
+  const profileImageSrc = profileInfo.profileImage ? profileInfo.profileImage : noImg;
 
   useEffect(() => {
     const storedMemberId = localStorage.getItem("memberId");
@@ -83,7 +87,7 @@ const Profile = () => {
                 /> */}
                 <img
                   className="w-52 h-52 rounded-full mb-2"
-                  src={profileInfo.profileImage}
+                  src={profileImageSrc}
                   alt="프로필 이미지"
                 />
                 <button className="absolute bottom-1 right-56 cursor-pointer" onClick={() => setIsImageEditOpen(true)}>
