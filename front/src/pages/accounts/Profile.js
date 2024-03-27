@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useMemo } from "react";
 import { useNavigate } from 'react-router-dom';
-import { Chart } from "chart.js";
-import DoughnutChart from "./DoughnutChart";
-import { getGenreNameByIndex } from "../../components/GenreUtil.js"
+import DoughnutChart from "../../components/DoughnutChart.js";
 
 import fetchProfileInfo from "../../api/accounts/fetchProfileInfo";
 
@@ -41,10 +38,6 @@ const Profile = () => {
 
   // 프로필 이미지가 없는 경우 기본 이미지로 대체
   const profileImageSrc = profileInfo.profileImage ? profileInfo.profileImage : noImg;
-
-  // 장르명-카운트 인덱스 연결
-  // const [genreCountByName, setGenreCountByName] = useState([]);
-
 
   useEffect(() => {
     const storedMemberId = localStorage.getItem("memberId");
@@ -86,20 +79,6 @@ const Profile = () => {
     20: '독일문학',
     21: '프랑스문학'
   };
-  // 여기에 경고가 생겨서 useMemo 추가 -> genreMapping이 정적인 객체이기 때문(상태변화X)
-
-  // profileInfo.genreNoList와 장르 이름을 매치시킨 데이터 생성
-  // const genreCountData = profileInfo.genreNoList.map((count, index) => ({
-  //   genre: {getGenreNameByIndex}(index), // index에 해당하는 장르 이름 가져오기
-  //   count: count
-  // }));
-
-  // // 장르 인덱스에 따른 장르 이름 반환하는 함수
-  // const getGenreNameByIndex = (index) => {
-  //   // index에 해당하는 장르 이름을 반환하는 로직 구현
-  //   // 예를 들어, genreMapping 객체를 활용하여 index에 해당하는 장르 이름을 가져올 수 있습니다.
-  // };
-
 
   // {profileInfo.genreNoList}가 [0,1]이 아니라 01로 화면에 표시됨 -> 배열 형식으로 만들기
   const genreCountByName = [];
@@ -115,18 +94,6 @@ const Profile = () => {
     dataLabels.push(data.genre);
     dataValues.push(data.count);
   });
-  // useEffect(() => {
-  //   if (profileInfo.genreNoList) {
-  //     const matchingByIndex = [];
-  //     for (const index in genreMapping) {
-  //       const genreName = genreMapping[index];
-  //       const count = profileInfo.genreNoList[index] || 0;
-  //       matchingByIndex.push({ genre: genreName, count: count });
-  //     }
-  //     setGenreCountByName(matchingByIndex);
-  //   }
-  // }, [profileInfo.genreNoList, genreMapping]);  // genreMapping 의존성 배열에 추가하라고 해서 추가했더니
-
 
   useEffect(() => {
     // fetchProfileInfo 함수를 사용하여 프로필 정보를 가져옴
@@ -145,39 +112,6 @@ const Profile = () => {
     navigate(`/modify/${memberId}`);
   };
   
-  // 차트
-  // const DoughnutChart = () => {
-  //   // canvas 요소를 가져옵니다.
-  //   const canvas = document.getElementById('doughnutChart');
-
-  //   // 장르 번호를 배열로 변환하여 숫자로 파싱
-  //   const genreNumbers = profileInfo.genreNoList.map(num => parseInt(num, 10));
-
-  //   // 장르마다 카운트 데이터 생성
-  //   const genreCountData = genreNumbers.map((count, index) => ({
-  //     genre: genreMapping[index + 1],
-  //     count: count
-  //   }));
-
-  //   // 도넛 그래프를 생성합니다.
-  //   new Chart(canvas, {
-  //     type: 'doughnut',
-  //     data: {
-  //       labels: genreCountData.map(data => data.genre),
-  //       datasets: [{
-  //         data: genreCountData.map(data => data.count),
-  //         backgroundColor: [
-  //           'red', 'blue', 'green', 'yellow', 'purple', 'orange', 'pink', 'cyan', 'magenta', 'lime', 'teal', 'lavender', 'brown', 'gold', 'silver', 'skyblue', 'crimson', 'indigo', 'violet', 'olive'
-  //         ]
-  //       }]
-  //     },
-  //     options: {
-  //       responsive: true,
-  //       maintainAspectRatio: false
-  //     }
-  //   });
-  // };
-
   return (
     <div className="flex items-center justify-center pt-32">
       <div className="flex items-center justify-center bg-sky-100 w-[1000px] p-12">
@@ -248,16 +182,15 @@ const Profile = () => {
 
             {/* 그래프 넣는 곳 */}
             <div className="flex-1">
-              <img src={grahp} alt="임시 그래프" />
+              {/* <img src={grahp} alt="임시 그래프" /> */}
               <div>
                 {/* 도넛 그래프를 그릴 canvas 요소 */}
-                {/* <canvas id="doughnutChart" width="400" height="400"></canvas> */}
                 <DoughnutChart dataLabels={dataLabels} dataValues={dataValues} />
               </div>
-              {profileInfo.genreNoList}
+              {/* {profileInfo.genreNoList} */}
               {/* {genreCountByName} */}
-              {dataLabels}
-              {dataValues}
+              {/* {dataLabels} */}
+              {/* {dataValues} */}
             </div>
             {/* 설정 톱니바퀴 */}
             <div className="relative right-0" onClick={ handleSettingsClick }>
