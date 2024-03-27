@@ -1,32 +1,63 @@
 import React, { useState, useEffect } from "react";
 
 import GuestBookGet from "../../../api/llibrary/guestbook/GuestBookGet";
+import GuestBookDelete from "../../../api/llibrary/guestbook/GuestBookDelete";
 
 // 이미지
 import left from "../../../assets/book/left.png";
 import right from "../../../assets/book/right.png";
+import deleteButton from "../../../assets/library/deleteButton.png";
 
-const PostItView = ({ onClose, postId, moveLeft, moveRight }) => {
+const PostItView = ({
+  onClose,
+  postId,
+  moveLeft,
+  moveRight,
+  memberId,
+  isMemberPage,
+}) => {
+  const [fromMemberId, setFromMemberId] = useState("")
   const [nickname, setNickname] = useState("");
   const [profileImg, setProfileImg] = useState(null);
   const [content, setContent] = useState("");
   const [createdAt, setCreatedAt] = useState("");
+  const [showDeleteButton, setShowDeleteButton] = useState(false);
 
   useEffect(() => {
     const getPostItContent = async () => {
-      console.log("왜안대냐고 ");
-      try {
-        const response = await GuestBookGet(postId);
-        setProfileImg(response.data.data.profileImg);
-        setNickname(response.data.data.nickname);
-        setContent(response.data.data.content);
-        setCreatedAt(response.data.data.createdAt);
-      } catch (error) {
-        console.log("방명록 데이터 가져오기 실패", error);
+      if (postId) {
+        try {
+          const response = await GuestBookGet(postId);
+          setFromMemberId(response.data.data.fromMemberId)
+          setProfileImg(response.data.data.profileImg);
+          setNickname(response.data.data.nickname);
+          setContent(response.data.data.content);
+          setCreatedAt(response.data.data.createdAt);
+          checkDeleteButtonVisibility();
+        } catch (error) {
+          console.log("방명록 데이터 가져오기 실패", error);
+        }
       }
     };
     getPostItContent();
   }, [postId]);
+
+  const checkDeleteButtonVisibility = () => {
+    if (memberId === fromMemberId || memberId === isMemberPage ) {
+      setShowDeleteButton(true);
+    } else {
+      setShowDeleteButton(false);
+    }
+  };
+
+  const handleDeleteClick = async () => {
+    try {
+      await GuestBookDelete(postId);
+      console.log("포스트잇 띳다");
+    } catch (error) {
+      console.log("띠지마라", error);
+    }
+  };
 
   return (
     <div
@@ -37,28 +68,42 @@ const PostItView = ({ onClose, postId, moveLeft, moveRight }) => {
         className="relative p-5 border w-96 h-96 shadow-lg bg-yellow-200"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex flex-col h-full justify-between">
-          <div className="flex items-center mb-4">
-            <img
-              className="w-8 rounded-full"
-              src={profileImg}
-              alt="프로필사진"
-            />
-            <h3 className="text-lg font-medium leading-6 text-gray-900">
-              {nickname}
-            </h3>
-            <p className="text-sm text-gray-500 mt-2">{content}</p>
+        <div className="flex flex-col justify-between">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center ">
+              <img
+                className="w-8 h-8 rounded-full mr-2"
+                src={profileImg}
+                alt="프로필사진"
+              />
+              <h3 className="text-sm font-bold leading-6 text-gray-900">
+                {nickname}
+              </h3>
+            </div>
+            {showDeleteButton && (
+              <div className="flex items-center cursor-pointer" onClick={handleDeleteClick}>
+                <img className="flex w-5 h-5" src={deleteButton} alt="삭제" />
+              </div>
+            )}
           </div>
-          <div className="flex justify-between pb-2">
-            <button onClick={moveLeft}>
-              <img className="w-8 rounded-full " src={left} alt="왼쪽" />
-            </button>
-            <button onClick={moveRight}>
-              <img className="w-8 rounded-full" src={right} alt="오른쪽" />
-            </button>
-          </div>
-          <div className="absolute right-0 bottom-0 p-2">{createdAt}</div>
+          <p className="text-sm font-medium">{content}</p>
+          <div className="flex justify-between pb-2"></div>
         </div>
+        <button onClick={moveLeft}>
+          <img
+            className="absolute left-[-50px] top-44  w-8 rounded-full "
+            src={left}
+            alt="왼쪽"
+          />
+        </button>
+        <button onClick={moveRight}>
+          <img
+            className="absolute right-[-50px] top-44 w-8 rounded-full"
+            src={right}
+            alt="오른쪽"
+          />
+        </button>
+        <div className="absolute right-0 bottom-0 p-2 text-xs">{createdAt}</div>
       </div>
     </div>
   );
