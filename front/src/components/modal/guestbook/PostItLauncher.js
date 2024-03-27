@@ -1,20 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import WriteFormModal from "./PostItWriteForm"; // PostIt 작성 컴포넌트
-import PostIt from "./PostItView"; // PostIt 컴포넌트
+import PostItView from "./PostItView"; // PostIt 컴포넌트
+import GuestBookForm from "../../../api/llibrary/guestbook/GuestBookForm";
+import GuestBookListGet from "../../../api/llibrary/guestbook/GuestBookListGet";
 
 // 이미지
 import postIt from "../../../assets/library/post-it.png";
 import pen from "../../../assets/library/pen.png";
 
-const PostItLauncher = ({ onClose }) => {
+const PostItLauncher = ({ onClose, isMemberPage, memberId }) => {
+  const [postItList, setPostItList] = useState(); // 방명록 리스트
+  const [currentPostIt, setCurrentPostIt] = useState(0); // 현재 보여줄 postit 인덱스
+  const [postItContent, setPostItContent] = useState(""); // 포스트잇 내용
   const [modalState, setModalState] = useState({
     showButtonsModal: true,
     showPostIt: false,
     showWriteForm: false,
   });
-  const [postItContent, setPostItContent] = useState("");
+  const location = useLocation();
 
-  // 여기에서 modalState의 각 속성을 구조 분해 할당합니다.
+  useEffect(() => {
+    const getPostItList = async () => {
+      try {
+        const list = await GuestBookListGet(isMemberPage);
+        setPostItList(list);
+      } catch (error) {
+        console.error("방명록 리스트 가져오기 실패:", error);
+      }
+    };
+
+    getPostItList();
+  }, [location]);
+  
+  const moveLeft = () => {
+    setCurrentPostIt((prevIndex) => Math.max(0, prevIndex - 1));
+  };
+
+  const moveRight = () => {
+    setCurrentPostIt((prevIndex) =>
+      Math.min(postItList.length - 1, prevIndex + 1)
+    );
+  };
+
+  useEffect(() => {
+    if (postItList) {
+      console.log(postItList[currentPostIt]);
+    }
+  }, [postItList]);
+
+  // modalState의 각 속성을 구조 분해 할당
   const { showButtonsModal, showPostIt, showWriteForm } = modalState;
 
   const setModal = ({ showButtonsModal, showPostIt, showWriteForm }) => {
@@ -48,9 +83,17 @@ const PostItLauncher = ({ onClose }) => {
     );
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(postItContent); // 포스트잇 내용 콘솔에 출력
+
+    // API 호출
+    try {
+      const responseData = await GuestBookForm(isMemberPage, postItContent);
+      console.log("성공 했으면 true가 떠요:", responseData); // API 호출 결과 로깅
+    } catch (error) {
+      console.error("API 호출 중 오류 발생:", error);
+    }
+
     setPostItContent(""); // 폼 초기화
     setModal({
       showButtonsModal: false,
@@ -58,6 +101,7 @@ const PostItLauncher = ({ onClose }) => {
       showWriteForm: false,
     }); // 작성 폼 모달 닫고, 포스트잇 보기
   };
+
   return (
     <div>
       {showButtonsModal && (
@@ -70,7 +114,10 @@ const PostItLauncher = ({ onClose }) => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-6">
-              <button onClick={handleOpenWriteForm} className="flex items-center">
+              <button
+                onClick={handleOpenWriteForm}
+                className="flex items-center"
+              >
                 <img className=" w-20 mb-2 mr-4" src={pen} alt="작성" />
                 <div className="font-semibold">방명록 작성하기</div>
               </button>
@@ -94,16 +141,23 @@ const PostItLauncher = ({ onClose }) => {
         />
       )}
 
-      {showPostIt && (
+      {showPostIt && postItList.length > 0 && (
         <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto h-full w-full z-60"
           onClick={handleCloseAll}
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto h-full w-full z-60"
         >
-          <PostIt
-            onClose={handleCloseAll}
-            createdAt={new Date().toISOString()}
-          />
-          {/* createdAt을 현재 시간으로 설정하였습니다. 저장된 데이터에 따라 변경해주세요. */}
+          {postItList[currentPostIt] ? (
+            <PostItView
+              onClose={handleCloseAll}
+              postId={postItList[currentPostIt]} // 현재 postIt의 id를 PostItView에 전달
+              moveLeft={moveLeft}
+              moveRight={moveRight}
+              memberId={memberId}
+              isMemberPage={isMemberPage}
+            />
+          ) : (
+            <div>방명록이 없습니다.</div>
+          )}
         </div>
       )}
     </div>

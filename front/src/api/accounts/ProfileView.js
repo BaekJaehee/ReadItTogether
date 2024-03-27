@@ -2,17 +2,13 @@ import axios from "axios";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-const changeNickname = async (newNickname) => {
-  const requestBody = {
-    newNickname: newNickname
-  }
-  
+const profileView = async () => {
+
   const accessToken = localStorage.getItem('accessToken');
 
   try {
-    const response = await axios.put(
-      `${API_BASE_URL}/members/nickname`,
-      requestBody,
+    const response = await axios.get(
+      `${API_BASE_URL}/members/profile`,
       {
         withCredentials: true,
         headers: {
@@ -21,13 +17,13 @@ const changeNickname = async (newNickname) => {
         },
       }
     )
-    console.log(requestBody);
-    // console.log(response.data);
+
+    console.log(response);
     return response;
   } catch (error) {
-    console.error("닉네임 변경 실패", error);
+    console.log(error);
     throw error;
   }
 }
 
-export default changeNickname;
+export default profileView;
