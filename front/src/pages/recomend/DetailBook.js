@@ -47,6 +47,7 @@ const DetailBook = () => {
       'horror': '호러',
       'mystery': '미스터리',
       'fantasy': '판타지',
+      'history': '역사',
       'romantic': '로맨스',
       'sf': 'SF',
       'kr_long': '한국문학',
