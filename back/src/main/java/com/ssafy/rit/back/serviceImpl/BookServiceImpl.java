@@ -72,11 +72,15 @@ public class BookServiceImpl implements BookService {
                     Member member = comment.getMemberId();
                     String nickname = member.getNickname();
 
+
                     return CommentListResponseDto.builder()
                             .nickname(nickname)
                             .rating(comment.getRating())
                             .comment(comment.getComment())
                             .createAt(comment.getCreatedAt())
+                            .profileImage(member.getProfileImage())
+                            .memberId(member.getId())
+                            .commentId(comment.getId())
                             .build();
                 }).toList();
         // ---------------------- 댓글 넣기 ----------------------------------
@@ -88,8 +92,6 @@ public class BookServiceImpl implements BookService {
 
 
         BookDetailResponse response = new BookDetailResponse("책 정보 조회 성공", detailDto);
-        log.info("(BookServiceImpl) 책 조회 결과 {}", response);
-        log.info("(BookServiceImpl) 책 조회 서비스 끝");
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -105,6 +107,11 @@ public class BookServiceImpl implements BookService {
         Book currentBook = bookRepository.findById(dto.getBookId())
                 .orElseThrow(BookNotFoundException::new);
 
+        // 이미 작성된 코멘트가 있을 때
+        if (commentRepository.findByBookIdAndMemberId(currentBook, currentMember).isPresent()){
+            throw CommentException.commentExistException();
+        };
+
         // 평점 안줬을 때
         if (dto.getRating() < 1) {
             throw CommentException.ratingException();
@@ -114,6 +121,7 @@ public class BookServiceImpl implements BookService {
         if (dto.getComment() == null || dto.getComment().isEmpty() || dto.getComment().length() > 200) {
             throw CommentException.commentLengthException();
         }
+
 
         Comment newComment = Comment.builder()
                 .bookId(currentBook)
@@ -179,8 +187,6 @@ public class BookServiceImpl implements BookService {
         Comment comment = commentRepository.findById(dto.getCommentId())
                 .orElseThrow(CommentException::commentNotFoundException);
 
-        log.info("(코멘트 주인) {}", comment.getMemberId().getId());
-        log.info("(접속 주인) {}", currentMember.getId());
         // 코멘트 주인과 접속 유저가 같은지 확인
         if (!Objects.equals(comment.getMemberId().getId(), currentMember.getId())) {
             throw CommentException.memberNotEqualException();
@@ -194,7 +200,6 @@ public class BookServiceImpl implements BookService {
         Book currentBook = bookRepository.findById(dto.getBookId()).orElseThrow(BookNotFoundException::new);
 
         // 평점 갱신 : ( (현재 평균점수 x 댓글 갯수) - 원래 평점 + 바꾼 평점 ) / 댓글 갯수
-        log.info("(평점 테스트) 현재 평점{},원래 평점 {}, 수정평점{}, 바뀐평점{}", currentBook.getRating(),comment.getRating(), dto.getRating(), ((currentBook.getRating() * currentBook.getComments().size()) - comment.getRating() + dto.getRating()) / (currentBook.getComments().size()));
         currentBook.setRating(
                 ((currentBook.getRating() * currentBook.getComments().size()) - comment.getRating() + dto.getRating()) / (currentBook.getComments().size())
         );
@@ -216,6 +221,7 @@ public class BookServiceImpl implements BookService {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    // 코멘트 삭제
     @Override
     public ResponseEntity<CommentDeleteResponse> deleteComment(Long commentId) {
 
@@ -230,7 +236,6 @@ public class BookServiceImpl implements BookService {
         if (!Objects.equals(comment.getMemberId().getId(), currentMember.getId())) {
             throw CommentException.memberNotEqualException();
         }
-
 
         // comment entity 에 저장되어있는 BookId는 사실 Book 전체 정보이다 (추후에 객체 이름 수정 필요)
         Book currentBook = comment.getBookId();
