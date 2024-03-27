@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { handleSignUp } from '../../api/accounts/signUp';
+import { useNavigate } from "react-router-dom";
+import { handleSignUp } from "../../api/accounts/SignUp";
 import { checkEmailDuplicate } from "../../api/accounts/MailDuplicate";
 import { checkNicknameDuplicate } from "../../api/accounts/NicknameDuplicate";
 
-// 닉네임, 이메일 중복처리 로직 확인 필요
+// 이메일 형식 검사만 하는 게 아니라 실제 존재하는 이메일인지 확인 -> API 사용 필요
 
 const SignUp = () => {
-  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,31 +19,33 @@ const SignUp = () => {
 
   const [emailMessage, setEmailMessage] = useState('');
   const [emailStatusMessage, setEmailStatusMessage] = useState('');
+  const [emailStatusMessageClassName, setEmailStatusMessageClassName] = useState('');
   const [passwordMessage, setPasswordMessage] = useState('');
   const [passwordConfirmMessage, setPasswordConfirmMessage] = useState('');
   const [passwordConfirmMessageClassName, setPasswordConfirmMessageClassName] = useState(''); // 글자 색 바꾸기 위함
   const [nicknameMessage, setNicknameMessage] = useState('');
   const [nicknameStatusMessage, setNicknameStatusMessage] = useState('');
+  const [nicknameStatusMessageClassName, setNicknameStatusMessageClassName] = useState('');
 
-  // 중복체크용
-  // const [isEmailValid, setIsEmailValid] = useState(false);
-  // const [isNicknameValid, setIsNicknameValid] = useState(false);
-
-  // 가입하기 버튼
+  // 가입하기 버튼 활성화
   const [isFormValid, setIsFormValid] = useState(false);
+  // 중복 확인을 안하면 가입하기 버튼 활성화 안됨
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [isNicknameValid, setIsNicknameValid] = useState(false);
+
   // 중복 확인 버튼
   const [isCorrectEmail, setIsCorrectEmail] = useState(false);
   const [isCorrectNickname, setIsCorrectNickname] = useState(false);
 
   useEffect(() => {
-    // 모든 입력란이 채워졌는지 확인
+    // 모든 입력란이 채워졌는지 + 중복 검사를 했는지 확인
     const emailRegExp = /^[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+(?:\.[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+)*@(?:[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?$/;
-    const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+\\|[\]{};:'",.<>/?]).{8,20}$/;
+    const passwordRegExp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
     const nicknameRegExp = /^[가-힣a-zA-Z0-9]{2,8}$/;
 
-    const isValid = email && emailRegExp.test(email) && password && passwordConfirm && (password === passwordConfirm) && passwordRegExp.test(password) && passwordRegExp.test(passwordConfirm) && nickname && nicknameRegExp.test(nickname) && birth && gender;
+    const isValid = email && emailRegExp.test(email) && password && passwordConfirm && (password === passwordConfirm) && passwordRegExp.test(password) && passwordRegExp.test(passwordConfirm) && nickname && nicknameRegExp.test(nickname) && birth && gender && isEmailValid && isNicknameValid;
     setIsFormValid(isValid);
-  }, [email, password, passwordConfirm, nickname, birth, gender]);
+  }, [email, password, passwordConfirm, nickname, birth, gender, isEmailValid, isNicknameValid]);
 
   useEffect(() => {
     const emailRegExp = /^[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+(?:\.[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+)*@(?:[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?$/;
@@ -59,6 +61,7 @@ const SignUp = () => {
 
   const onChangeEmail = (e) => {
     const currentEmail = e.target.value;
+    setIsEmailValid(false);
     setEmail(currentEmail);
     const emailRegExp = /^[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+(?:\.[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+)*@(?:[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?$/;
 
@@ -68,11 +71,33 @@ const SignUp = () => {
       setEmailMessage('')
     };
   };
+  
+  useEffect(() => {
+    setEmailStatusMessage(''); // 이메일 상태 메시지 초기화
+  }, [email]); // email 상태가 변경될 때마다 useEffect 호출  
+  
+  const onChangeNickname = (e) => {
+    const currentNickname = e.target.value;
+    // setEmailStatusMessage('');
+    setIsNicknameValid(false);
+    setNickname(currentNickname);
+    const nicknameRegExp = /^[가-힣a-zA-Z0-9]{2,8}$/;
+    
+    if (!nicknameRegExp.test(currentNickname) && currentNickname.length !== 0) {
+      setNicknameMessage('올바른 형식이 아닙니다!')
+    } else {
+      setNicknameMessage('')
+    };
+  };
+
+  useEffect(() => {
+    setNicknameStatusMessage('');
+  }, [nickname]);
 
   const onChangePassword = (e) => {
     const currentPassword = e.target.value;
     setPassword(currentPassword);
-    const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+\\|[\]{};:'",.<>/?]).{8,20}$/;
+    const passwordRegExp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
 
     if (!passwordRegExp.test(currentPassword) && currentPassword.length !== 0) {
       setPasswordMessage('올바른 형식이 아닙니다!')
@@ -83,30 +108,22 @@ const SignUp = () => {
   
   const onChangePasswordConfirm = (e) => {
     const currentPasswordConfirm = e.target.value;
-    const passwordRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+\\|[\]{};:'",.<>/?]).{8,20}$/;
+    const passwordRegExp = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/;
     setPasswordConfirm(currentPasswordConfirm);
     if (password !== currentPasswordConfirm) {
       setPasswordConfirmMessage('비밀번호가 일치하지 않습니다!');
-      setPasswordConfirmMessageClassName('text-red-500');
+      setPasswordConfirmMessageClassName('text-sm text-red-500');
     } else if (!passwordRegExp.test(currentPasswordConfirm)) {
       setPasswordConfirmMessage('');
     } else {
       setPasswordConfirmMessage('비밀번호가 일치합니다.');
-      setPasswordConfirmMessageClassName('text-blue-500');
+      setPasswordConfirmMessageClassName('text-sm text-blue-500');
     };
   };
 
-  const onChangeNickname = (e) => {
-    const currentNickname = e.target.value;
-    setNickname(currentNickname);
-    const nicknameRegExp = /^[가-힣a-zA-Z0-9]{2,8}$/;
-    
-    if (!nicknameRegExp.test(currentNickname) && currentNickname.length !== 0) {
-      setNicknameMessage('올바른 형식이 아닙니다!')
-    } else {
-      setNicknameMessage('')
-    };
-  };
+  useEffect(() => {
+    setPasswordConfirmMessage('');
+  }, [password]);
 
   let now = new Date();
   let years = []
@@ -119,26 +136,18 @@ const SignUp = () => {
     try {
       const response = await handleSignUp(name, email, password, nickname, birth, gender);
       console.log(response);
+      navigate("/login");
     } catch (error) {
       throw error;
     };
-
-    // 회원가입 후 초기화
-    setEmail('');
-    setPassword('');
-    setPasswordConfirm('');
-    setNickname('');
-    setName('');
-    setBirth('');
-    setGender('');
-    setPasswordConfirmMessage('');
   };
 
   const handleCheckEmail = async () => {
     try {
       const isEmailDuplicate = await checkEmailDuplicate(email);
-      // setIsEmailValid(!isEmailDuplicate);
+      setIsEmailValid(isEmailDuplicate);
       setEmailStatusMessage(!isEmailDuplicate ? '중복된 이메일입니다.' : '사용 가능한 이메일입니다.');
+      setEmailStatusMessageClassName(!isEmailDuplicate ? 'text-sm text-red-500' : 'text-sm text-blue-500');
     } catch (error) {
       console.error(error);
     };
@@ -147,8 +156,9 @@ const SignUp = () => {
   const handleCheckNickname = async () => {
     try {
       const isNicknameDuplicate = await checkNicknameDuplicate(nickname);
-      // setIsNicknameValid(!isNicknameDuplicate);
+      setIsNicknameValid(isNicknameDuplicate);
       setNicknameStatusMessage(!isNicknameDuplicate ? '중복된 닉네임입니다.' : '사용 가능한 닉네임입니다.');
+      setNicknameStatusMessageClassName(!isNicknameDuplicate ? 'text-sm text-red-500' : 'text-sm text-blue-500');
     } catch (error) {
       console.log(error);
     };
@@ -167,8 +177,8 @@ const SignUp = () => {
         <div className="mb-4">
           <div className="flex justify-between">
             <label htmlFor="email" className="block mb-1">이메일</label>
-            <p className="text-red-500 mr-32">{emailMessage}</p>
-            <p>{emailStatusMessage}</p>
+            <p className="text-red-500 mr-32 text-sm">{emailMessage}</p>
+            <p className={emailStatusMessageClassName}>{emailStatusMessage}</p>
           </div>
           <div className="flex items-center">
             <input type="text" id="email" name="email" value={email} onChange={onChangeEmail} className="border border-gray-300 px-2 py-1 flex-grow mr-3" />
@@ -178,10 +188,10 @@ const SignUp = () => {
         <div className="mb-4">
           <div className="flex justify-between">
             <label htmlFor="password" className="block mb-1">비밀번호</label>
-            <p className="text-red-500">{passwordMessage}</p>
+            <p className="text-red-500 text-sm">{passwordMessage}</p>
           </div>
           <input type="password" id="password" name="password" value={password} onChange={onChangePassword} className="border border-gray-300 px-2 py-1 w-full" />
-          <p className="text-sm text-gray-500">영어 대문자, 소문자, 숫자, 특수문자가 1개 이상 있어야 합니다.</p>
+          <p className="text-sm text-gray-500">영문·숫자·특수문자를 포함한 8~20자</p>
         </div>
         <div className="mb-4">
           <div className="flex justify-between">
@@ -193,13 +203,14 @@ const SignUp = () => {
         <div className="mb-4">
           <div className="flex justify-between">
             <label htmlFor="nickname" className="block mb-1">닉네임</label>
-            <p className="text-red-500 mr-32">{nicknameMessage}</p>
-            <p>{nicknameStatusMessage}</p>
+            <p className="text-red-500 mr-32 text-sm">{nicknameMessage}</p>
+            <p className={nicknameStatusMessageClassName}>{nicknameStatusMessage}</p>
           </div>
           <div className="flex items-center">
             <input type="text" id="nickname" name="nickname" value={nickname} onChange={onChangeNickname} className="border border-gray-300 px-2 py-1 flex-grow mr-3" />
             <button type='button' onClick={handleCheckNickname} className={`bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded ml-2 ${!isCorrectNickname && 'opacity-50 cursor-not-allowed'}`} disabled={!isCorrectNickname}>중복 확인</button>
           </div>
+            <p className="text-sm text-gray-500">한글·영문·숫자를 포함한 2~8자(공백 허용X)</p>
         </div>
         <div className="mb-4">
           <label htmlFor="birth" className="block mb-1">출생년도</label>

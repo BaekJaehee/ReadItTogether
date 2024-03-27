@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import PostItLauncher from "../../components/modal/PostIt/PostItLauncher";
@@ -27,13 +27,38 @@ const Library = () => {
 
   // 소개글 상태
   const [isGuestBookOpen, setIsGuestBookOpen] = useState(false);
-  const openGuestBook = () => setIsGuestBookOpen(true);
+  const openGuestBook = () => {
+    if (memberId && isMemberPage) {
+      setIsGuestBookOpen(true);
+    } else {
+      console.warn("모달을 열 수 있는 권한이 없습니다.");
+    }
+  };
   const closeGuestBook = () => setIsGuestBookOpen(false);
 
   // 우편함 상태
   const [isMailBoxOpen, setIsMailBoxOpen] = useState(false);
   const openMailBox = () => setIsMailBoxOpen(true);
   const closeMailBox = () => setIsMailBoxOpen(false);
+
+  const [memberId, setMemberId] = useState(null);
+  const [isMemberPage, setIsMemberPage] = useState(false);
+
+  useEffect(() => {
+    const storedMemberId = localStorage.getItem("memberId");
+    setMemberId(storedMemberId);
+
+    // URL에서 memberId 추출하기 (예시로, 도메인/library/{memberId} 형태의 URL을 가정)
+    const pathArray = window.location.pathname.split("/");
+    const memberIdFromURL = pathArray[pathArray.length - 1];
+
+    // 두 memberId가 일치하는지 확인하고, 불일치할 경우 경고 또는 처리
+    if (storedMemberId && storedMemberId !== memberIdFromURL) {
+      console.warn(
+        "URL의 memberId와 로컬 스토리지의 memberId가 일치하지 않습니다."
+      );
+    }
+  }, []);
 
   return (
     <div className="min-h-screen min-w-full overflow-auto">
@@ -55,7 +80,7 @@ const Library = () => {
             />
           </Link>
         </div>
-        
+
         <div className="group absolute right-64 bottom-44 overflow-hidden">
           <button onClick={openDiaryModal}>
             <img
@@ -84,7 +109,7 @@ const Library = () => {
               alt="우편함"
             />
           </button>
-          {isMailBoxOpen && <MailBox onClose={closeMailBox}/>}
+          {isMailBoxOpen && <MailBox onClose={closeMailBox} />}
         </div>
         <div className="group absolute right-40 top-20 overflow-hidden">
           <button onClick={openModal}>

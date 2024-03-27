@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import SideBar from "./SideBar";
 
@@ -11,9 +11,9 @@ import search from "../../assets/navbar/search.png";
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false); // 검색 입력 창 상태
-  const navigate = useNavigate();
   const navRef = useRef(); // 네비게이션 바와 사이드바를 위한 ref
   const location = useLocation();
+  const memberId = localStorage.getItem("memberId");
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -57,8 +57,8 @@ const NavBar = () => {
         </button>
 
         {/* 로고/홈 버튼 */}
-        <Link to="/" className="font-extrabold mr-6">
-          <img className="w-44" src={logo} alt="" />
+        <Link to={`/${memberId}`} className="font-extrabold mr-6">
+          <img className="w-36" src={logo} alt="" />
         </Link>
       </div>
 

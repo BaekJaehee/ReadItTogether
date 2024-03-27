@@ -18,7 +18,6 @@ const NaverLoginButton = () => {
       );
 
       window.location.href = `${naverAuthUrl}?client_id=${clientId}&response_type=${responseType}&redirect_uri=${redirectUri}`;
-      console.log();
     } catch (error) {
       console.log("에러 코드:", error);
     }
