@@ -22,3 +22,15 @@
   /* 추가 스타일 */
 }
 
+.star {
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 200ms;
+}
+
+.smallstar {
+  font-size: 16px;
+  height: 27px;
+  cursor: pointer;
+  transition: color 200ms;
+}
