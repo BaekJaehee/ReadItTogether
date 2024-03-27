@@ -13,6 +13,7 @@ import com.ssafy.rit.back.exception.member.MemberNotFoundException;
 import com.ssafy.rit.back.exception.member.NicknameAlreadyExistsException;
 import com.ssafy.rit.back.repository.MemberRepository;
 import com.ssafy.rit.back.serviceImpl.MemberServiceImpl;
+import com.ssafy.rit.back.serviceImpl.MyPageServiceImpl;
 import com.ssafy.rit.back.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,18 +30,26 @@ public class MemberController {
     private final MemberServiceImpl memberService;
     private final MemberRepository memberRepository;
     private final CommonUtil commonUtil;
+    private final MyPageServiceImpl myPageService;
 
 
-    public MemberController(MemberServiceImpl memberService, MemberRepository memberRepository, CommonUtil commonUtil) {
+    public MemberController(MemberServiceImpl memberService, MemberRepository memberRepository, CommonUtil commonUtil, MyPageServiceImpl myPageService) {
         this.memberService = memberService;
         this.memberRepository = memberRepository;
         this.commonUtil = commonUtil;
+        this.myPageService = myPageService;
     }
 
     @PostMapping("/signup")
     public ResponseEntity<SignUpResponseDto> signUp(@RequestBody MemberRequestDto dto) throws JsonProcessingException {
         log.info("-------------가입 이메일: {}--------------", dto.getEmail());
-        memberService.signUp(dto);
+
+        Boolean check = memberService.signUp(dto);
+
+        if (!check) {
+            SignUpResponseDto responseDto = new SignUpResponseDto("SignUp Fail. Already registered", false);
+            return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
+        }
 
         SignUpResponseDto responseDto = new SignUpResponseDto("SignUp Success", true);
         objectMapper.writeValueAsString(responseDto);
@@ -169,6 +178,15 @@ public class MemberController {
         VerifyAccessResponseDto responseDto = new VerifyAccessResponseDto("Success", true);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
         // git checkout -t origin/back
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<MyPageResponseDto> myPage() {
+
+        MyPageResponseDto responseDto = myPageService.getMyPage();
+
+
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
 }
