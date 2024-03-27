@@ -80,6 +80,7 @@ public class BookServiceImpl implements BookService {
                             .createAt(comment.getCreatedAt())
                             .profileImage(member.getProfileImage())
                             .memberId(member.getId())
+                            .commentId(comment.getId())
                             .build();
                 }).toList();
         // ---------------------- 댓글 넣기 ----------------------------------
