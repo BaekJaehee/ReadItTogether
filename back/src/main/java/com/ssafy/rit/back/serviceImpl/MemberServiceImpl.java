@@ -4,16 +4,16 @@ import com.ssafy.rit.back.dto.member.requestDto.*;
 import com.ssafy.rit.back.dto.member.response.PassingCertificationResponse;
 import com.ssafy.rit.back.dto.member.response.SendingCertificationResponse;
 import com.ssafy.rit.back.dto.member.response.SendingTemporaryPasswordResponse;
+import com.ssafy.rit.back.dto.member.responseDto.VerifyAccessResponseDto;
 import com.ssafy.rit.back.entity.EmailCode;
 import com.ssafy.rit.back.entity.Member;
-import com.ssafy.rit.back.exception.member.EmailAlreadyExistsException;
-import com.ssafy.rit.back.exception.member.EmailCodeNotMatchingException;
-import com.ssafy.rit.back.exception.member.MemberNotFoundException;
-import com.ssafy.rit.back.exception.member.NicknameAlreadyExistsException;
+import com.ssafy.rit.back.exception.member.*;
 import com.ssafy.rit.back.repository.EmailCodeRepository;
 import com.ssafy.rit.back.repository.MemberRepository;
+import com.ssafy.rit.back.security.jwt.JWTUtil;
 import com.ssafy.rit.back.service.MemberService;
 import com.ssafy.rit.back.util.CommonUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -38,23 +38,26 @@ public class MemberServiceImpl implements MemberService {
     private final EmailCodeRepository emailCodeRepository;
     private final JavaMailSender javaMailSender;
     private final RedisTemplate<String, String> redisTemplate;
+    private final JWTUtil jwtUtil;
 
     public MemberServiceImpl(MemberRepository memberRepository,
                              PasswordEncoder passwordEncoder,
                              CommonUtil commonUtil,
                              JavaMailSender javaMailSender,
                              EmailCodeRepository emailCodeRepository,
-                             RedisTemplate<String, String> redisTemplate){
+                             RedisTemplate<String, String> redisTemplate,
+                             JWTUtil jwtUtil){
         this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
         this.commonUtil = commonUtil;
         this.javaMailSender = javaMailSender;
         this.emailCodeRepository = emailCodeRepository;
         this.redisTemplate = redisTemplate;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
-    public void signUp(MemberRequestDto dto) {
+    public Boolean signUp(MemberRequestDto dto) {
 
         String email = dto.getEmail();
         String password = dto.getPassword();
@@ -65,7 +68,7 @@ public class MemberServiceImpl implements MemberService {
 
         Boolean isJoined = memberRepository.existsByEmail(email);
         if (isJoined) {
-            return;
+            return false;
         }
 
         Member data = Member.builder()
@@ -78,6 +81,8 @@ public class MemberServiceImpl implements MemberService {
                 .build();
 
         memberRepository.save(data);
+
+        return true;
     }
 
     public Boolean checkEmail(CheckEmailRequestDto dto) {
@@ -94,6 +99,16 @@ public class MemberServiceImpl implements MemberService {
     public Boolean checkNickname(CheckNicknameRequestDto dto) {
 
         Optional<Member> optionalMember = memberRepository.findByNickname(dto.getNickname());
+        if (optionalMember.isPresent()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public Boolean checkNewNickname(UpdateNicknameRequestDto dto) {
+//        Member member = memberRepository.findByNickname(dto.getNewNickname()).orElseThrow(DuplicatedMemberException::new);
+        Optional<Member> optionalMember = memberRepository.findByNickname(dto.getNewNickname());
         if (optionalMember.isPresent()) {
             return false;
         }
@@ -129,7 +144,7 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Transactional
-    public void updatePassword(UpdatePasswordRequestDto dto) {
+    public Boolean updatePassword(UpdatePasswordRequestDto dto) {
 
 
         Member currentMember = commonUtil.getMember();
@@ -139,14 +154,17 @@ public class MemberServiceImpl implements MemberService {
         String savedOldPassword = targetMember.getPassword();
         String newHashedPassword = encodePassword(dto);
 
-
-        // 패스워드 업데이트 전 비밀번호 검증
-        if (passwordEncoder.matches(inputOldPassword, savedOldPassword)) {
-            targetMember.updatePassword(newHashedPassword);
-            log.info("----------------비밀번호 일치염. 진행시켜!----------------");
+        if (!passwordEncoder.matches(inputOldPassword, savedOldPassword)) {
+            log.info("--------------------비밀번호 불일치--------------------");
+            return false;
         }
 
+        log.info("----------------비밀번호 일치염. 진행시켜!----------------");
+        targetMember.updatePassword(newHashedPassword);
+
+
         log.info("-------------------비밀번호 변경 완료-------------------");
+        return true;
 
     }
 
@@ -164,19 +182,56 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Transactional
-    public void updateNickname(UpdateNicknameRequestDto dto) {
+    public Boolean updateNickname(UpdateNicknameRequestDto dto) {
 
-        Member targetMember = memberRepository.findByEmail(commonUtil.getMember().getEmail()).orElseThrow(MemberNotFoundException::new);
+        Member targetMember = memberRepository.findByNickname(commonUtil.getMember().getNickname()).orElseThrow(DuplicatedMemberException::new);
+        Optional<Member> checkMember = memberRepository.findByNickname(dto.getNewNickname());
+        if (checkMember.isPresent()) {
+            return false;
+        }
 
         log.info("------------------------------------------------------------------");
         log.info("---------------------변경 전 닉네임: {}---------------------", targetMember.getNickname());
         log.info("------------------------------------------------------------------");
 
+        // 이전 닉과 변경하려는 닉이 동일한 경우
+        if (targetMember.getNickname().equals(dto.getNewNickname())) {
+            return false;
+        }
+
+
         targetMember.updateNickname(dto.getNewNickname());
 
         log.info("---------------------변경 후 닉네임: {}---------------------", targetMember.getNickname());
+        return true;
 
     }
+
+    public String getOldNickname(Member member) {
+        return member.getNickname();
+    }
+
+
+    public Boolean verifyAccess(VerifyAccessRequestDto dto) {
+
+        if (!dto.getAccessToken().startsWith("Bearer ")) {
+            log.info(dto.getAccessToken());
+            log.info("Bearer로 시작 안 함");
+            return false;
+        }
+
+        String accessToken = dto.getAccessToken().split(" ")[1];
+        log.info("Bearer 뗀 액세스염");
+
+        try {
+            jwtUtil.isExpired(accessToken);
+        } catch (ExpiredJwtException e) {
+            return false;
+        }
+
+        return true;
+    }
+
 
 
     String encodePassword(UpdatePasswordRequestDto dto) {
@@ -184,6 +239,8 @@ public class MemberServiceImpl implements MemberService {
         return passwordEncoder.encode(dto.getNewPassword());
 
     }
+
+
 
     // 여기부터 Redis or smtp 사용한 엔드포인트의 서비스 로직입니다.
     // TODO: 세부 예외 처리 진행 예정

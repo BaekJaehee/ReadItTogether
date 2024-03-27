@@ -6,7 +6,7 @@ build/
 !**/src/test/**/build/
 gcs_cloud.json
 ### STS ###
-env.yml
+src/main/resources/env.yml
 .apt_generated
 .classpath
 .factorypath
@@ -17,7 +17,7 @@ env.yml
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
-env.yml
+src/main/resources/env.yml
 .env
 ### IntelliJ IDEA ###
 .idea

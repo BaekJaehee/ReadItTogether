@@ -37,8 +37,12 @@ public class Bookshelf {
     private String cover;
 
 //  관계 설정
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member memberId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id")
+    private Book bookId;
 
 }

@@ -34,7 +34,8 @@ public class CustomLogoutFilter extends GenericFilterBean {
     private void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 
         String requestUri = request.getRequestURI();
-        if (!requestUri.matches("^\\/logout$")) {
+        if (!requestUri.matches("^/logout$")) {
+            System.out.println("--------------로가웃 경로 에러염--------------" + requestUri);
 
             filterChain.doFilter(request, response);
             return;
@@ -83,6 +84,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
             return;
         }
 
+        System.out.println("-------------------굿 로그아웃 진행 ㄱㄱ-------------------" + requestUri);
         // 로그아웃 진행 - DB에서 리프레시 토큰 제거, 리프레시 토큰의 쿠키값 초기화
         refreshRepository.deleteByRefresh(refresh);
 
