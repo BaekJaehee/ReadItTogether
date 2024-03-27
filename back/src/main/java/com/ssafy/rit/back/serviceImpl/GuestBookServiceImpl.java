@@ -3,8 +3,10 @@ package com.ssafy.rit.back.serviceImpl;
 import com.ssafy.rit.back.dto.guestBook.requestDto.GuestBookCreationRequestDto;
 import com.ssafy.rit.back.dto.guestBook.response.GuestBookCreationResponse;
 import com.ssafy.rit.back.dto.guestBook.response.GuestBookDetailResponse;
+import com.ssafy.rit.back.dto.guestBook.response.GuestBookListResponse;
 import com.ssafy.rit.back.dto.guestBook.response.GuestBookRemovalResponse;
 import com.ssafy.rit.back.dto.guestBook.responseDto.GuestBookDetailResponseDto;
+import com.ssafy.rit.back.dto.guestBook.responseDto.GuestBookListResponseDto;
 import com.ssafy.rit.back.entity.GuestBook;
 import com.ssafy.rit.back.entity.Member;
 import com.ssafy.rit.back.exception.guestBook.GuestBookNotFoundException;
@@ -22,6 +24,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -71,7 +75,13 @@ public class GuestBookServiceImpl implements GuestBookService {
         GuestBook currentGuestBook = guestBookRepository.findById(postId)
                 .orElseThrow(GuestBookNotFoundException::new);
 
-        GuestBookDetailResponseDto detailDto = modelMapper.map(currentGuestBook, GuestBookDetailResponseDto.class);
+        GuestBookDetailResponseDto detailDto = GuestBookDetailResponseDto.builder()
+                .content(currentGuestBook.getContent())
+                .nickname(currentGuestBook.getFromMemberId().getNickname())
+                .fromMemberId(currentGuestBook.getFromMemberId().getId())
+                .profileImg(currentGuestBook.getFromMemberId().getProfileImage())
+                .createdAt(String.valueOf(currentGuestBook.getCreatedAt()))
+                .build();
 
         GuestBookDetailResponse response = new GuestBookDetailResponse("방명록 조회 성공", detailDto);
 
@@ -94,6 +104,29 @@ public class GuestBookServiceImpl implements GuestBookService {
         guestBookRepository.delete(currentGuestBook);
 
         GuestBookRemovalResponse response = new GuestBookRemovalResponse("방명록 삭제 성공", true);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    // 해당 유저 방명록 리스트 조회
+    @Override
+    public ResponseEntity<GuestBookListResponse> readGuestBookList(Long toMemberId) {
+
+        commonUtil.getMember();
+
+        Member currentMember = memberRepository.findById(toMemberId)
+                .orElseThrow(MemberNotFoundException::new);
+
+        List<Long> guestBookIds = guestBookRepository.findIdsByToMemberId(currentMember);
+
+        GuestBookListResponseDto detailDto = GuestBookListResponseDto.builder()
+                .guestbookList(guestBookIds)
+                .build();
+
+        GuestBookListResponse response = new GuestBookListResponse(
+                "방명록 목록 조회 성공",
+                detailDto
+        );
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
