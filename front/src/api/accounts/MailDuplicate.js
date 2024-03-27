@@ -4,7 +4,8 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const checkEmailDuplicate = async (email) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/members/email`, 
+    const response = await axios.post(
+    `${API_BASE_URL}/members/email`, 
     {email: email},
     {
       headers: {
@@ -15,7 +16,7 @@ const checkEmailDuplicate = async (email) => {
     console.log(response.data)
     return response.data;
   } catch (error) {
-    console.log(error);
+    console.error(error.response.data.message)
     return false; // 에러가 발생했을 경우 중복으로 처리
   };
 }
