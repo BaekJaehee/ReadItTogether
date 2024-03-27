@@ -18,7 +18,7 @@ public class GuestBook {
     @Column(name = "guest_book_id")
     private Long id;
 
-    @Column(name = "content", length = 255, nullable = false)
+    @Column(name = "content", length = 120, nullable = false)
     private String content;
 
     @Column(name = "created_at")

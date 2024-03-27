@@ -3,6 +3,7 @@ package com.ssafy.rit.back.controller;
 import com.ssafy.rit.back.dto.guestBook.requestDto.GuestBookCreationRequestDto;
 import com.ssafy.rit.back.dto.guestBook.response.GuestBookCreationResponse;
 import com.ssafy.rit.back.dto.guestBook.response.GuestBookDetailResponse;
+import com.ssafy.rit.back.dto.guestBook.response.GuestBookListResponse;
 import com.ssafy.rit.back.dto.guestBook.response.GuestBookRemovalResponse;
 import com.ssafy.rit.back.service.GuestBookService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,11 @@ public class GuestBookController {
     @DeleteMapping("/{postId}")
     public ResponseEntity<GuestBookRemovalResponse> deleteGuestBook(@PathVariable("postId") Long postId) {
         return guestBookService.deleteGuestBook(postId);
+    }
+
+    @GetMapping("/list/{toMemberId}")
+    public ResponseEntity<GuestBookListResponse> readGuestBookList(@PathVariable("toMemberId") Long toMemberId) {
+        return guestBookService.readGuestBookList(toMemberId);
     }
 
 }
