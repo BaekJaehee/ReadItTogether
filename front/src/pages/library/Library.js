@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 
-import PostItLauncher from "../../components/modal/PostIt/PostItLauncher";
+import PostItLauncher from "../../components/modal/guestbook/PostItLauncher";
 import Diary from "../../components/modal/Diary/Diary";
-import GuestBook from "../../components/modal/GuestBook";
+import Intro from "../../components/modal/Intro";
 import MailBox from "../../components/modal/MailBox";
+
+import IntroGet from "../../api/llibrary/intro/IntroGet";
 
 // 이미지
 import table from "../../assets/library/table.png";
@@ -15,6 +17,32 @@ import whiteBoard from "../../assets/library/whiteBoard.png";
 import mailBox from "../../assets/library/mailBox.png";
 
 const Library = () => {
+  const location = useLocation();
+  const [introText, setIntroText] = useState("");
+  const [memberId, setMemberId] = useState(null);
+  const [isMemberPage, setIsMemberPage] = useState(false);
+
+  useEffect(() => {
+    const storedMemberId = localStorage.getItem("memberId");
+    setMemberId(storedMemberId);
+
+    const pathArray = window.location.pathname.split("/");
+    setIsMemberPage(pathArray[pathArray.length - 1]);
+  }, [location]);
+
+  useEffect(() => {
+    const myIntroText = async () => {
+      try {
+        const text = await IntroGet(isMemberPage);
+        setIntroText(text);
+      } catch (error) {
+        console.error("서재 소개글 에러:", error);
+      }
+    };
+
+    myIntroText();
+  }, [isMemberPage]);
+
   // 방명록 상태
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
@@ -26,9 +54,15 @@ const Library = () => {
   const closeDiaryModal = () => setIsDiaryModalOpen(false);
 
   // 소개글 상태
-  const [isGuestBookOpen, setIsGuestBookOpen] = useState(false);
-  const openGuestBook = () => setIsGuestBookOpen(true);
-  const closeGuestBook = () => setIsGuestBookOpen(false);
+  const [isIntroOpen, setIsIntroOpen] = useState(false);
+  const openIntro = () => {
+    if (memberId && isMemberPage) {
+      setIsIntroOpen(true);
+    } else {
+      console.warn("모달을 열 수 있는 권한이 없습니다.");
+    }
+  };
+  const closeIntro = () => setIsIntroOpen(false);
 
   // 우편함 상태
   const [isMailBoxOpen, setIsMailBoxOpen] = useState(false);
@@ -39,12 +73,13 @@ const Library = () => {
     <div className="min-h-screen min-w-full overflow-auto">
       {/* 배경 벽지 */}
       <div className="bg-sky-100 absolute inset-0 min-w-full min-h-full"></div>
+
       {/* 이미지 */}
       <div className="relative min-w-full min-h-full">
         <img
           className="absolute bottom-0 w-screen h-[500px] min-w-full"
           src={table}
-          alt=""
+          alt="책상"
         />
         <div className="group absolute left-52 bottom-40 overflow-hidden">
           <Link to="/bookshelf">
@@ -55,7 +90,7 @@ const Library = () => {
             />
           </Link>
         </div>
-        
+
         <div className="group absolute right-64 bottom-44 overflow-hidden">
           <button onClick={openDiaryModal}>
             <img
@@ -66,16 +101,25 @@ const Library = () => {
           </button>
           {isDiaryModalOpen && <Diary onClose={closeDiaryModal} />}
         </div>
+
         <div className="group flex items-center justify-center overflow-hidden">
-          <button onClick={openGuestBook}>
-            <img
-              className="w-[500px] transform transition-transform duration-500 ease-in-out"
-              src={whiteBoard}
-              alt="화이트보드"
-            />
+          <button onClick={openIntro}>
+            <div className="relative">
+              <img
+                className="w-[500px] transform transition-transform duration-500 ease-in-out"
+                src={whiteBoard}
+                alt="소개글"
+              />
+              <div className="w-[300px] absolute top-0 left-24 right-0 bottom-0 flex items-center justify-center">
+                {introText && (
+                  <p className="font-semibold text-xl">{introText}</p>
+                )}
+              </div>
+            </div>
           </button>
-          {isGuestBookOpen && <GuestBook onClose={closeGuestBook} />}
+          {isIntroOpen && <Intro onClose={closeIntro} onUpdate={(updatedText) => setIntroText(updatedText)} />}
         </div>
+
         <div className="group flex items-center justify-center  overflow-hidden">
           <button onClick={openMailBox}>
             <img
@@ -84,8 +128,9 @@ const Library = () => {
               alt="우편함"
             />
           </button>
-          {isMailBoxOpen && <MailBox onClose={closeMailBox}/>}
+          {isMailBoxOpen && <MailBox onClose={closeMailBox} />}
         </div>
+
         <div className="group absolute right-40 top-20 overflow-hidden">
           <button onClick={openModal}>
             <img
