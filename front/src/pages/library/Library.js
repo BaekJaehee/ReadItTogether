@@ -36,7 +36,7 @@ const Library = () => {
         const text = await IntroGet(isMemberPage);
         setIntroText(text);
       } catch (error) {
-        console.error("서재 소개글 에러:", error);
+        return null;
       }
     };
 
@@ -117,7 +117,13 @@ const Library = () => {
               </div>
             </div>
           </button>
-          {isIntroOpen && <Intro onClose={closeIntro} onUpdate={(updatedText) => setIntroText(updatedText)} />}
+          {isIntroOpen && (
+            <Intro
+              onClose={closeIntro}
+              memberId={memberId}
+              onUpdate={(updatedText) => setIntroText(updatedText)}
+            />
+          )}
         </div>
 
         <div className="group flex items-center justify-center  overflow-hidden">
@@ -139,7 +145,9 @@ const Library = () => {
               alt="포스트잇"
             />
           </button>
-          {isModalOpen && <PostItLauncher onClose={closeModal} />}
+          {isModalOpen && (
+            <PostItLauncher onClose={closeModal} isMemberPage={isMemberPage} />
+          )}
         </div>
       </div>
     </div>

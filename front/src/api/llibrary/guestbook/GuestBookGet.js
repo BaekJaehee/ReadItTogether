@@ -11,7 +11,7 @@ const GuestBookGet = async (postId) => {
       },
     });
     console.log("받아라", response.data);
-    return response.data;
+    return response
   } catch (error) {
     console.error(error);
   }
