@@ -2,7 +2,11 @@ import axios from "axios";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-const BookDetail = async (bookId) => {
+const BookDetail = async (bookId, page = 0, size = 8) => {
+
+  if (!bookId) {
+    throw new Error("bookId가 유효하지 않습니다.");
+  }
 
   const accessToken = localStorage.getItem("accessToken");
   
@@ -14,13 +18,16 @@ const BookDetail = async (bookId) => {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${accessToken}`
       },
+      params: {
+        page: page,
+        size: size
+      }
     });
-    
     console.log(response.data);
+    // console.log(response.data.info);
     return response.data;
   } catch (error) {
     console.error(error);
-    // return []; // 오류 발생 시 빈 배열 반환
     throw error;
   }
 };
