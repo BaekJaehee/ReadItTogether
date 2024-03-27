@@ -12,6 +12,11 @@ const DoughnutChart = ({ dataLabels, dataValues }) => {
 
     if (dataLabels.length === 0 || dataValues.length === 0) return; // 데이터가 없을 경우 렌더링하지 않음
 
+    // dataValues 배열에서 값이 0인 데이터 필터링하여 새로운 배열 생성
+    const filteredDataValues = dataValues.filter(value => value !== 0);
+    // dataValues의 값이 0이 아닌 데이터에 해당하는 dataLabels 필터링하여 새로운 배열 생성
+    const filteredDataLabels = dataLabels.filter((_, index) => dataValues[index] !== 0);
+
     const canvas = chartRef.current;
     const ctx = canvas.getContext('2d');
 
@@ -19,10 +24,12 @@ const DoughnutChart = ({ dataLabels, dataValues }) => {
     chartInstanceRef.current = new Chart(ctx, {
       type: 'doughnut',
       data: {
-        labels: dataLabels,
+        // labels: dataLabels,
+        labels: filteredDataLabels,
         datasets: [{
-          data: dataValues,
-          backgroundColor: getRandomColors(dataValues.length)
+          // data: dataValues,
+          data: filteredDataValues,
+          backgroundColor: getRandomColors(filteredDataValues.length)
         }]
       },
       options: {
