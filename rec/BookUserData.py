@@ -11,7 +11,7 @@ class BookUserData:
     name_to_bookID = {}
     ratingsPath = './reviewdata/ratings-test.csv'
 
-    def loadMovieLensLatestSmall(self):
+    def loadBookLatestSmall(self):
         self.bookID_to_name = {}
         self.name_to_bookID = {}
 

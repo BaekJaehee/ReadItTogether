@@ -8,7 +8,7 @@ import numpy as np
 def LoadBookData():
     ml = BookUserData()
     print("Loading book ratings...")
-    data = ml.loadMovieLensLatestSmall()
+    data = ml.loadBookLatestSmall()
     print("\nComputing book popularity ranks so we can measure novelty later...")
     rankings = ml.getPopularityRanks()
     return (ml, data, rankings)
