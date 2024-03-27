@@ -15,6 +15,6 @@ import java.util.List;
 public class CardListResponse {
 
     private String message;
-    private List<CardListResponseDto> data; // 변경된 부분
+    private List<CardListResponseDto> data;
 
 }

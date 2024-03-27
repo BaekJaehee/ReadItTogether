@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CardCreateReponse {
+public class CardCreateResponse {
 
     private String message;
     private boolean data;
