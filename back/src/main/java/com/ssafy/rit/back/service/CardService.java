@@ -1,8 +1,20 @@
 package com.ssafy.rit.back.service;
 
+import com.ssafy.rit.back.dto.card.renspose.CardCreateReponse;
+import com.ssafy.rit.back.dto.card.renspose.CardDeleteResponse;
+import com.ssafy.rit.back.dto.card.renspose.CardDetailResponse;
+import com.ssafy.rit.back.dto.card.renspose.CardListResponse;
 import com.ssafy.rit.back.dto.card.requestDto.CardCreationRequestDto;
-import com.ssafy.rit.back.entity.Card;
+import org.springframework.http.ResponseEntity;
+
 
 public interface CardService {
-    Card createCard(CardCreationRequestDto requestDto);
+
+    ResponseEntity<CardDetailResponse> CardDetail(long cardId);
+    ResponseEntity<CardListResponse> CardList();
+    ResponseEntity<CardDeleteResponse> CardDelete(long cardId);
+    ResponseEntity<CardCreateReponse> CardCreate(CardCreationRequestDto dto);
+
+
+
 }
