@@ -9,8 +9,8 @@ import GuestBookListGet from "../../../api/llibrary/guestbook/GuestBookListGet";
 import postIt from "../../../assets/library/post-it.png";
 import pen from "../../../assets/library/pen.png";
 
-const PostItLauncher = ({ onClose, isMemberPage }) => {
-  const [postItList, setPostItList] = useState([]); // 방명록 리스트
+const PostItLauncher = ({ onClose, isMemberPage, memberId }) => {
+  const [postItList, setPostItList] = useState(); // 방명록 리스트
   const [currentPostIt, setCurrentPostIt] = useState(0); // 현재 보여줄 postit 인덱스
   const [postItContent, setPostItContent] = useState(""); // 포스트잇 내용
   const [modalState, setModalState] = useState({
@@ -32,6 +32,22 @@ const PostItLauncher = ({ onClose, isMemberPage }) => {
 
     getPostItList();
   }, [location]);
+  
+  const moveLeft = () => {
+    setCurrentPostIt((prevIndex) => Math.max(0, prevIndex - 1));
+  };
+
+  const moveRight = () => {
+    setCurrentPostIt((prevIndex) =>
+      Math.min(postItList.length - 1, prevIndex + 1)
+    );
+  };
+
+  useEffect(() => {
+    if (postItList) {
+      console.log(postItList[currentPostIt]);
+    }
+  }, [postItList]);
 
   // modalState의 각 속성을 구조 분해 할당
   const { showButtonsModal, showPostIt, showWriteForm } = modalState;
@@ -86,16 +102,6 @@ const PostItLauncher = ({ onClose, isMemberPage }) => {
     }); // 작성 폼 모달 닫고, 포스트잇 보기
   };
 
-  const moveLeft = () => {
-    setCurrentPostIt((prevIndex) => Math.max(0, prevIndex - 1));
-  };
-
-  const moveRight = () => {
-    setCurrentPostIt((prevIndex) =>
-      Math.min(postItList.length - 1, prevIndex + 1)
-    );
-  };
-
   return (
     <div>
       {showButtonsModal && (
@@ -143,9 +149,11 @@ const PostItLauncher = ({ onClose, isMemberPage }) => {
           {postItList[currentPostIt] ? (
             <PostItView
               onClose={handleCloseAll}
-              postId={postItList[currentPostIt].id} // 현재 postIt의 id를 PostItView에 전달
+              postId={postItList[currentPostIt]} // 현재 postIt의 id를 PostItView에 전달
               moveLeft={moveLeft}
               moveRight={moveRight}
+              memberId={memberId}
+              isMemberPage={isMemberPage}
             />
           ) : (
             <div>방명록이 없습니다.</div>

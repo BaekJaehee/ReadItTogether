@@ -33,8 +33,8 @@ function App() {
               <Route path="/find-password" element={<FindPassword />} />
             </Route>
 
+            <Route path="/:memberId" element={<Library />} />
             <Route element={<PrivateRoute />}>
-              <Route path="/:memberId" element={<Library />} />
               <Route path="/profile/:memberId" element={<Profile />} />
               <Route path="/recommend-book" element={<RecommendBook />} />
               <Route path="/detail-book/:bookId" element={<DetailBook />} />
