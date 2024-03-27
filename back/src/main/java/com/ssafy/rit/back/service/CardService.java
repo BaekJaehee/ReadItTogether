@@ -8,11 +8,13 @@ import com.ssafy.rit.back.dto.card.requestDto.CardCreateRequestDto;
 import com.ssafy.rit.back.dto.card.requestDto.CardRequestDto;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Map;
+
 
 public interface CardService {
 
     ResponseEntity<CardDetailResponse> CardDetail(long cardId);
-    ResponseEntity<CardListResponse> CardList();
+    ResponseEntity<Map<String, Object>> CardList(int page, int size); // 수정된 부분
     ResponseEntity<CardDeleteResponse> CardDelete(CardRequestDto dto);
     ResponseEntity<CardCreateResponse> CardCreate(CardCreateRequestDto dto);
 

@@ -1,12 +1,13 @@
 package com.ssafy.rit.back.repository;
 import com.ssafy.rit.back.entity.Member;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.ssafy.rit.back.entity.Card;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 
 public interface CardRepository extends JpaRepository<Card,Long> {
@@ -24,8 +25,8 @@ public interface CardRepository extends JpaRepository<Card,Long> {
     // 카드 ID로 카드 상세 정보 조회
 
 
-    List<Card> findByFromMemberId(Member member);
-    List<Card> findByToMemberId(Member member);
+    Page<Card> findByFromMemberId(Member fromMember, Pageable pageable);
+    Page<Card> findByToMemberId(Member toMember, Pageable pageable);
 
 
 

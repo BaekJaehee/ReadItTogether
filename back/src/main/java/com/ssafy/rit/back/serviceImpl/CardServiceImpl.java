@@ -16,6 +16,9 @@ import com.ssafy.rit.back.service.CardService;
 import com.ssafy.rit.back.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,7 +26,9 @@ import com.ssafy.rit.back.entity.Member;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -69,31 +74,38 @@ public class CardServiceImpl implements CardService {
 
 
     @Override
-    public ResponseEntity<CardListResponse> CardList() {
+    public ResponseEntity<Map<String, Object>> CardList(int page, int size) {
         Member currentMember = commonUtil.getMember(); // 현재 로그인한 사용자 정보 가져오기
+        Pageable pageable = PageRequest.of(page, size);
 
-        // 현재 사용자가 보낸 카드 목록 조회 (isWrite = 0)
-        List<CardListResponseDto> sentCardDtos = cardRepository.findByFromMemberId(currentMember).stream()
+        // 보낸 카드 목록 페이징 처리하여 조회
+        Page<Card> sentCardsPage = cardRepository.findByFromMemberId(currentMember, pageable);
+        List<CardListResponseDto> sentCardDtos = sentCardsPage.getContent().stream()
                 .map(card -> new CardListResponseDto(card.getId(), card.getBookId().getCover(), 0))
-                .toList();
-
-        // 현재 사용자가 받은 카드 목록 조회 (isWrite = 1)
-        List<CardListResponseDto> receivedCardDtos = cardRepository.findByToMemberId(currentMember).stream()
-                .map(card -> new CardListResponseDto(card.getId(), card.getBookId().getCover(), 1))
-                .toList();
-
-        // 두 리스트를 결합
-        List<CardListResponseDto> allCardDtos = Stream.concat(sentCardDtos.stream(), receivedCardDtos.stream())
                 .collect(Collectors.toList());
 
+        // 받은 카드 목록 페이징 처리하여 조회
+        Page<Card> receivedCardsPage = cardRepository.findByToMemberId(currentMember, pageable);
+        List<CardListResponseDto> receivedCardDtos = receivedCardsPage.getContent().stream()
+                .map(card -> new CardListResponseDto(card.getId(), card.getBookId().getCover(), 1))
+                .collect(Collectors.toList());
 
-        CardListResponse response = CardListResponse.builder()
-                .message("Card list 입니다요")
-                .data(allCardDtos)
-                .build();
+        // 응답 객체에 페이징 정보를 포함시켜 반환
+        Map<String, Object> response = new HashMap<>();
+        response.put("sentCards", Map.of(
+                "content", sentCardDtos,
+                "totalPages", sentCardsPage.getTotalPages(),
+                "totalElements", sentCardsPage.getTotalElements()
+        ));
+        response.put("receivedCards", Map.of(
+                "content", receivedCardDtos,
+                "totalPages", receivedCardsPage.getTotalPages(),
+                "totalElements", receivedCardsPage.getTotalElements()
+        ));
 
         return ResponseEntity.ok(response);
     }
+
 
 
 
