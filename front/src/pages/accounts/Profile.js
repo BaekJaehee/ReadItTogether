@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+import fetchProfileInfo from "../../api/accounts/fetchProfileInfo";
+
 import FollowModal from "../../components/modal/FollowModal";
 import EditNicknameModal from "../../components/modal/EditNicknameModal";
 import EditImageModal from "../../components/modal/EditImageModal";
@@ -16,6 +18,21 @@ const Profile = () => {
   const [isNicknameEditOpen, setIsNicknameEditOpen] = useState(false);
   const [isImageEditOpen, setIsImageEditOpen] = useState(false);
   const [memberId, setMemberId] = useState(null);
+  // 받아오는 프로필 정보
+  const [profileInfo, setProfileInfo] = useState({
+    profileImage: "",
+    nickname: "",
+    email: "",
+    followList: "",
+    followerList: "",
+    evaluatedBookCnt: "",
+    likedBookCnt: "",
+    sendCardCnt: "",
+    genreNoList: ""
+  })
+  
+  let followCount = profileInfo.followList.length
+  let follwerCount = profileInfo.followerList.length
 
   useEffect(() => {
     const storedMemberId = localStorage.getItem("memberId");
@@ -33,6 +50,19 @@ const Profile = () => {
     }
   }, []);
   
+  useEffect(() => {
+    // fetchProfileInfo 함수를 사용하여 프로필 정보를 가져옴
+    const getProfileInfo = async () => {
+      try {
+        const info = await fetchProfileInfo(); // fetchProfileInfo 함수 호출
+        setProfileInfo(info); // 가져온 프로필 정보 설정
+      } catch (error) {
+        console.error("프로필 정보를 가져오는 데 실패했습니다:", error);
+      }
+    };
+    getProfileInfo(); // 함수 호출
+  }, [isNicknameEditOpen, isImageEditOpen]);
+
   const handleSettingsClick = () => {
     navigate(`/modify/${memberId}`);
   };
@@ -46,20 +76,26 @@ const Profile = () => {
             {/* 유저 정보 */}
             <div className="flex-1">
               <div className="relative">
-                <img
+                {/* <img
                   className="w-52 h-52 rounded-full mb-2"
                   src={man}
                   alt="헤키레키 잇센"
+                /> */}
+                <img
+                  className="w-52 h-52 rounded-full mb-2"
+                  src={profileInfo.profileImage}
+                  alt="프로필 이미지"
                 />
                 <button className="absolute bottom-1 right-56 cursor-pointer" onClick={() => setIsImageEditOpen(true)}>
                   <img src={edit} alt="edit" className="w-5 h-5"/>
                 </button>
                 {isImageEditOpen && (
-                  <EditImageModal onClose={() => setIsImageEditOpen(false)}/>
+                  <EditImageModal onClose={() => setIsImageEditOpen(false)} nickname={profileInfo.nickname}/>
                 )}
               </div>
               <div className="flex items-center">
-                <span className="font-semibold text-xl mb-2"> 닉네임 </span>
+                {/* <span className="font-semibold text-xl mb-2"> 닉네임 </span> */}
+                <span className="font-semibold text-xl mb-2"> {profileInfo.nickname} </span>
                 <button className="cursor-pointer p-0 mx-1" onClick={() => setIsNicknameEditOpen(true)}>
                   <img src={edit} alt="edit" className="w-4 h-4"/>
                 </button>
@@ -68,7 +104,8 @@ const Profile = () => {
                 )}
               </div>
               <p className="underline text-gray-500 text-xs mb-2">
-                example@naver.com
+                {/* example@naver.com */}
+                {profileInfo.email}
               </p>
               {/* 팔로우 수 */}
               <button onClick={() => setIsModalOpen(true)}>
@@ -76,12 +113,14 @@ const Profile = () => {
                   {/* 팔로잉 */}
                   <div className="flex mr-2">
                     <p className="text-gray-500 mr-2">팔로잉</p>
-                    <p className="font-semibold">137</p>
+                    {/* <p className="font-semibold">137</p> */}
+                    <p className="font-semibold">{followCount}</p>
                   </div>
                   {/* 팔로워 */}
                   <div className="flex">
                     <p className="text-gray-500 mr-2">팔로워</p>
-                    <p className="font-semibold">936</p>
+                    {/* <p className="font-semibold">936</p> */}
+                    <p className="font-semibold">{follwerCount}</p>
                   </div>
                 </div>
               </button>
@@ -89,6 +128,9 @@ const Profile = () => {
                 <FollowModal
                   isFollowers={true}
                   onClose={() => setIsModalOpen(false)}
+                  followList={profileInfo.followList}
+                  followerList={profileInfo.followerList}
+                  // 팔로우/팔로워 목록 전달
                 />
               )}
             </div>
@@ -109,15 +151,18 @@ const Profile = () => {
             <div className="flex justify-between mt-4 mx-10 font-semibold text-sm">
               <div className="flex-col">
                 <p>평가 완료한 책</p>
-                <p className="flex items-center justify-center text-2xl">136</p>
+                {/* <p className="flex items-center justify-center text-2xl">136</p> */}
+                <p className="flex items-center justify-center text-2xl">{profileInfo.evaluatedBookCnt}</p>
               </div>
               <div className="flex-col">
                 <p>관심 있는 책</p>
-                <p className="flex items-center justify-center text-2xl">29</p>
+                {/* <p className="flex items-center justify-center text-2xl">29</p> */}
+                <p className="flex items-center justify-center text-2xl">{profileInfo.likedBookCnt}</p>
               </div>
               <div className="flex-col">
                 <p>내가 쓴 카드</p>
-                <p className="flex items-center justify-center text-2xl">12</p>
+                {/* <p className="flex items-center justify-center text-2xl">12</p> */}
+                <p className="flex items-center justify-center text-2xl">{profileInfo.sendCardCnt}</p>
               </div>
             </div>
           </div>
