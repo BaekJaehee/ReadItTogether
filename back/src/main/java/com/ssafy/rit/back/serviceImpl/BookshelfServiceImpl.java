@@ -25,7 +25,10 @@ import org.springframework.stereotype.Service;
 
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -65,6 +68,21 @@ public class BookshelfServiceImpl implements BookshelfService {
                 .build();
 
         bookshelfRepository.save(bookshelf);
+
+        // 유저의 책 성향 업데이트 shelfGroup
+        /*
+        * 현재 멤버 id를 이용해서 bookshelf에서 가장 많은 그룹을 찾아서 member table에 있는 shelfGroup을 업데이트 해준다.
+        * */
+
+        List<Bookshelf> bookshelfList = bookshelfRepository.findAllByMemberId(currentMember);
+
+        List<Integer> bookIds = bookshelfList.stream()
+                .map(b -> b.getBookId().getId())
+                .toList();
+
+        List<Book> books = bookRepository.findAllByBookIds(bookIds);
+
+
 
         BookshelfUploadResponse response = new BookshelfUploadResponse("책 저장에 성공했습니다.", true);
 
