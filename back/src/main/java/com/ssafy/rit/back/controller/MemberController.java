@@ -185,7 +185,6 @@ public class MemberController {
 
         MyPageResponseDto responseDto = myPageService.getMyPage();
 
-
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
