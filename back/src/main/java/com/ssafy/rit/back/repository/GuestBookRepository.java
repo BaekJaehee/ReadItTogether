@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface GuestBookRepository extends JpaRepository<GuestBook, Long> {
 
-    @Query("SELECT gb.id FROM GuestBook gb WHERE gb.toMemberId = :toMemberId")
+    @Query("SELECT gb.id FROM GuestBook gb WHERE gb.toMemberId = :toMemberId ORDER BY gb.id")
     List<Long> findIdsByToMemberId(@Param("toMemberId") Member toMemberId);
 }
