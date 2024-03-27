@@ -1,14 +1,21 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from fastapi.responses import Response
 from fastapi import FastAPI, HTTPException, UploadFile, File
 import pandas as pd
 from io import StringIO
 import logging
 
+from starlette.responses import JSONResponse
+
+from BookUserData import BookUserData
+from surprise import SVD
+from Evaluator import Evaluator
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-from models.Model import Comment, Book
+from models.Model import Comment, Book, MemberRecommendBook
 
 # 동기 엔진 및 세션 생성
 SYNC_DB_URL = "mysql+pymysql://root:1234@j10d206.p.ssafy.io/ssafy"
@@ -16,6 +23,7 @@ engine = create_engine(SYNC_DB_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 app = FastAPI()
+
 
 @app.post("/upload-reviews/")
 def upload_reviews(file: UploadFile = File(...)):  # 동기 함수
@@ -59,12 +67,6 @@ def upload_reviews(file: UploadFile = File(...)):  # 동기 함수
     return {"message": "Reviews successfully uploaded and processed."}
 
 
-
-
-from BookUserData import BookUserData
-from surprise import SVD
-from Evaluator import Evaluator
-
 def LoadBookData():
     ml = BookUserData()
     print("Loading book ratings...")
@@ -73,6 +75,27 @@ def LoadBookData():
     rankings = ml.getPopularityRanks()
     return (ml, data, rankings)
 
+
+def get_unique_userIds(csv_file_path):
+    df = pd.read_csv(csv_file_path)
+    unique_userIds = df['userId'].unique()  # 'userId' 컬럼에서 고유한 값들을 추출
+    return unique_userIds
+
+
+def fetch_data_and_save_to_csv(filename="reviews.csv"):
+    db = SessionLocal()
+    try:
+        query = db.query(Comment.member_id, Comment.book_id, Comment.rating, Comment.created_at).all()
+
+        df = pd.DataFrame(query, columns=['userId', 'bookId', 'rating', 'timestamp'])
+
+        file_path = f"./{filename}"
+        df.to_csv(file_path, index=False, header=['userId', 'bookId', 'rating', 'timestamp'])
+        return file_path
+    finally:
+        db.close()
+
+
 # Load up common data set for the recommender algorithms
 (ml, evaluationData, rankings) = LoadBookData()
 
@@ -80,13 +103,36 @@ def LoadBookData():
 evaluator = Evaluator(evaluationData, rankings)
 
 # SVD
-SVD_algo = SVD()  # 알고리즘 인스턴스를 SVD_algo로 이름 변경하여 충돌 방지
+SVD = SVD()
 
-@app.post("/recommend/{testSubject}")
-def recommend(testSubject: int, k: int = 10):
-    evaluator.AddAlgorithm(SVD_algo, "SVD")
-    recommendations = evaluator.SampleTopNRecs(testSubject, k)
-    if recommendations:
-        return {"userId": testSubject, "recommendations": recommendations}
-    else:
-        raise HTTPException(status_code=404, detail="Recommendations not found")
+
+@app.post("/recommend/")
+def recommend():
+    db = SessionLocal()  # 세션 시작
+    ids = get_unique_userIds("reviews.csv")
+    evaluator.AddAlgorithm(SVD, "SVD")
+
+    try:
+        for user_id in ids.tolist():
+            n_recs = evaluator.SampleTopNRecs(ml, user_id=user_id)
+            for rec in n_recs:
+                new_rec = MemberRecommendBook(member_id=user_id, book_id=rec[0])
+                print(new_rec)
+                db.add(new_rec)
+        db.commit()
+    except Exception as e:
+        db.rollback()  # 에러 발생 시 롤백
+        print(e)  # 에러 로깅
+        return JSONResponse(status_code=500, content={"message": "Insert failed"})
+    finally:
+        db.close()  # 세션 종료
+
+    return JSONResponse(status_code=200, content={"message": "Insert successful"})
+
+
+
+@app.get("/download-reviews/")
+def download_reviews():
+    csv_data = fetch_data_and_save_to_csv()
+    return Response(content=csv_data, media_type="text/csv",
+                    headers={"Content-Disposition": "attachment; filename=reviews.csv"})

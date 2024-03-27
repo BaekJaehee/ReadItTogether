@@ -9,7 +9,7 @@ class BookUserData:
 
     bookID_to_name = {}
     name_to_bookID = {}
-    ratingsPath = './reviewdata/ratings-test.csv'
+    ratingsPath = 'reviews.csv'
 
     def loadBookLatestSmall(self):
         self.bookID_to_name = {}
