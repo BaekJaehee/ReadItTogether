@@ -17,6 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -34,19 +37,13 @@ public class CardServiceImpl implements CardService {
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new RuntimeException("Card not found"));
 
-        Book book = card.getBookId(); // Card 엔터티로부터 Book 엔터티 참조
-
-        // CardDetailResponseDto에 카드와 책의 정보를 설정
+        Book book = card.getBookId();
         CardDetailDto responseDto = new CardDetailDto();
         responseDto.setId(cardId);
         responseDto.setComment(card.getComment());
-
-        // Book 엔터티가 null이 아닐 경우에만 bookCover 설정
         if (book != null) {
             responseDto.setBookCover(book.getCover());
         }
-
-        // CardDetailResponse 생성 및 반환
         CardDetailResponse response = new CardDetailResponse("Success", responseDto);
         return ResponseEntity.ok(response);
     }
@@ -54,7 +51,13 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public ResponseEntity<CardListResponse> CardList() {
-        return null;
+        // 로직 구현 예시
+        List<Card> cards = cardRepository.findAll();
+        List<CardDetailDto> cardDetails = cards.stream()
+                .map(card -> new CardDetailDto()
+                .collect(Collectors.toList());
+        CardListResponse response = new CardListResponse("Card list fetched successfully", cardDetails);
+        return ResponseEntity.ok(response);
     }
 
     @Override
