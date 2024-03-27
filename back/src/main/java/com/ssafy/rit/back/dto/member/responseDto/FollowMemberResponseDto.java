@@ -1,12 +1,12 @@
 package com.ssafy.rit.back.dto.member.responseDto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class FollowMemberResponseDto {
 
     private Long memberId;
