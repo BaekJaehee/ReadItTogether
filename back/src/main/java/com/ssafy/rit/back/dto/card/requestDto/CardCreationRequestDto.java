@@ -1,4 +1,4 @@
-package com.ssafy.rit.back.dto;
+package com.ssafy.rit.back.dto.card.requestDto;
 
 import com.ssafy.rit.back.entity.Book;
 import com.ssafy.rit.back.entity.Member;

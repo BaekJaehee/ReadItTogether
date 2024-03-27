@@ -1,9 +1,10 @@
 import React, { useEffect, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { handleOauthLogin } from "../../api/authService";
+import { AuthContext } from "../../authentication/AuthContext";
 
 const LoginCallBack = () => {
-  // const { setAuthState } = useContext(AuthContext);
+  const { setAuthState } = useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -20,7 +21,7 @@ const LoginCallBack = () => {
           // 백엔드로 인증 코드 전송 및 처리
           await handleOauthLogin(provider, code, stateValue);
           navigate("/");
-          // setAuthState({state: "loggedIn"})
+          setAuthState({state: "loggedIn"})
           console.log("인가코드 왔냐?", code);
         } catch (error) {
           console.log("Authentication error:", error);

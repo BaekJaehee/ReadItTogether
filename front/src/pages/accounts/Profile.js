@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 
 import FollowModal from "../../components/modal/FollowModal";
 
@@ -7,7 +8,30 @@ import grahp from "../../assets/profile/grahp.png";
 import settings from "../../assets/profile/settings.png";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [memberId, setMemberId] = useState(null);
+
+  useEffect(() => {
+    const storedMemberId = localStorage.getItem("memberId");
+    setMemberId(storedMemberId);
+
+    // URL에서 memberId 추출하기 (예시로, 도메인/library/{memberId} 형태의 URL을 가정)
+    const pathArray = window.location.pathname.split("/");
+    const memberIdFromURL = pathArray[pathArray.length - 1];
+
+    // 두 memberId가 일치하는지 확인하고, 불일치할 경우 경고 또는 처리
+    if (storedMemberId && storedMemberId !== memberIdFromURL) {
+      console.warn(
+        "URL의 memberId와 로컬 스토리지의 memberId가 일치하지 않습니다."
+      );
+    }
+  }, []);
+  
+  const handleSettingsClick = () => {
+    navigate(`/modify/${memberId}`);
+  };
+
   return (
     <div className="flex items-center justify-center pt-32">
       <div className="flex items-center justify-center bg-sky-100 w-[1000px] p-12">
@@ -55,7 +79,7 @@ const Profile = () => {
               <img src={grahp} alt="임시 그래프" />
             </div>
             {/* 설정 톱니바퀴 */}
-            <div className="relative right-0">
+            <div className="relative right-0" onClick={ handleSettingsClick }>
               <img className="w-5" src={settings} alt="" />
             </div>
           </div>
