@@ -4,5 +4,5 @@ import com.ssafy.rit.back.dto.recommend.response.RecommendListResponse;
 import org.springframework.http.ResponseEntity;
 
 public interface RecommendService {
-    ResponseEntity<RecommendListResponse> readRecommendList(Long memberId, int group);
+    ResponseEntity<RecommendListResponse> readRecommendList(int group);
 }
