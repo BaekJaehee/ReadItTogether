@@ -54,6 +54,14 @@ import java.util.Arrays;
         }
 
         @Bean
+        public GroupedOpenApi bookshelfAPI() {
+            return GroupedOpenApi.builder()
+                    .group("bookshelf-api")
+                    .pathsToMatch("/bookshelf/**")
+                    .build();
+        }
+
+        @Bean
         public GroupedOpenApi libraryAPI() {
             return GroupedOpenApi.builder()
                     .group("library-api")
