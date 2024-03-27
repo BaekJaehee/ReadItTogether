@@ -1,26 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
-import GuestBookForm from "../../api/llibrary/GuestBookForm";
+import IntroForm from "../../api/llibrary/intro/IntroForm";
 
 // 이미지
 import logo from "../../assets/navbar/logo2.png";
 import deleteButton from "../../assets/profile/delete.png";
 
-const GuestBook = ({ onClose, toMemberId }) => {
+const Intro = ({ onClose, onUpdate }) => {
   const [text, setText] = useState("");
   const modalRef = useRef();
-  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // if (!isMemberPage) {
-    //   console.error("현재 페이지는 로그인한 사용자의 서재가 아닙니다.");
-    //   return;
-    // }
-
     try {
       // API 호출
-      await GuestBookForm(toMemberId, text);
+      await IntroForm(text);
+      onUpdate(text)
       onClose(); // 모달 닫기
     } catch (error) {
       console.error("방명록 에러:", error);
@@ -78,4 +72,4 @@ const GuestBook = ({ onClose, toMemberId }) => {
   );
 };
 
-export default GuestBook;
+export default Intro;

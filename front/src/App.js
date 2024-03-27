@@ -15,14 +15,14 @@ import RecommendBook from "./pages/recomend/RecommendBook";
 import DetailBook from "./pages/recomend/DetailBook";
 import Logout from "./api/accounts/Logout";
 
-import  SignUp from "./pages/accounts/SignUp";
+import SignUp from "./pages/accounts/SignUp";
 import Diary from "./components/modal/Diary/Diary";
 import ModifyProfile from "./pages/accounts/ModifyProfile";
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
         <PageLayout>
           <Routes>
             <Route path="/login" element={<Login />} />
@@ -38,8 +38,8 @@ function App() {
             <Route path="/modify/:memberId" element={<ModifyProfile/>} />
 
             {/* 유저 인증 상태 관리 */}
-            {/* 미완성 .. */}
-            {/* <Route element={<PublicRoute />}>
+            <Route element={<PublicRoute />}>
+              <Route path="/" element={<Login />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/find-password" element={<FindPassword />} />
@@ -48,16 +48,16 @@ function App() {
             <Route element={<PrivateRoute />}>
               <Route path="/:memberId" element={<Library />} />
               <Route path="/profile/:memberId" element={<Profile />} />
-              <Route path="/logout" element={<Logout />} />
               <Route path="/recommend-book" element={<RecommendBook />} />
               <Route path="/detail-book/:bookId" element={<DetailBook />} />
               <Route path="/bookshelf" element={<Bookshelf />} />
               <Route path="/diary/:memberId" element={<Diary />} />
-            </Route> */}
+              <Route path="/logout" element={<Logout />} />
+            </Route>
           </Routes>
         </PageLayout>
-      </BrowserRouter>
-    </AuthProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 

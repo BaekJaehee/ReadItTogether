@@ -12,7 +12,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [saveEmail, setSaveEmail] = useState(false);
-  const { userState, setUserState } = useContext(AuthContext);
+  const { setUserState } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -42,7 +42,6 @@ const Login = () => {
       }
 
       setUserState({ status: "loggedIn" });
-      console.log("로그인 성공", userState)
 
       navigate(`/${memberId}`);
     } catch (error) {
