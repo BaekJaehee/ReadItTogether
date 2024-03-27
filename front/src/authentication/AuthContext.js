@@ -19,7 +19,7 @@ const AuthProvider = ({ children }) => {
           { accessToken: `Bearer ${accessToken}` },
           { withCredentials: true }
         );
-        console.log(response.data.message);
+        console.log("토큰 유효성 검사:",response.data.message);
         setUserState({ status: "loggedIn" });
       } catch (err) {
         // 액세스 토큰이 유효하지 않을 때(예: 만료된 경우)
@@ -43,6 +43,7 @@ const AuthProvider = ({ children }) => {
         // 새로 발급받은 액세스 토큰을 로컬 스토리지에 저장
         localStorage.setItem("accessToken", newAccessToken);
         setUserState({ status: "loggedIn" });
+        console.log("토큰이 만료되어 재발급:", response.data)
       } catch (err) {
         console.error(err);
         // 리프레시 토큰으로도 인증 실패 시 로그아웃 처리

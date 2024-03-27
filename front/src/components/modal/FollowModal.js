@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import logo from "../../assets/navbar/logo2.png";
 import deleteButton from "../../assets/profile/delete.png";
 
-const FollowModal = ({ isFollowers, onClose }) => {
+const FollowModal = ({ isFollowers, onClose, followList, followerList }) => {
   const [isFollowingActive, setIsFollowingActive] = useState(false);
   // const [isFollowingActive, setIsFollowingActive] = useState(!isFollowers);
 
@@ -51,9 +51,40 @@ const FollowModal = ({ isFollowers, onClose }) => {
           </button>
         </div>
         <div className="max-h-[280px] bg-gray-200 py-0.5 rounded-b-lg rounded-r-lg overflow-y-auto">
-
+          {/* 팔로워 또는 팔로잉 목록 표시 */}
+          {isFollowingActive ? (
+            // 팔로잉 목록 표시
+            <div>
+              {followList.map((user, index) => (
+                <div key={index} className="flex justify-between bg-white rounded-md px-2 py-1 m-2">
+                  <div className="flex items-center">
+                    <img className="w-7 mr-1" src={user.profileImage} alt="" />
+                    <p className="font-semibold text-sm">{user.nickname}</p>
+                  </div>
+                  <button className="bg-white border w-[70px] border-gray-300 hover:bg-gray-300 hover:text-white rounded-lg text-gray-500 text-xs py-2 px-4 transition-colors duration-300">
+                    팔로잉
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            // 팔로워 목록 표시
+            <div>
+              {followerList.map((user, index) => (
+                <div key={index} className="flex justify-between bg-white rounded-md px-2 py-1 m-2">
+                  <div className="flex items-center">
+                    <img className="w-7 mr-1" src={user.profileImage} alt="" />
+                    <p className="font-semibold text-sm">{user.nickname}</p>
+                  </div>
+                  <button className="bg-white border w-[70px] border-gray-300 hover:bg-gray-300 hover:text-white rounded-lg text-gray-500 text-xs py-2 px-4 transition-colors duration-300">
+                    삭제
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
           {/* 예시 목록, 실제 팔로워/팔로잉 목록 렌더링 로직에 따라 변경 필요 */}
-          <div className="flex justify-between bg-white rounded-md px-2 py-1 m-2">
+          {/* <div className="flex justify-between bg-white rounded-md px-2 py-1 m-2">
             <div className="flex items-center">
               <img className="w-7 mr-1" src={logo} alt="" />
               <p className="font-semibold text-sm">닉네임</p>
@@ -64,7 +95,7 @@ const FollowModal = ({ isFollowers, onClose }) => {
             <button className={`bg-white border w-[70px] border-gray-300 hover:bg-gray-300 hover:text-white rounded-lg text-gray-500 text-xs py-2 px-4 transition-colors duration-300 ${!isFollowingActive ? '' : 'hidden'}`}>
               삭제
             </button>
-          </div>
+          </div> */}
           {/* 팔로워/팔로잉 목록 렌더링 반복 */}
           {/* 팔로워/팔로잉 목록 렌더링 반복 */}
           {/* 팔로워/팔로잉 목록 렌더링 반복 */}
