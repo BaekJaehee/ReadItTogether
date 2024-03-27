@@ -24,6 +24,6 @@ public class MyPageResponseDto {
     // 작성한 카드 개수
     private int sendCardCnt;
     // 한달 동안 읽은 책의 장르
-    private List<Long> genreNoList;
+    private List<Integer> genreNoList;
 
 }
