@@ -14,8 +14,8 @@ public class RecommendController {
 
     private final RecommendService recommendService;
 
-    @GetMapping("/{memberId}/{group}")
-    public ResponseEntity<RecommendListResponse> readRecommendList(@PathVariable Long memberId, @PathVariable int group) {
-        return recommendService.readRecommendList(memberId, group);
+    @GetMapping("/{group}")
+    public ResponseEntity<RecommendListResponse> readRecommendList(@PathVariable int group) {
+        return recommendService.readRecommendList(group);
     }
 }
