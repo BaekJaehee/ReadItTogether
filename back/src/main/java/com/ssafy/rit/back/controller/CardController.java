@@ -3,7 +3,6 @@ package com.ssafy.rit.back.controller;
 import com.ssafy.rit.back.dto.card.renspose.CardCreateResponse;
 import com.ssafy.rit.back.dto.card.renspose.CardDeleteResponse;
 import com.ssafy.rit.back.dto.card.renspose.CardDetailResponse;
-import com.ssafy.rit.back.dto.card.renspose.CardListResponse;
 import com.ssafy.rit.back.dto.card.requestDto.CardCreateRequestDto;
 import com.ssafy.rit.back.dto.card.requestDto.CardRequestDto;
 import com.ssafy.rit.back.service.CardService;
@@ -11,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,7 +38,9 @@ public class CardController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<CardListResponse> getCardList() {
-        return cardService.CardList();
+    public ResponseEntity<Map<String, Object>> getCardList(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size) {
+        return cardService.CardList(page, size);
     }
 }
