@@ -67,7 +67,6 @@ public class BookServiceImpl implements BookService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         Page<Comment> commentPage = commentRepository.findByBookId(currentBook, pageable);
 
-
         List<CommentListResponseDto> commentListResponseDtos = commentPage.stream()
                 .map(comment -> {
                     Member member = comment.getMemberId();

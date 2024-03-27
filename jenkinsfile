@@ -21,6 +21,12 @@ pipeline {
         SMTP_USERNAME="${env.SMTP_USERNAME}"
         SMTP_PASSWORD="${env.SMTP_PASSWORD}"
         HOST_URL="${env.HOST_URL}"
+        //3.27 aws 키추가
+        BUCKET_NAME="${env.BUCKET_NAME}"
+        AWS_SECRET_KEY="${env.AWS_SECRET_KEY}"
+        AWS_ACCESS_KEY="${env.AWS_ACCESS_KEY}"
+
+
             
     }
 
@@ -92,6 +98,9 @@ pipeline {
                                 "--build-arg SMTP_USERNAME='${env.SMTP_USERNAME}' " +
                                 "--build-arg SMTP_PASSWORD='${env.SMTP_PASSWORD}' " +
                                 "--build-arg HOST_URL='${env.HOST_URL}' " +
+                                "--build-arg BUCKET_NAME='${env.BUCKET_NAME}' " +
+                                "--build-arg AWS_SECRET_KEY='${env.AWS_SECRET_KEY}' " +
+                                "--build-arg AWS_ACCESS_KEY='${env.AWS_ACCESS_KEY}' " +
                                 "--build-arg DATABASE_PASSWORD='${env.DATABASE_PASSWORD}' .")
 
 

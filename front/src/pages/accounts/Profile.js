@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-
-import fetchProfileInfo from "../../api/accounts/fetchProfileInfo";
+import { useNavigate } from 'react-router-dom';
 
 import FollowModal from "../../components/modal/FollowModal";
 import EditNicknameModal from "../../components/modal/EditNicknameModal";
