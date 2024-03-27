@@ -1,4 +1,5 @@
 package com.ssafy.rit.back.repository;
+import com.ssafy.rit.back.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.ssafy.rit.back.entity.Card;
 import org.springframework.data.jpa.repository.Query;
@@ -21,9 +22,10 @@ public interface CardRepository extends JpaRepository<Card,Long> {
 
 
     // 카드 ID로 카드 상세 정보 조회
-    Optional<Card> findById(Long id);
 
-    List<Card> findByToMemberId(Long toMemberId);
+
+    List<Card> findByFromMemberId(Member member);
+    List<Card> findByToMemberId(Member member);
 
 
 

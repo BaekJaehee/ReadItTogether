@@ -1,6 +1,5 @@
 package com.ssafy.rit.back.dto.card.renspose;
 
-import com.ssafy.rit.back.dto.card.requestDto.CardDetailDto;
 import com.ssafy.rit.back.dto.card.responseDto.CardDetailResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +14,6 @@ public class CardDetailResponse
 {
 
     private String message;
-    private CardDetailDto data;
+    private CardDetailResponseDto data;
 
 }
