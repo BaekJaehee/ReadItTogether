@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -13,6 +15,6 @@ import lombok.NoArgsConstructor;
 public class CardListResponse {
 
     private String message;
-    private CardListResponseDto data;
+    private List<CardListResponseDto> data; // 변경된 부분
 
 }
