@@ -9,8 +9,16 @@ public class CommentException extends RuntimeException{
         return new CommentException("평점을 부과하지 않았습니다.");
     }
 
+
     public static CommentException commentLengthException() {
         return new CommentException("내용이 없거나 길이가 맞지 않습니다.");
+    }
+
+    public static CommentException commentNotFoundException() {
+        return new CommentException("해당 코멘트가 존재하지 않습니다..");}
+
+    public static CommentException memberNotEqualException() {
+        return new CommentException("해당 코멘트 작성자가 아닙니다.");
     }
 
 }
