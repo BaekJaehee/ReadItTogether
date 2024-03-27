@@ -82,7 +82,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         Long memberId = member.getId();
 
 
-        String accessToken = jwtUtil.createJwt("Authorization", email, 600000L);
+        String accessToken = jwtUtil.createJwt("Authorization", email, 6000000L);
         String refreshToken = jwtUtil.createJwt("refresh", email, 86400000L);
 
         // refreshToken를 서버에 저장

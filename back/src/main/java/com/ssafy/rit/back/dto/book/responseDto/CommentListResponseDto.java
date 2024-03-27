@@ -21,4 +21,8 @@ public class CommentListResponseDto {
 
     private LocalDate createAt;
 
+    private Long memberId;
+
+    private String profileImage;
+
 }
