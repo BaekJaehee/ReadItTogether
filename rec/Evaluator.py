@@ -46,7 +46,7 @@ class Evaluator:
             print("           for a given user. Higher means more diverse.")
             print("Novelty:   Average popularity rank of recommended items. Higher means more novel.")
 
-    def SampleTopNRecs(self, ml, testSubject=2, k=10):
+    def SampleTopNRecs(self, testSubject, k=10):
         recommendations_list = []
 
         for algo in self.algorithms:

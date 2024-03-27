@@ -1,5 +1,4 @@
 from sqlalchemy import create_engine
-from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import sessionmaker
 from fastapi import FastAPI, HTTPException, UploadFile, File
 import pandas as pd
@@ -59,3 +58,35 @@ def upload_reviews(file: UploadFile = File(...)):  # 동기 함수
 
     return {"message": "Reviews successfully uploaded and processed."}
 
+
+
+
+from BookUserData import BookUserData
+from surprise import SVD
+from Evaluator import Evaluator
+
+def LoadBookData():
+    ml = BookUserData()
+    print("Loading book ratings...")
+    data = ml.loadBookLatestSmall()
+    print("\nComputing book popularity ranks so we can measure novelty later...")
+    rankings = ml.getPopularityRanks()
+    return (ml, data, rankings)
+
+# Load up common data set for the recommender algorithms
+(ml, evaluationData, rankings) = LoadBookData()
+
+# Construct an Evaluator to, you know, evaluate them
+evaluator = Evaluator(evaluationData, rankings)
+
+# SVD
+SVD_algo = SVD()  # 알고리즘 인스턴스를 SVD_algo로 이름 변경하여 충돌 방지
+
+@app.post("/recommend/{testSubject}")
+def recommend(testSubject: int, k: int = 10):
+    evaluator.AddAlgorithm(SVD_algo, "SVD")
+    recommendations = evaluator.SampleTopNRecs(testSubject, k)
+    if recommendations:
+        return {"userId": testSubject, "recommendations": recommendations}
+    else:
+        raise HTTPException(status_code=404, detail="Recommendations not found")
