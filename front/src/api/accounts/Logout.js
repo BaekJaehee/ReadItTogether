@@ -10,6 +10,8 @@ const Logout = () => {
   const { setUserState } = useContext(AuthContext);
   localStorage.removeItem(`memberId`);
   localStorage.removeItem(`accessToken`);
+  localStorage.removeItem(`nickname`);
+  localStorage.removeItem(`profileImage`);
 
   useEffect(() => {
     const logout = async () => {
