@@ -8,7 +8,8 @@ const Received = ({ onCardOpen, onCardClose, cards }) => {
   const [page, setPage] = useState(1);  // 기본 페이지 1
   const [limit] = useState(4); // 페이지당 아이템 수
   // const [data, setData] = useState([]); // 더미 데이터
-  const [currentPageData, setCurrentPageData] = useState([]); // 현재 페이지에 표시될 데이터
+  // const [currentPageData, setCurrentPageData] = useState([]); // 현재 페이지에 표시될 데이터
+  const [currentPageDataReceived, setCurrentPageDataReceived] = useState([]); // 현재 페이지에 표시될 데이터 구분
   const [selectedItem, setSelectedItem] = useState(null); // 개별 카드 선택
   const [showPagination, setShowPagination] = useState(true); // 페이지 보이기/숨기기
 
@@ -16,7 +17,7 @@ const Received = ({ onCardOpen, onCardClose, cards }) => {
     const fetchData = async () => {
       try {
         const response = await handleCardList(page - 1, limit); // 페이지 값을 전달하여 데이터 불러오기
-        setCurrentPageData(response.receivedCards.content); // 현재 페이지 데이터 설정
+        setCurrentPageDataReceived(response.receivedCards.content); // 현재 페이지 데이터 설정
         console.log("현재 페이지: ", page - 1)
       } catch (error) {
         console.error(error);
@@ -60,7 +61,7 @@ const Received = ({ onCardOpen, onCardClose, cards }) => {
       ) : (
         <>
           <div className="grid grid-cols-2 gap-4">
-            {currentPageData.map((item, index) => (
+            {currentPageDataReceived.map((item, index) => (
               <div key={index} className="text-center cursor-pointer" onClick={() => openCard(item)}>
                 <img src={item.cover} alt={item.title} className="mx-auto"/>
               </div>
@@ -77,7 +78,7 @@ const Received = ({ onCardOpen, onCardClose, cards }) => {
               <span className="mx-2">{page}</span>
               <button 
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full ml-2" 
-                onClick={goToNext} disabled={currentPageData.length < limit}
+                onClick={goToNext} disabled={currentPageDataReceived.length < limit}
               >
                 다음
               </button>
