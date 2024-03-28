@@ -1,5 +1,6 @@
 package com.ssafy.rit.back.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ssafy.rit.back.dto.member.requestDto.DisableRequestDto;
 import com.ssafy.rit.back.dto.member.requestDto.UpdatePasswordRequestDto;
 import jakarta.persistence.*;
@@ -45,7 +46,7 @@ public class Member {
     private int isDisabled = 0;
 
     @Column(name = "birth", nullable = false)
-    private String birth;
+    private int birth;
 
     @Column(name = "gender", nullable = false)
     private int gender;
@@ -70,9 +71,11 @@ public class Member {
     private int shelfGroup = 0;
 
     // 관계 설정 (many to one 등)
+    @JsonManagedReference
     @OneToMany(mappedBy = "memberId")
     private List<Comment> comments;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "memberId")
     private List<Bookshelf> bookshelf;
 
@@ -91,6 +94,7 @@ public class Member {
     @OneToMany(mappedBy = "memberId")
     private List<Postbox> postboxes;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "memberId")
     private List<MemberRecommendBook> memberRecommendBooks;
 
