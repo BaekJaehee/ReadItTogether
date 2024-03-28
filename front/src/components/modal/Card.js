@@ -5,6 +5,7 @@ import diaryButton from "../../assets/library/diaryButton.png";
 
 const Card = ({ item, onClose }) => {
   const [cardDetail, setCardDetail] = useState(""); // 형식 제발 null로 하지말고
+  const memberId = localStorage.getItem("memberId")
   // const { from_m_id, comment } = cardData;  // card 테이블에만 있는 정보
   // item은 card와 book에서 조인해서 받아온 정보
 
@@ -41,9 +42,12 @@ const Card = ({ item, onClose }) => {
           <p className="text-xl font-semibold">{cardDetail.title}</p>
           <p>{cardDetail.author}</p>
           <br/>
-          {/* 카드 보낸사람 !== 카드 받은사람 -> 유저가 받은 카드일 경우 보낸사람 닉네임 표시 */}
-          <p>{(cardDetail.from_member_id !== cardDetail.to_member_id) ? cardDetail.from_member_id : ''}</p>
-          <p>{cardDetail.comment}</p>
+          {/* 카드 보낸사람 !== 카드 받은사람 -> 유저가 받은 카드일 경우 보낸사람 닉네임 표시 -> 삼항연산자 안먹히네.. */}
+          <p>보낸이 {cardDetail.fromId !== memberId && cardDetail.nickname}</p>
+          <br/>
+          <div className="bg-blue-100 py-3">
+            <p>{cardDetail.comment}</p>
+          </div>
         </div>
       </div>
       {/* 뒤로가기 버튼(실제로는 컴포넌트 닫기) */}
