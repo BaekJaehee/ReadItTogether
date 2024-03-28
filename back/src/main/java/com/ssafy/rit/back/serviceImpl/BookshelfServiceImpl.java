@@ -6,15 +6,10 @@ import com.ssafy.rit.back.dto.bookshelf.response.BookshelfListResponse;
 import com.ssafy.rit.back.dto.bookshelf.response.BookshelfUpdateResponse;
 import com.ssafy.rit.back.dto.bookshelf.response.BookshelfUploadResponse;
 import com.ssafy.rit.back.dto.bookshelf.responseDto.BookshelfListResponseDto;
-import com.ssafy.rit.back.entity.Book;
-import com.ssafy.rit.back.entity.Bookshelf;
-import com.ssafy.rit.back.entity.Comment;
-import com.ssafy.rit.back.entity.Member;
+import com.ssafy.rit.back.entity.*;
 import com.ssafy.rit.back.exception.Book.BookNotFoundException;
 import com.ssafy.rit.back.exception.Bookshelf.BookshelfException;
-import com.ssafy.rit.back.repository.BookRepository;
-import com.ssafy.rit.back.repository.BookshelfRepository;
-import com.ssafy.rit.back.repository.CommentRepository;
+import com.ssafy.rit.back.repository.*;
 import com.ssafy.rit.back.service.BookshelfService;
 import com.ssafy.rit.back.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
@@ -25,15 +20,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +40,8 @@ public class BookshelfServiceImpl implements BookshelfService {
     private final BookRepository bookRepository;
     private final BookshelfRepository bookshelfRepository;
     private final CommentRepository commentRepository;
+    private final MemberRepository memberRepository;
+    private final BookGenreRepository bookGenreRepository;
 
 
     // 책장에 책 등록하기
@@ -146,7 +144,7 @@ public class BookshelfServiceImpl implements BookshelfService {
 
         switch (sort) {
             case 0:
-                pageable = PageRequest.of(page, size, Sort.by("bookshelfId").descending());
+                pageable = PageRequest.of(page, size, Sort.by("id").descending());
                 break;
             case 1:
                 pageable = PageRequest.of(page, size, Sort.by("rating").descending());
@@ -156,9 +154,27 @@ public class BookshelfServiceImpl implements BookshelfService {
                 break;
         }
 
-        Page<Bookshelf> bookshelfPage = bookshelfRepository.findAllByMemberIdAndSearchKeyword(memberId, searchKeyword, pageable);
+        Member currentMember = memberRepository.findById(memberId).orElseThrow();
+
+        Page<Bookshelf> bookshelfPage = bookshelfRepository.findAllByMemberIdAndSearchKeyword(currentMember, searchKeyword, pageable);
 
 
-        return null;
+        List<BookshelfListResponseDto> bookshelfListResponseDtos = bookshelfPage.getContent().stream()
+                .map(bookshelf -> {
+                    String genresStr = bookshelf.getBookId().getGenre(); // "action, mystery" 형식의 문자열을 가져옵니다.
+                    List<String> genresList = Arrays.asList(genresStr.split("\\s*,\\s*")); // 쉼표와 쉼표 주변의 공백을 기준으로 문자열을 분리합니다.
+                    return BookshelfListResponseDto.builder()
+                            .bookId(bookshelf.getId())
+                            .title(bookshelf.getTitle())
+                            .cover(bookshelf.getCover())
+                            .isRead(bookshelf.getIsRead())
+                            .genres(genresList) // 분리한 장르 리스트를 설정합니다.
+                            .build();
+                })
+                .toList();
+
+        BookshelfListResponse response = new BookshelfListResponse("책 조회 성공", bookshelfListResponseDtos);
+
+        return ResponseEntity.ok(response);
     }
 }
