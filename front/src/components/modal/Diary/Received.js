@@ -2,16 +2,31 @@ import React, { useState, useEffect } from "react";
 // import axios from "axios";
 import dummy from '../../../assets/MOCK_DATA';
 import Card from '../Card';
+import handleCardList from "../../../api/card/HandleCardList";
 
 const Received = ({ onCardOpen, onCardClose, cards }) => {
   const [page, setPage] = useState(1);  // 기본 페이지 1
   const [limit] = useState(4); // 페이지당 아이템 수
-  const [data, setData] = useState([]); // 더미 데이터
+  // const [data, setData] = useState([]); // 더미 데이터
   const [currentPageData, setCurrentPageData] = useState([]); // 현재 페이지에 표시될 데이터
   const [selectedItem, setSelectedItem] = useState(null); // 개별 카드 선택
   const [showPagination, setShowPagination] = useState(true); // 페이지 보이기/숨기기
-  // const offset = (page - 1) * limit;4
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await handleCardList(page - 1, limit); // 페이지 값을 전달하여 데이터 불러오기
+        setCurrentPageData(response.receivedCards.content); // 현재 페이지 데이터 설정
+        console.log("현재 페이지: ", page - 1)
+      } catch (error) {
+        console.error(error);
+      }
+    };
   
+    fetchData(); // 페이지가 변경될 때마다 데이터 다시 불러오기
+  
+  }, [page, limit]); // 페이지 또는 limit
+
   // 페이지 이동
   const goToPrev = () => {
     setPage(page - 1);
@@ -21,11 +36,6 @@ const Received = ({ onCardOpen, onCardClose, cards }) => {
     setPage(page + 1);
   };
 
-  useEffect(() => {
-    // setData(dummy);
-    setData(cards);
-  }, [cards]);
-
   const openCard = (item) => {
     setSelectedItem(item);
     setShowPagination(false);
@@ -33,7 +43,6 @@ const Received = ({ onCardOpen, onCardClose, cards }) => {
       onCardOpen(); // onCardOpen 함수가 존재하고 함수일 때만 호출
     }
   }
-
 
   const closeCard = () => {
     setSelectedItem(null);
@@ -43,12 +52,6 @@ const Received = ({ onCardOpen, onCardClose, cards }) => {
     }
   }
   
-  useEffect(() => {
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + limit;
-    setCurrentPageData(data.slice(startIndex, endIndex));
-  }, [data, limit, page]);
-
   return (
     <div>
       <h1 className="text-xl font-medium leading-6 text-gray-900 text-center my-5">받은 카드</h1>
