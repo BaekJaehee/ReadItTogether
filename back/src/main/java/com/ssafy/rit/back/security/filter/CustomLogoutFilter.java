@@ -91,6 +91,10 @@ public class CustomLogoutFilter extends GenericFilterBean {
         Cookie cookie = new Cookie("refresh", null);
         cookie.setMaxAge(0);
         cookie.setPath("/");
+        //by 복씨
+//        cookie.setSecure(true); // HTTPS 환경에서 필수
+//        cookie.setHttpOnly(true);
+//        cookie.setDomain("j10d206.p.ssafy.io");
 
         Cookie c = new Cookie("refresh", null);
         c.setMaxAge(0);
