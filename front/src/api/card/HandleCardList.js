@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-const handleCardList = () => {
+const handleCardList = (page = 0, size = 4) => {
 
   const accessToken = localStorage.getItem("accessToken");
 
@@ -13,6 +13,10 @@ const handleCardList = () => {
         withCredentials: true,
         headers: {
           "Authorization": `Bearer ${accessToken}`
+        },
+        params: {
+          page: page,
+          size: size
         }
       }
     )
