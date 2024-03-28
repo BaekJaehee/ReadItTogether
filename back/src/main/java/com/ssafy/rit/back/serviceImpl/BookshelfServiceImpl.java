@@ -20,11 +20,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,6 +42,8 @@ public class BookshelfServiceImpl implements BookshelfService {
     private final BookshelfRepository bookshelfRepository;
     private final CommentRepository commentRepository;
 
+
+    // 책장에 책 등록하기
     @Override
     public ResponseEntity<BookshelfUploadResponse> uploadBookshelf(BookshelfUploadRequestDto dto) {
 
@@ -48,7 +52,11 @@ public class BookshelfServiceImpl implements BookshelfService {
 
         Book currentBook = bookRepository.findById(dto.getBookId()).orElseThrow(BookNotFoundException::new);
 
-        bookshelfRepository.findByBookIdAndMemberId(currentBook, currentMember).orElseThrow(BookshelfException::existException);
+
+        bookshelfRepository.findByBookIdAndMemberId(currentBook, currentMember)
+                .ifPresent(s -> {
+                    throw BookshelfException.existException();
+                });
 
         Optional<Comment> commentOptional = commentRepository.findByBookIdAndMemberId(currentBook, currentMember);
 
@@ -70,19 +78,34 @@ public class BookshelfServiceImpl implements BookshelfService {
         bookshelfRepository.save(bookshelf);
 
         // 유저의 책 성향 업데이트 shelfGroup
-        /*
-        * 현재 멤버 id를 이용해서 bookshelf에서 가장 많은 그룹을 찾아서 member table에 있는 shelfGroup을 업데이트 해준다.
-        * */
-
         List<Bookshelf> bookshelfList = bookshelfRepository.findAllByMemberId(currentMember);
 
         List<Integer> bookIds = bookshelfList.stream()
+                .filter(b -> b.getIsRead() == 1)
                 .map(b -> b.getBookId().getId())
                 .toList();
 
         List<Book> books = bookRepository.findAllByBookIds(bookIds);
 
+        List<Integer> groupList = books.stream()
+                .map(Book::getBookGroup)
+                .toList();
 
+        HashMap<Integer, Integer> frequencyMap = new HashMap<>();
+        int max_v = 0;
+        int max_key = currentMember.getShelfGroup();
+
+        for (Integer group : groupList) {
+            frequencyMap.put(group, frequencyMap.getOrDefault(group, 0) + 1);
+
+            int value = frequencyMap.get(group);
+            if(value >= max_v) {
+                max_v = value;
+                max_key = group;
+            }
+        }
+
+        currentMember.setShelfGroup(max_key);
 
         BookshelfUploadResponse response = new BookshelfUploadResponse("책 저장에 성공했습니다.", true);
 
@@ -110,6 +133,8 @@ public class BookshelfServiceImpl implements BookshelfService {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+
+    // 책장 조회 하기
     @Override
     public ResponseEntity<BookshelfListResponse> readBookshelfList(Long memberId) {
         return null;
