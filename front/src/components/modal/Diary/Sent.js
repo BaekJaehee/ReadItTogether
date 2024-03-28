@@ -5,7 +5,7 @@ import Card from '../Card';
 
 const Sent = ({ onCardOpen, onCardClose, cards }) => {
   const [page, setPage] = useState(1);  // 기본 페이지 1
-  const [limit] = useState(10); // 페이지당 아이템 수
+  const [limit] = useState(4); // 페이지당 아이템 수
   const [data, setData] = useState([]); // 더미 데이터
   const [currentPageData, setCurrentPageData] = useState([]); // 현재 페이지에 표시될 데이터
   const [selectedItem, setSelectedItem] = useState(null); // 개별 카드 선택
