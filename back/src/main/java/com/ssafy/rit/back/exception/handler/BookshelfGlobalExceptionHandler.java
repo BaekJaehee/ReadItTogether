@@ -1,9 +1,7 @@
 package com.ssafy.rit.back.exception.handler;
 
 import com.google.gson.Gson;
-import com.ssafy.rit.back.exception.Book.BookNotFoundException;
-import com.ssafy.rit.back.exception.Book.CommentException;
-import com.ssafy.rit.back.exception.guestBook.GuestBookToMemberMismatchException;
+import com.ssafy.rit.back.exception.Bookshelf.BookshelfException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,7 +13,7 @@ import java.util.Collections;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
-public class BookGlobalExceptionHandler {
+public class BookshelfGlobalExceptionHandler {
 
     private final Gson gson;
     private static final HttpHeaders JSON_HEADERS;
@@ -23,15 +21,9 @@ public class BookGlobalExceptionHandler {
         JSON_HEADERS = new HttpHeaders();
         JSON_HEADERS.add(HttpHeaders.CONTENT_TYPE, "application/json");
     }
-    @ExceptionHandler(BookNotFoundException.class)
-    public ResponseEntity<String> handleBookNotFoundException(BookNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .headers(JSON_HEADERS)
-                .body(stringToGson(e.getMessage()));
-    }
 
-    @ExceptionHandler(CommentException.class)
-    public ResponseEntity<String> handleCommentException(CommentException e) {
+    @ExceptionHandler(BookshelfException.class)
+    public ResponseEntity<String> handleBookshelfException(BookshelfException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .headers(JSON_HEADERS)
                 .body(stringToGson(e.getMessage()));
