@@ -1,24 +1,91 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+
+import BookDetail from "../../api/book/BookDetail";
 
 import AddShelf from "../../components/button/AddShelf";
 import CreateCard from "../../components/button/CreateCard";
-import CreateComments from "../../components/comments/CreateComments";
+import CreateComments from "../../components/comments/CreateComment";
 import Comments from "../../components/comments/Comments";
 
-import img1 from "../../assets/book/img1.PNG";
-
 const DetailBook = () => {
+  const { bookId } = useParams();
+  const [bookInfo, setBookInfo] = useState({
+    title: "",
+    cover: "",
+    author: "",
+    info: "",
+    pubDate: "",
+    publisher: "",
+    page: "",
+    rating: "",
+    reviewerCnt: "",
+    isbn: "",
+    genres: [],
+    commentListResponseDtos: []
+  });
+  
+  useEffect(() => {
+    const fetchBookInfo = async () => {
+      try {
+        const response = await BookDetail(bookId); // BookDetail 함수를 통해 도서 정보를 가져옴
+        setBookInfo(response.data); // 가져온 도서 정보를 상태에 설정
+      } catch (error) {
+        console.error("책 정보를 가져오는 데 실패했습니다:", error);
+      }
+    };
+    fetchBookInfo(); // useEffect에서 한 번만 호출하도록 설정
+  }, [bookId]); // 의존성 배열을 빈 배열로 설정하여 컴포넌트가 마운트될 때 한 번만 실행되도록 함
+  
+
+  // 데이터의 장르명 표시 바꾸기
+  const mapGenreToDisplayName = (genre) => {
+    const genreMapping = {
+      'action': '액션',
+      'horror': '호러',
+      'mystery': '미스터리',
+      'fantasy': '판타지',
+      'history': '역사',
+      'romantic': '로맨스',
+      'sf': 'SF',
+      'kr_long': '한국문학',
+      'kr_short': '한국단편',
+      'en_short': '영미단편',
+      'en_long': '영미문학',
+      'jp_short': '일본단편',
+      'jp_long': '일본문학',
+      'china': '중국문학',
+      'spain': '스페인문학',
+      'north': '북유럽문학',
+      'latin': '라틴문학',
+      'russia': '러시아문학',
+      'east': '동유럽문학',
+      'german': '독일문학',
+      'france': '프랑스문학'
+    };
+
+    return genreMapping[genre] || genre;  // 해당하는 표시 이름이 없으면 기본적으로는 장르를 그대로 반환
+  };
+
+  // 장르는 배열 형태이므로 map 사용하고 장르가 2개 이상일 경우 ', '로 나눔
+  const genreDisplayNames = bookInfo.genres.map(genre => mapGenreToDisplayName(genre)).join(', ');
+  
   return (
     <div>
       <div className="flex flex-wrap justify-center px-44 py-20">
-        <img className="w-[400px] h-[580px] rounded-lg" src={img1} alt="" />
+        {/* 책표지 */}
+        <img className="w-[400px] h-[580px] rounded-lg" src={bookInfo.cover} alt="" />
         <div className="flex-col text-gray-600 font-bold pl-10 ">
           <div className="flex justify-between">
             <div>
-              <h1 className="text-3xl w-full font-bold mb-4">책 제목</h1>
-              <p>작가명 · 장르/장르</p>
-              <p>출판사 · 202XX 202XX12일</p>
-              <p>페이지 수</p>
+              {/* 책 제목 */}
+              <h1 className="text-3xl w-full font-bold mb-4">{bookInfo.title}</h1>
+              {/* 작가명 · 장르 */}
+              <p>{bookInfo.author} · {genreDisplayNames}</p>
+              {/* 출판사 · 출판일 */}
+              <p>{bookInfo.publisher} · {bookInfo.pubDate}</p>
+              {/* 페이지 수 */}
+              <p>{bookInfo.page}쪽 · 평점 {bookInfo.rating}점</p>
             </div>
             <div className="flex-col">
               <div className="mb-2">
@@ -35,18 +102,20 @@ const DetailBook = () => {
           <p className="text-2xl mt-10 mb-2">책 소개</p>
           <p className="max-w-2xl text-gray-700 text-sm w-[500px] h-[180px] overflow-y-auto">
             {/* 책 소개 내용 */}
-            <b>미스터리 제왕의 2024년 최신작 <br/>괴짜 페르소나 『블랙 쇼맨』의 귀환<br/>100억을 두고 벌이는 치열한 심리 게임</b><br/><br/> 히가시노 게이고가 선보이는 새로운 시리즈. 일본에서 『블랙 쇼맨과 각성하는 여자들』로 발표된 소설집을 작가와의 긴밀한 편집 회의 끝에 두 권의 단편집으로 국내에서 출간한다. 앞선 『블랙 쇼맨과 환상의 여자』에서 불특정 다수가 오가며 사연을 만드는 비밀의 바 트랩핸드의 실체가 드러났다면, 신작 『블랙 쇼맨과 운명의 바퀴』에서는 한발 더 나아가 진정한 행복을 찾는 이들의 일생일대의 선택을 돕는 사연이 시원스레 밝혀진다. <br/><br/> 데뷔 후 40년간 성실하게 작품을 출간해 온 히가시노 게이고는 명실공히 인기 작가로 다양한 장르를 넘나들며 수많은 독자를 사로잡았다. 능수능란한 필력으로 에도가와 란포상, 일본추리작가협회상, 나오키상, 본격미스터리대상 등 이름만 들어도 알 만한 일본 대표 문학상을 모조리 석권하고, 최다 수의 영상물 원작자로서 문학성과 대중성을 두루 갖춘 그의 작품세계에 새롭게 등장한 블랙 쇼맨은 어떤 의미일까. 팬데믹을 기점으로 등장한 블랙 쇼맨은 정통 미스터리 문법에서 벗어나 코지 미스터리, 휴먼 미스터리의 경계를 오가며 작가 스스로도 “지금 내가 가장 집중하고 있는 캐릭터”라 할 만큼 다채로운 방식으로 사건을 해결해 나간다. 투박한 설정에 무심한 면모가 더해진 다케시가 인생에서 맞닥뜨릴 법한 크고 작은 고민에 빠진 사람들을 한 치의 망설임도 없이 명쾌하게 구해내는 과정이 색다른 쾌감으로 다가온다. 
+            {/* HTML로 렌더링할 때 <br/> 태그를 마크다운으로 렌더링 */}
+            {/*  bookInfo.info를 <br/> 태그를 기준으로 분할하고, 각 줄에 <br /> 태그를 추가하여 마크다운으로 렌더링 -> <br /> 태그를 HTML 엔티티로 치환하여 출력 */}
+            {bookInfo.info.split('<br/>').map((line, index) => (
+              <React.Fragment key={index}>
+                {line}
+                <br />
+              </React.Fragment>
+            ))}
           </p>
-          <div className="flex mt-6">
-            <div className="text-2xl mr-2">평점</div>
-            <div className="flex items-center mr-4">
-              {/* 평점 */}
-            </div>
-          </div>
-          <CreateComments />
+          
+          <CreateComments bookId={bookId} />
         </div>
       </div>
-      <Comments />
+      <Comments bookId={bookId} commentListResponseDtos={bookInfo.commentListResponseDtos} />
     </div>
   );
 };
