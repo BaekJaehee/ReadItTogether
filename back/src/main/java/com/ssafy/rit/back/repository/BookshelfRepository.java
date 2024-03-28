@@ -39,7 +39,7 @@ public interface BookshelfRepository extends JpaRepository<Bookshelf, Integer> {
     // 검색
     @Query("SELECT b FROM Bookshelf b WHERE b.memberId = :memberId " +
             "AND (:title IS NULL OR :title = '' OR b.title LIKE %:title%)")
-    Page<Bookshelf> findAllByMemberIdAndSearchKeyword(Long memberId, String title, Pageable pageable);
+    Page<Bookshelf> findAllByMemberIdAndSearchKeyword(Member memberId, String title, Pageable pageable);
 
 
 }

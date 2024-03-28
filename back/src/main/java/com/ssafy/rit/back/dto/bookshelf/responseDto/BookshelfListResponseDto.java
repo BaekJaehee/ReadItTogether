@@ -1,5 +1,6 @@
 package com.ssafy.rit.back.dto.bookshelf.responseDto;
 
+import com.ssafy.rit.back.entity.BookGenre;
 import com.ssafy.rit.back.entity.Genre;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,17 +12,19 @@ import java.util.List;
 @Data
 @Builder
 @NoArgsConstructor
-//@AllArgsConstructor
+@AllArgsConstructor
 public class BookshelfListResponseDto {
-//
-//    private int bookId;
-//
-//    private String title;
-//
-//    private String cover;
-//
-//    private int isRead;
-//
-//    private List<Genre> genres;
+
+    private int bookId;
+
+    private String title;
+
+    private String cover;
+
+    private int isRead;
+
+    private int rating;
+
+    private List<String> genres;
 
 }
