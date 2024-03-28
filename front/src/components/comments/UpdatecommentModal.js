@@ -68,7 +68,7 @@ const UpdateCommentModal = ({
                   return (
                     <div
                       key={index}
-                      className={`small-star ${
+                      className={`small-star cursor-pointer ${
                         ratingValue <= (hover || rating)
                           ? "text-sky-400"
                           : "text-gray-400"
@@ -95,6 +95,7 @@ const UpdateCommentModal = ({
               className="w-full h-[200px] p-2 border rounded resize-none text-xs text-gray-600"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
+              maxLength={120}
             ></textarea>
           </div>
         </form>
