@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Received from "./Received";
 import Sent from "./Sent";
-import handleCardList from "../../../api/card/HandleCardList";
 
 // 카드 등록일 기준으로 정렬
 
@@ -21,19 +20,6 @@ const Diary = ({ onClose }) => {
   // const [currentComponent, setCurrentComponent] = useState(<Received onCardOpen={handleCardOpen} onCardClose={handleCardClose}/>);  // 열었을 시 기본은 받은 카드
   const [currentComponent, setCurrentComponent] = useState('received');  // 열었을 시 기본은 받은 카드
   const [showButtons, setShowButtons] = useState(true);
-
-  // useEffect(() => {
-  //   const fetchCardListInfo = async () => {
-  //     try {
-  //       const response = await handleCardList();
-  //       setReceivedCards(response.data.receivedCards.content);
-  //       setSentCards(response.data.sentCards.content);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }
-  //   fetchCardListInfo();
-  // }, []);
 
   // const handleReceivedClick = () => {
   //   setCurrentComponent(<Received onCardOpen={handleCardOpen} onCardClose={handleCardClose}/>);
