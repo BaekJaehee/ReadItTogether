@@ -16,14 +16,35 @@ const SideBar = () => {
     nickname: "닉네임",
     profileImage: noImg
   })
-
+  
+  // 로그인한 유저가 바뀔 때마다
   useEffect(() => {
     const storedProfileInfo = {
       nickname: localStorage.getItem("nickname"),
       profileImage: localStorage.getItem("profileImage")
     };
     setProfileInfo(storedProfileInfo);
-  }, [memberId]); // memberId가 바뀔 때마다(=로그인한 유저가 바뀔 때마다)
+  }, [memberId]);
+
+  // 이미지나 닉네임이 바뀌었을 때
+  useEffect(() => {
+    const handleStorageChange = (event) => {
+      if (event.key === "nickname" || event.key === "profileImage") {
+        setProfileInfo({
+          nickname: localStorage.getItem("nickname"),
+          profileImage: localStorage.getItem("profileImage")
+        });
+      }
+    };
+
+    // 이벤트 리스너 등록
+    window.addEventListener('storage', handleStorageChange);
+
+    // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []); // 컴포넌트가 처음 렌더링될 때만 실행
 
   return (
     <nav className="flex flex-col h-full">

@@ -18,7 +18,7 @@ const EditImageModal = ({ onClose, nickname }) => {
     try {
       const response = await changeImage(upload, nickname);
       // 이미지 변경 성공 시 profileImage 업데이트
-      localStorage.setItem("profileImage", imageUrl);
+      // localStorage.setItem("profileImage", response.data.profileImage);
       onClose();
       await fetchProfileInfo();
       return response;
