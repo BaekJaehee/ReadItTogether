@@ -25,8 +25,11 @@ public interface CardRepository extends JpaRepository<Card,Long> {
     // 카드 ID로 카드 상세 정보 조회
 
 
-    Page<Card> findByFromMemberId(Member fromMember, Pageable pageable);
-    Page<Card> findByToMemberId(Member toMember, Pageable pageable);
+//    Page<Card> findByFromMemberId(Member fromMember, Pageable pageable);
+//    Page<Card> findByToMemberId(Member toMember, Pageable pageable);
+
+    Page<Card> findByFromMemberIdAndDeletedBySenderIsFalse(Member fromMember, Pageable pageable);
+    Page<Card> findByToMemberIdAndDeletedByRecipientIsFalse(Member toMember, Pageable pageable);
 
 
 

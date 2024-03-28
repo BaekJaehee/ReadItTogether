@@ -8,10 +8,7 @@ import com.ssafy.rit.back.dto.book.responseDto.CommentListResponseDto;
 import com.ssafy.rit.back.entity.*;
 import com.ssafy.rit.back.exception.Book.BookNotFoundException;
 import com.ssafy.rit.back.exception.Book.CommentException;
-import com.ssafy.rit.back.repository.BookGenreRepository;
-import com.ssafy.rit.back.repository.BookRepository;
-import com.ssafy.rit.back.repository.CommentRepository;
-import com.ssafy.rit.back.repository.GenreRepository;
+import com.ssafy.rit.back.repository.*;
 import com.ssafy.rit.back.service.BookService;
 import com.ssafy.rit.back.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 
 @Service
@@ -37,6 +35,7 @@ import java.util.Objects;
 public class BookServiceImpl implements BookService {
     // 레파지토리
     private final BookRepository bookRepository;
+    private final BookshelfRepository bookshelfRepository;
     private final BookGenreRepository bookGenreRepository;
     private final CommentRepository commentRepository;
     private final GenreRepository genreRepository;
@@ -62,6 +61,13 @@ public class BookServiceImpl implements BookService {
         List<String> categories = genreRepository.findAllById(genreIds).stream()
                                                 .map(Genre::getCategory)
                                                 .toList();
+
+        // 책장에 등록 되어 있는지 확인
+        int existBookshelf = 0;
+        Optional<Bookshelf> isBookshelf = bookshelfRepository.findByBookIdAndMemberId(currentBook, commonUtil.getMember());
+        if (isBookshelf.isPresent()){
+            existBookshelf = 1;
+        }
 
         // ------------------------ 댓글 넣기 -----------------------------------
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
@@ -89,6 +95,7 @@ public class BookServiceImpl implements BookService {
         BookDetailResponseDto detailDto = modelMapper.map(currentBook, BookDetailResponseDto.class);
         detailDto.setGenres(categories);
         detailDto.setCommentListResponseDtos(commentListResponseDtos);
+        detailDto.setExistBookshelf(existBookshelf);
 
 
         BookDetailResponse response = new BookDetailResponse("책 정보 조회 성공", detailDto);
@@ -110,7 +117,7 @@ public class BookServiceImpl implements BookService {
         // 이미 작성된 코멘트가 있을 때
         if (commentRepository.findByBookIdAndMemberId(currentBook, currentMember).isPresent()){
             throw CommentException.commentExistException();
-        };
+        }
 
         // 평점 안줬을 때
         if (dto.getRating() < 1) {
