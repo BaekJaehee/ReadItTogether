@@ -8,8 +8,6 @@ import CreateCard from "../../components/button/CreateCard";
 import CreateComments from "../../components/comments/CreateComments";
 import Comments from "../../components/comments/Comments";
 
-import img1 from "../../assets/book/img1.PNG";
-
 const DetailBook = () => {
   const { bookId } = useParams();
   const [bookInfo, setBookInfo] = useState({
@@ -47,6 +45,7 @@ const DetailBook = () => {
       'horror': '호러',
       'mystery': '미스터리',
       'fantasy': '판타지',
+      'history': '역사',
       'romantic': '로맨스',
       'sf': 'SF',
       'kr_long': '한국문학',
@@ -86,16 +85,16 @@ const DetailBook = () => {
               {/* 출판사 · 출판일 */}
               <p>{bookInfo.publisher} · {bookInfo.pubDate}</p>
               {/* 페이지 수 */}
-              <p>{bookInfo.page}쪽</p>
+              <p>{bookInfo.page}쪽 · 평점 {bookInfo.rating}점</p>
             </div>
             <div className="flex-col">
               <div className="mb-2">
                 {/* 책장 추가 버튼 + 모달 */}
-                <AddShelf />
+                <AddShelf bookId={bookId} />
               </div>
               <div className="mb-2">
                 {/* 카드 작성 버튼 + 모달 */}
-                <CreateCard />
+                <CreateCard bookId={bookId} cover={bookInfo.cover} title={bookInfo.title} author={bookInfo.author} publisher={bookInfo.publisher} />
               </div>
             </div>
           </div>
@@ -112,17 +111,11 @@ const DetailBook = () => {
               </React.Fragment>
             ))}
           </p>
-          <div className="flex mt-6">
-            <div className="text-2xl mr-2">평점</div>
-            <div className="flex items-center mr-4">
-              {/* 평점 */}
-              {bookInfo.rating}
-            </div>
-          </div>
-          <CreateComments />
+          
+          <CreateComments bookId={bookId} />
         </div>
       </div>
-      <Comments />
+      <Comments bookId={bookId} commentListResponseDtos={bookInfo.commentListResponseDtos} />
     </div>
   );
 };

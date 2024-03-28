@@ -12,4 +12,6 @@ public class DataDto {
     private String accessToken;
     private String refreshToken;
     private Long memberId;
+    private String profileImage;
+    private String nickname;
 }

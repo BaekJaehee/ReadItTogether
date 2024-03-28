@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import DoughnutChart from "../../components/DoughnutChart.js";
 
 import fetchProfileInfo from "../../api/accounts/fetchProfileInfo";
 
@@ -24,12 +25,12 @@ const Profile = () => {
     profileImage: "",
     nickname: "",
     email: "",
-    followList: "",
-    followerList: "",
+    followList: [],
+    followerList: [],
     evaluatedBookCnt: "",
     likedBookCnt: "",
     sendCardCnt: "",
-    genreNoList: ""
+    genreNoList: []
   })
   
   let followCount = profileInfo.followList.length
@@ -53,7 +54,47 @@ const Profile = () => {
       );
     }
   }, []);
-  
+
+  // 데이터의 장르명 표시 바꾸기
+  const genreMapping ={
+    1: '액션',
+    2: '호러',
+    3: '미스터리',
+    4: '판타지',
+    5: '역사',
+    6: '로맨스',
+    7: 'SF',
+    8: '한국문학',
+    9: '한국단편',
+    10: '영미단편',
+    11: '영미문학',
+    12: '일본단편',
+    13: '일본문학',
+    14: '중국문학',
+    15: '스페인문학',
+    16: '북유럽문학',
+    17: '라틴문학',
+    18: '러시아문학',
+    19: '동유럽문학',
+    20: '독일문학',
+    21: '프랑스문학'
+  };
+
+  // {profileInfo.genreNoList}가 [0,1]이 아니라 01로 화면에 표시됨 -> 배열 형식으로 만들기
+  const genreCountByName = [];
+  for (const index in genreMapping) {
+    const genreName = genreMapping[index];
+    const count = profileInfo.genreNoList[index];
+    genreCountByName.push({ genre: genreName, count: count });  // 장르명: 횟수 형식으로 추가
+  }
+
+  const dataLabels = [];
+  const dataValues = [];
+  genreCountByName.forEach(data => {
+    dataLabels.push(data.genre);
+    dataValues.push(data.count);
+  });
+
   useEffect(() => {
     // fetchProfileInfo 함수를 사용하여 프로필 정보를 가져옴
     const getProfileInfo = async () => {
@@ -70,7 +111,7 @@ const Profile = () => {
   const handleSettingsClick = () => {
     navigate(`/modify/${memberId}`);
   };
-
+  
   return (
     <div className="flex items-center justify-center pt-32">
       <div className="flex items-center justify-center bg-sky-100 w-[1000px] p-12">
@@ -141,7 +182,15 @@ const Profile = () => {
 
             {/* 그래프 넣는 곳 */}
             <div className="flex-1">
-              <img src={grahp} alt="임시 그래프" />
+              {/* <img src={grahp} alt="임시 그래프" /> */}
+              <div>
+                {/* 도넛 그래프를 그릴 canvas 요소 */}
+                <DoughnutChart dataLabels={dataLabels} dataValues={dataValues} />
+              </div>
+              {/* {profileInfo.genreNoList} */}
+              {/* {genreCountByName} */}
+              {/* {dataLabels} */}
+              {/* {dataValues} */}
             </div>
             {/* 설정 톱니바퀴 */}
             <div className="relative right-0" onClick={ handleSettingsClick }>
