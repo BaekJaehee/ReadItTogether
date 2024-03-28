@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import dummy from '../../../assets/MOCK_DATA';
 import Card from '../Card';
 
-const Sent = ({ onCardOpen, onCardClose }) => {
+const Sent = ({ onCardOpen, onCardClose, cards }) => {
   const [page, setPage] = useState(1);  // 기본 페이지 1
   const [limit] = useState(10); // 페이지당 아이템 수
   const [data, setData] = useState([]); // 더미 데이터
@@ -22,8 +22,9 @@ const Sent = ({ onCardOpen, onCardClose }) => {
   };
 
   useEffect(() => {
-    setData(dummy);
-  }, []);
+    // setData(dummy);
+    setData(cards);
+  }, [cards]);
 
   const openCard = (item) => {
     setSelectedItem(item);
@@ -57,9 +58,8 @@ const Sent = ({ onCardOpen, onCardClose }) => {
         <>
           <div className="grid grid-cols-2 gap-4">
             {currentPageData.map((item, index) => (
-              <div key={index} className="text-center" onClick={() => openCard(item)}>
+              <div key={index} className="text-center cursor-pointer" onClick={() => openCard(item)}>
                 <img src={item.cover} alt={item.title} className="mx-auto"/>
-                <p>{item.title}</p>
               </div>
             ))}
           </div>

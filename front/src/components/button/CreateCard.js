@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import handleSentCard from '../../api/card/HandleSendCard';
 import img1 from "../../assets/book/img1.PNG"
 
-const CreateCard = ({ onClose, bookId, cover, title, author, publisher }) => {
+const CreateCard = ({ bookId, cover, title, author, publisher }) => {
   const [comment, setComment] = useState('');
   const [isValid, setIsValid] = useState(false);
   
@@ -21,19 +22,15 @@ const CreateCard = ({ onClose, bookId, cover, title, author, publisher }) => {
     }
   }, [comment])
   
-  const handleSubmit = () => {
-    // 전송 로직 처리 후 모달 닫기
-    // setTimeout으로 모달을 일정 시간 후에 닫도록 설정
-    setTimeout(() => {
-      onClose();
-    }, 2000); // 2초 후에 모달 닫힘
+  const handleSubmit = async () => {
+    try {
+      await handleSentCard(bookId, comment);
+      alert('카드를 보냈습니다.');
+      closeCreateCardModal();
+    } catch (error) {
+      console.error('카드 작성에 실패했습니다', error);
+    }
   };
-
-  // const handleCloseClick = (e) => {
-  //   e.stopPropagation();
-  //   handleCloseModal();
-  // };
-
 
   return (
     <div>
