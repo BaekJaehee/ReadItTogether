@@ -8,6 +8,7 @@ const DeleteComment = (commentId) => {
     const response = axios.delete(`${API_BASE_URL}/books/comment/${commentId}`, {
       withCredentials: true,
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
     });

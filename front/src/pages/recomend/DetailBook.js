@@ -5,7 +5,7 @@ import BookDetail from "../../api/book/BookDetail";
 
 import AddShelf from "../../components/button/AddShelf";
 import CreateCard from "../../components/button/CreateCard";
-import CreateComments from "../../components/comments/CreateComments";
+import CreateComments from "../../components/comments/CreateComment";
 import Comments from "../../components/comments/Comments";
 
 const DetailBook = () => {
