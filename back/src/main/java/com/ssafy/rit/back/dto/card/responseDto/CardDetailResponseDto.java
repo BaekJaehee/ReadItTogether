@@ -17,6 +17,8 @@ public class CardDetailResponseDto {
     private String title;
     private String cover;
     private String author;
+    private long fromId;
+    private String nickname;
 
 
 }
