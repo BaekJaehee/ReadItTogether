@@ -82,14 +82,14 @@ public class CardServiceImpl implements CardService {
         Member currentMember = commonUtil.getMember(); // 현재 로그인한 사용자 정보 가져오기
         Pageable pageable = PageRequest.of(page, size);
 
-        // 보낸 카드 목록 페이징 처리하여 조회
-        Page<Card> sentCardsPage = cardRepository.findByFromMemberId(currentMember, pageable);
+        // 보낸 카드 목록 조회: 삭제되지 않은 카드만 필터링
+        Page<Card> sentCardsPage = cardRepository.findByFromMemberIdAndDeletedBySenderIsFalse(currentMember, pageable);
         List<CardListResponseDto> sentCardDtos = sentCardsPage.getContent().stream()
                 .map(card -> new CardListResponseDto(card.getId(), card.getBookId().getCover(), 0))
                 .collect(Collectors.toList());
 
-        // 받은 카드 목록 페이징 처리하여 조회
-        Page<Card> receivedCardsPage = cardRepository.findByToMemberId(currentMember, pageable);
+        // 받은 카드 목록 조회: 삭제되지 않은 카드만 필터링
+        Page<Card> receivedCardsPage = cardRepository.findByToMemberIdAndDeletedByRecipientIsFalse(currentMember, pageable);
         List<CardListResponseDto> receivedCardDtos = receivedCardsPage.getContent().stream()
                 .map(card -> new CardListResponseDto(card.getId(), card.getBookId().getCover(), 1))
                 .collect(Collectors.toList());
@@ -112,6 +112,7 @@ public class CardServiceImpl implements CardService {
 
 
 
+
     @Override
     public ResponseEntity<CardDeleteResponse> CardDelete(CardRequestDto dto) {
         Member currentMember = commonUtil.getMember(); // 현재 로그인한 사용자 정보 가져오기
@@ -124,25 +125,19 @@ public class CardServiceImpl implements CardService {
         boolean isCurrentUserTheRecipient = card.getToMemberId() != null && card.getToMemberId().equals(currentMember);
 
         if (!isCurrentUserTheSender && !isCurrentUserTheRecipient) {
-            // 현재 사용자가 카드의 보낸 사람도, 받는 사람도 아닐 경우
             throw new UnauthorizedCardDeletionException();
         }
-
-
-        // 현재 사용자가 보낸 카드일 경우, fromMemberId 관계를 제거
         if (isCurrentUserTheSender) {
-            card.setFromMemberId(null);
+            card.setDeletedBySender(true);
         }
-
-        // 현재 사용자가 받은 카드일 경우, toMemberId 관계를 제거
         if (isCurrentUserTheRecipient) {
-            card.setToMemberId(null);
+            card.setDeletedByRecipient(true);
         }
+        cardRepository.save(card);
 
-        cardRepository.save(card); // 변경 사항 저장
-
-        return ResponseEntity.ok(new CardDeleteResponse("카드삭제 .", true));
+        return ResponseEntity.ok(new CardDeleteResponse("카드 삭제 완료여.", true));
     }
+
 
 
 
@@ -162,12 +157,14 @@ public class CardServiceImpl implements CardService {
         card.setComment(dto.getComment()); // 사용자가 입력한 코멘트
         card.setBookId(book); // 책 선택
         card.setFromMemberId(sender); // 현재 사용자
+        card.setToMemberId(sender); // 효선이 요청
+        card.setCreatedAt(LocalDate.now());
         // 랜덤한 수신자 설정 로직 삭제
         cardRepository.save(card);
 
 
         // 성공 응답 반환
-        CardCreateResponse response = new CardCreateResponse("Card successfully sent", true);
+        CardCreateResponse response = new CardCreateResponse("카드생성", true);
         return ResponseEntity.ok(response);
     }
 

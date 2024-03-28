@@ -8,7 +8,7 @@ public class BookSpecifications {
     public static Specification<Book> titleOrAuthorContainsIgnoreCase(String searchTerm) {
         return (root, query, cb) -> {
             if (searchTerm == null || searchTerm.isEmpty()) {
-                return cb.conjunction(); // 비어 있는 조건 반환
+                return cb.conjunction();
             }
             String likePattern = "%" + searchTerm.toLowerCase() + "%";
             Predicate titlePredicate = cb.like(cb.lower(root.get("title")), likePattern);
