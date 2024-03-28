@@ -82,7 +82,8 @@ const Library = () => {
           alt="책상"
         />
         <div className="group absolute left-52 bottom-40 overflow-hidden">
-          <Link to="/bookshelf">
+          {/* <Link to="/bookshelf"> */}
+          <Link to={`/bookshelf/${memberId}`}>
             <img
               className="w-[400px] transform transition-transform duration-500 ease-in-out group-hover:scale-110"
               src={bookshelf}
