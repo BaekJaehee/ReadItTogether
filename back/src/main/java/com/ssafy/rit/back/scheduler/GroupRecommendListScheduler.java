@@ -11,7 +11,7 @@ public class GroupRecommendListScheduler {
 
     private final GroupRecommendListService groupRecommendListService;
 
-    @Scheduled(cron = "0 3 14 * * *")
+    @Scheduled(cron = "0 0 2 * * *")
     public void createGroupRecommendList() {
         groupRecommendListService.createGroupRecommendList();
     }
