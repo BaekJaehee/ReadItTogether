@@ -162,6 +162,8 @@ public class CardServiceImpl implements CardService {
         card.setComment(dto.getComment()); // 사용자가 입력한 코멘트
         card.setBookId(book); // 책 선택
         card.setFromMemberId(sender); // 현재 사용자
+        card.setToMemberId(sender); // 효선이 요청
+        card.setCreatedAt(LocalDate.now());
         // 랜덤한 수신자 설정 로직 삭제
         cardRepository.save(card);
 
