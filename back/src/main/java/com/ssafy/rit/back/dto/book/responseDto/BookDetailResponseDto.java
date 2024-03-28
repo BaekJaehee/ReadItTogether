@@ -37,4 +37,6 @@ public class BookDetailResponseDto {
 
     private List<CommentListResponseDto> commentListResponseDtos;
 
+    private int existBookshelf;
+
 }

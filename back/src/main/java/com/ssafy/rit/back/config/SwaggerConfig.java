@@ -30,6 +30,14 @@ import java.util.Arrays;
         }
 
         @Bean
+        public GroupedOpenApi cardApi() {
+            return GroupedOpenApi.builder()
+                    .group("card-api")
+                    .pathsToMatch("/card/**")
+                    .build();
+        }
+
+        @Bean
         public GroupedOpenApi guestBookApi() {
             return GroupedOpenApi.builder()
                     .group("guestbook-api")
