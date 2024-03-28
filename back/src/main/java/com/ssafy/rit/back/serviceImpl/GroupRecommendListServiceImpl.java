@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,21 +42,26 @@ public class GroupRecommendListServiceImpl implements GroupRecommendListService 
         }
 
         for (int groupNum = contentGroupNum; groupNum < ageAndGenderGroupNum; groupNum++) {
-            int minAge, maxAge, gender;
+            int currentYear = LocalDate.now().getYear();
+            int startYear, endYear, gender;
             if (groupNum == 5 || groupNum == 6) {
-                minAge = 0; maxAge = 29; // 1~20대
+                endYear = currentYear; // 0살부터
+                startYear = currentYear - 29; // 29살까지
             } else if (groupNum == 7 || groupNum == 8) {
-                minAge = 30; maxAge = 39; // 30대
+                endYear = currentYear - 30;
+                startYear = currentYear - 39;
             } else if (groupNum == 9 || groupNum == 10) {
-                minAge = 40; maxAge = 49; // 40대
-            } else {
-                minAge = 50; maxAge = 150; // 50대 이상
+                endYear = currentYear - 40;
+                startYear = currentYear - 49;
+            } else { // 50세 이상
+                endYear = currentYear - 50;
+                startYear = currentYear - 150;
             }
             gender = groupNum % 2 == 0 ? 1 : 0;
 
-            System.out.println(groupNum);
+            System.out.println("Processing group number: " + groupNum);
             List<GroupRecommendBook> allByRecList = groupRecommendBookRepository.findAllByReGroupOrderByCreatedAt(groupNum);
-            List<Member> allByShelfGroup = memberRepository.findMembersByAgeRangeAndGender(minAge, maxAge, gender);
+            List<Member> allByShelfGroup = memberRepository.findByBirthBetweenAndGender(startYear, endYear, gender);
             System.out.println("그룹사이즈" + allByShelfGroup.size());
             changeRecommendList(allByShelfGroup, allByRecList);
         }
