@@ -84,7 +84,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String nickname = member.getNickname();
 
 
-        String accessToken = jwtUtil.createJwt("Authorization", email, 600000L);
+        String accessToken = jwtUtil.createJwt("Authorization", email, 6000000L);
         String refreshToken = jwtUtil.createJwt("refresh", email, 86400000L);
 
         // refreshToken를 서버에 저장
