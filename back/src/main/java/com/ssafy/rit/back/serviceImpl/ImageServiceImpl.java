@@ -34,7 +34,7 @@ public class ImageServiceImpl implements ImageService {
     private String bucket;
 
     // 굳이 해야 하나?
-    private String localLocation = "C:\\Users\\SSAFY\\Desktop\\beforebucket\\";
+    private String localLocation = System.getProperty("java.io.tmpdir");
 
     @Override
     @Transactional
