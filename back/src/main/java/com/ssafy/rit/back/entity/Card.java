@@ -26,6 +26,12 @@ public class Card {
     @Column(name = "create_at")
     private LocalDate createdAt;
 
+    @Column(name = "deleted_by_sender", columnDefinition = "BOOLEAN DEFAULT FALSE") //기본값은 FALSE
+    private boolean deletedBySender = false;
+
+    @Column(name = "deleted_by_recipient", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean deletedByRecipient = false;
+
 //    관계 설정
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_member_id")
@@ -41,5 +47,7 @@ public class Card {
 
     @OneToMany(mappedBy = "cardId")
     private List<Postbox> postboxes;
+
+
 
 }
