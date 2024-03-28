@@ -120,8 +120,8 @@ const Library = () => {
           {isIntroOpen && (
             <Intro
               onClose={closeIntro}
-              memberId={memberId}
               onUpdate={(updatedText) => setIntroText(updatedText)}
+              introText={introText}
             />
           )}
         </div>
