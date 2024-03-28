@@ -1,5 +1,6 @@
 package com.ssafy.rit.back.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,13 +24,13 @@ public class Bookshelf {
     private int id;
 
     @Column(name = "is_read")
-    private int isRead;
+    private Integer isRead;
 
     @Column(name = "is_rate")
-    private int isRate;
+    private Integer isRate;
 
     @Column(name = "rating")
-    private int rating;
+    private Integer rating;
 
     @Column(name = "created_at")
     private LocalDate createdAt;
@@ -38,10 +39,12 @@ public class Bookshelf {
     private String cover;
 
 //  관계 설정
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member memberId;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book bookId;
