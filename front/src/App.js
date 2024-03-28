@@ -9,7 +9,7 @@ import PublicRoute from "./authentication/routers/PublicRouter";
 import Library from "./pages/library/Library";
 import Login from "./pages/accounts/Login";
 import FindPassword from "./pages/accounts/FindPassword";
-import Bookshelf from "./pages/library/Bookshelf";
+import Bookshelf from "./pages/bookshelf/Bookshelf";
 import Profile from "./pages/accounts/Profile";
 import RecommendBook from "./pages/recomend/RecommendBook";
 import DetailBook from "./pages/recomend/DetailBook";
@@ -50,7 +50,8 @@ function App() {
               <Route path="/profile/:memberId" element={<Profile />} />
               <Route path="/recommend-book" element={<RecommendBook />} />
               <Route path="/detail-book/:bookId" element={<DetailBook />} />
-              <Route path="/bookshelf" element={<Bookshelf />} />
+              {/* <Route path="/bookshelf" element={<Bookshelf />} /> */}
+              <Route path="/bookshelf/:memberId" element={<Bookshelf />} />
               <Route path="/diary/:memberId" element={<Diary />} />
               <Route path="/logout" element={<Logout />} />
             </Route>
