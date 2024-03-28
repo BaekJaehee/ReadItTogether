@@ -64,6 +64,8 @@ springdoc:
   swagger-ui:
     path: /v3/api-docs
 
+profile:
+  image: ${BASIC_PROFILE_IMAGE}
 
 ---
 spring:
