@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import GetBookShelfList from "../../api/book/bookshelf/GetBookshelfList";
 import BookFilter from "../../components/books/BookFilter";
 import BookSort from "../../components/books/BookSort";
 import getSearchBooks from "../../api/book/BookSearch";
 
 const Bookshelf = () => {
-  const [filter, setFilter] = useState({ genres: [] });
   const navigate = useNavigate();
+  const memberId = localStorage.getItem("memberId")
+  const [filter, setFilter] = useState({ genres: [] });
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [bookshelfInfo, setBookshelfInfo] = useState([]);
 
   const handleFilterChange = (newFilter) => {
     setFilter(newFilter);
@@ -22,8 +25,20 @@ const Bookshelf = () => {
   };
 
   const handleClickBook = (bookId) => {
-    navigate.pushState(`/books/${bookId}`);  // 페이지 이동(or 새 탭)
+    navigate.pushState(`/detail-book/${bookId}`);  // 페이지 이동(or 새 탭)
   }
+
+  useEffect(() => {
+    const fetchBookshelfList = async () => {
+      try {
+        const response = await GetBookShelfList(memberId);
+        setBookshelfInfo(response.data);
+      } catch (error) {
+        console.log("책장 목록을 가져오는 데 실패했습니다: ", error);
+      }
+    };
+    fetchBookshelfList();
+  }, [memberId]);
 
   return (
     <div className="bg-sky-100 absolute inset-0 m-20">
