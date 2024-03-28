@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import img1 from "../../assets/book/img1.PNG"
 
-const CreateCard = ({ onClose }) => {
+const CreateCard = ({ onClose, bookId, cover, title, author, publisher }) => {
   const [comment, setComment] = useState('');
   const [isValid, setIsValid] = useState(false);
   
@@ -49,12 +49,17 @@ const CreateCard = ({ onClose }) => {
             <div className="grid grid-cols-2 gap-4 mb-4">
               {/* 왼쪽 열 */}
               <div className="col-span-1">
-                <img src={img1} alt="cover" className="mb-4 w-48 h-64" />
+                {/* <img src={img1} alt="cover" className="mb-4 w-48 h-64" /> */}
+                <img src={cover} alt="cover" className="mb-4 w-48 h-64" />
               </div>
               {/* 오른쪽 열 */}
               <div className="col-span-1">
-                <p className="my-2 text-lg font-bold">제목</p>
-                <p className="my-2 text-md font-bold">출판사</p>
+                {/* <p className="my-2 text-lg font-bold">제목</p> */}
+                <p className="my-2 text-lg font-bold">{title}</p>
+                {/* <p className="my-2 text-lg font-bold">작가</p> */}
+                <p className="my-2 text-lg font-bold">{author}</p>
+                {/* <p className="my-2 text-md font-bold">출판사</p> */}
+                <p className="my-2 text-md font-bold">{publisher}</p>
                 {/* <input 
                   type="text" 
                   id="comment" 
