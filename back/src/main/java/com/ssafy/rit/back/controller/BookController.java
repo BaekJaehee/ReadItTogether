@@ -45,7 +45,7 @@ public class BookController {
     // 코멘트 수정
     @PatchMapping("/comment")
     @Operation(summary = "책 코멘트 수정", description = "책 코멘트 수정")
-    public ResponseEntity<CommentUpdateResponse> updateComment(CommentUpdateRequestDto dto) {
+    public ResponseEntity<CommentUpdateResponse> updateComment(@RequestBody CommentUpdateRequestDto dto) {
         return bookService.updateComment(dto);
     }
 
