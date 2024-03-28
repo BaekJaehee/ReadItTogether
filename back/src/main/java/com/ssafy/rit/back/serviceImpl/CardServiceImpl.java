@@ -50,31 +50,36 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public ResponseEntity<CardDetailResponse> CardDetail(long cardId) {
-
+        // 카드 ID로 카드 정보 조회
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(CardNotFoundException::new);
 
-        // 카드<---->책
+        // 카드와 연관된 책 정보
         Book book = card.getBookId();
         if (book == null) {
             throw new BookNotFoundException();
         }
 
+        // 보낸 사람 정보
+        Member sender = card.getFromMemberId();
 
         // 카드 상세 정보를 담을 DTO 생성
         CardDetailResponseDto responseDto = CardDetailResponseDto.builder()
-                .content(book.getInfo())
-                .comment(card.getComment())
-                .title(book.getTitle())
-                .cover(book.getCover())
-                .author(book.getAuthor())
+                .content(book.getInfo()) // 책 정보
+                .comment(card.getComment()) // 카드 코멘트
+                .title(book.getTitle()) // 책 제목
+                .cover(book.getCover()) // 책 커버 이미지
+                .author(book.getAuthor()) // 책 저자
+                .fromId(sender.getId()) // 보낸 사람 ID
+                .nickname(sender.getNickname()) // 보낸 사람 닉네임
                 .build();
 
-        // 최종 응답 객체 생성
+        // 최종 응답 객체 생성 및 반환
         CardDetailResponse response = new CardDetailResponse("Success", responseDto);
 
         return ResponseEntity.ok(response);
     }
+
 
 
     @Override
