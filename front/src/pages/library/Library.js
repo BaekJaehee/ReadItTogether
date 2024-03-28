@@ -19,29 +19,29 @@ import mailBox from "../../assets/library/mailBox.png";
 const Library = () => {
   const location = useLocation();
   const [introText, setIntroText] = useState("");
-  const [memberId, setMemberId] = useState(null);
   const [isMemberPage, setIsMemberPage] = useState(false);
+  const memberId = localStorage.getItem("memberId")
 
   useEffect(() => {
-    const storedMemberId = localStorage.getItem("memberId");
-    setMemberId(storedMemberId);
+      // URL에서 whoMemberId 추출
+  const pathArray = location.pathname.split("/");
+  const whoMemberId = pathArray[pathArray.length - 1];
 
-    const pathArray = window.location.pathname.split("/");
-    setIsMemberPage(pathArray[pathArray.length - 1]);
-  }, [location]);
+  // 현재 페이지의 사용자 ID 업데이트
+  setIsMemberPage(whoMemberId);
 
-  useEffect(() => {
-    const myIntroText = async () => {
-      try {
-        const text = await IntroGet(isMemberPage);
-        setIntroText(text);
-      } catch (error) {
-        console.error("서재 소개글 에러:", error);
-      }
-    };
+  // 소개글 가져오기
+  const fetchIntroText = async () => {
+    try {
+      const text = await IntroGet(whoMemberId);
+      setIntroText(text);
+    } catch (error) {
+      console.error("소개글을 가져오는 데 실패했습니다:", error);
+    }
+  };
 
-    myIntroText();
-  }, [isMemberPage]);
+  fetchIntroText();
+}, [location.pathname]); // 의존성 배열에 location.pathname 추가
 
   // 방명록 상태
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -56,7 +56,7 @@ const Library = () => {
   // 소개글 상태
   const [isIntroOpen, setIsIntroOpen] = useState(false);
   const openIntro = () => {
-    if (memberId && isMemberPage) {
+    if (memberId === isMemberPage) {
       setIsIntroOpen(true);
     } else {
       console.warn("모달을 열 수 있는 권한이 없습니다.");
@@ -117,7 +117,13 @@ const Library = () => {
               </div>
             </div>
           </button>
-          {isIntroOpen && <Intro onClose={closeIntro} onUpdate={(updatedText) => setIntroText(updatedText)} />}
+          {isIntroOpen && (
+            <Intro
+              onClose={closeIntro}
+              memberId={memberId}
+              onUpdate={(updatedText) => setIntroText(updatedText)}
+            />
+          )}
         </div>
 
         <div className="group flex items-center justify-center  overflow-hidden">
@@ -139,7 +145,13 @@ const Library = () => {
               alt="포스트잇"
             />
           </button>
-          {isModalOpen && <PostItLauncher onClose={closeModal} />}
+          {isModalOpen && (
+            <PostItLauncher
+              onClose={closeModal}
+              isMemberPage={isMemberPage}
+              memberId={memberId}
+            />
+          )}
         </div>
       </div>
     </div>
