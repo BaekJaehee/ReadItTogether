@@ -35,10 +35,9 @@ public class GroupRecommendListServiceImpl implements GroupRecommendListService 
 
         // 그룹별 추천 리스트 갱신
         for (int groupNum = 0; groupNum < contentGroupNum; groupNum++) {
-            System.out.println("지금 그룹 넘버는? " + groupNum);
-            List<GroupRecommendBook> allByRecList = groupRecommendBookRepository.findAllByReGroupOrderByCreatedAt(groupNum);
-            List<Member> allByShelfGroup = memberRepository.findAllByShelfGroup(groupNum);
-            changeRecommendList(allByShelfGroup, allByRecList);
+            List<GroupRecommendBook> contentBaseGroupRecList = groupRecommendBookRepository.findAllByReGroupOrderByCreatedAt(groupNum);
+            List<Member> contentBaseShelfGroup = memberRepository.findAllByShelfGroup(groupNum);
+            changeRecommendList(contentBaseShelfGroup, contentBaseGroupRecList);
         }
 
         for (int groupNum = contentGroupNum; groupNum < ageAndGenderGroupNum; groupNum++) {
@@ -59,12 +58,13 @@ public class GroupRecommendListServiceImpl implements GroupRecommendListService 
             }
             gender = groupNum % 2 == 0 ? 1 : 0;
 
-            System.out.println("Processing group number: " + groupNum);
-            List<GroupRecommendBook> allByRecList = groupRecommendBookRepository.findAllByReGroupOrderByCreatedAt(groupNum);
-            List<Member> allByShelfGroup = memberRepository.findByBirthBetweenAndGender(startYear, endYear, gender);
-            System.out.println("그룹사이즈" + allByShelfGroup.size());
-            changeRecommendList(allByShelfGroup, allByRecList);
+            List<GroupRecommendBook> ageAndGenderGroupRecList = groupRecommendBookRepository.findAllByReGroupOrderByCreatedAt(groupNum);
+            List<Member> ageAndGenderShelfGroup = memberRepository.findByBirthBetweenAndGender(startYear, endYear, gender);
+            changeRecommendList(ageAndGenderShelfGroup, ageAndGenderGroupRecList);
         }
+        List<GroupRecommendBook> bestGroupRecList = groupRecommendBookRepository.findAllByReGroupOrderByCreatedAt(99);
+        List<Member> all = memberRepository.findAll();
+        changeRecommendList(all, bestGroupRecList);
     }
 
     private void changeRecommendList(List<Member> allByShelfGroup, List<GroupRecommendBook> allByRecList) {
@@ -83,10 +83,6 @@ public class GroupRecommendListServiceImpl implements GroupRecommendListService 
                 .collect(Collectors.toList());
 
         List<Book> top10Books = bookRepository.findAllById(top10BookIds);
-
-        if (top10Books.isEmpty()) {
-            System.out.println("탑10책이없음..");
-        }
 
         for (int thisRecommendBook = 0; thisRecommendBook < top10Books.size(); thisRecommendBook++) {
             GroupRecommendBook recommendBook = allByRecList.get(thisRecommendBook);
