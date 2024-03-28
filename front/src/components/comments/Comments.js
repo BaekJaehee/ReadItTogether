@@ -26,7 +26,7 @@ const CommentCard = ({ bookId, comment }) => {
           <div className="flex items-center">
             <img
               className="w-6 h-6 rounded-full mr-2 ml-2"
-              src={img}
+              src={comment.profileImage}
               alt="프로필"
             />
             <span className="text-sm font-semibold">{comment.nickname}</span>
