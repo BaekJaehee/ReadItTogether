@@ -1,5 +1,6 @@
 package com.ssafy.rit.back.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.w3c.dom.Text;
@@ -62,6 +63,7 @@ public class Book {
     private String info;
 
 //    관계 설정
+    @JsonManagedReference
     @OneToMany(mappedBy = "bookId")
     private List<Comment> comments;
 
@@ -71,12 +73,15 @@ public class Book {
     @OneToMany(mappedBy = "bookId")
     private List<BookGenre> bookGenres;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "bookId")
     private List<GroupRecommendBook> groupRecommendBooks;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "bookId")
     private List<MemberRecommendBook> memberRecommendBooks;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "bookId")
     private List<Bookshelf> bookshelf;
 
