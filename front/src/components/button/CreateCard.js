@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import handleSentCard from '../../api/card/HandleSendCard';
 import img1 from "../../assets/book/img1.PNG"
 
-const CreateCard = ({ onClose }) => {
+const CreateCard = ({ bookId, cover, title, author, publisher }) => {
   const [comment, setComment] = useState('');
   const [isValid, setIsValid] = useState(false);
   
@@ -21,19 +22,15 @@ const CreateCard = ({ onClose }) => {
     }
   }, [comment])
   
-  const handleSubmit = () => {
-    // 전송 로직 처리 후 모달 닫기
-    // setTimeout으로 모달을 일정 시간 후에 닫도록 설정
-    setTimeout(() => {
-      onClose();
-    }, 2000); // 2초 후에 모달 닫힘
+  const handleSubmit = async () => {
+    try {
+      await handleSentCard(bookId, comment);
+      alert('카드를 보냈습니다.');
+      closeCreateCardModal();
+    } catch (error) {
+      console.error('카드 작성에 실패했습니다', error);
+    }
   };
-
-  // const handleCloseClick = (e) => {
-  //   e.stopPropagation();
-  //   handleCloseModal();
-  // };
-
 
   return (
     <div>
@@ -49,12 +46,17 @@ const CreateCard = ({ onClose }) => {
             <div className="grid grid-cols-2 gap-4 mb-4">
               {/* 왼쪽 열 */}
               <div className="col-span-1">
-                <img src={img1} alt="cover" className="mb-4 w-48 h-64" />
+                {/* <img src={img1} alt="cover" className="mb-4 w-48 h-64" /> */}
+                <img src={cover} alt="cover" className="mb-4 w-48 h-64" />
               </div>
               {/* 오른쪽 열 */}
               <div className="col-span-1">
-                <p className="my-2 text-lg font-bold">제목</p>
-                <p className="my-2 text-md font-bold">출판사</p>
+                {/* <p className="my-2 text-lg font-bold">제목</p> */}
+                <p className="my-2 text-lg font-bold">{title}</p>
+                {/* <p className="my-2 text-lg font-bold">작가</p> */}
+                <p className="my-2 text-lg font-bold">{author}</p>
+                {/* <p className="my-2 text-md font-bold">출판사</p> */}
+                <p className="my-2 text-md font-bold">{publisher}</p>
                 {/* <input 
                   type="text" 
                   id="comment" 

@@ -32,8 +32,12 @@ const Login = () => {
 
       const memberId = response.data.memberId;
       const accessToken = response.data.accessToken;
+      const nickname = response.data.nickname;
+      const profileImage = response.data.profileImage;
       localStorage.setItem("memberId", memberId);
       localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("nickname", nickname);
+      localStorage.setItem("profileImage", profileImage);
 
       if (saveEmail) {
         localStorage.setItem("savedEmail", email);

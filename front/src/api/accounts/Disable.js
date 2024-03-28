@@ -25,9 +25,11 @@ const disable = async (password) => {
     // 탈퇴 성공 시 로그아웃
     localStorage.removeItem(`memberId`);
     localStorage.removeItem(`accessToken`);
+    localStorage.removeItem(`nickname`);
+    localStorage.removeItem(`profileImage`);
 
     console.log(requestBody);
-    return response
+    return response;
   } catch (error) {
     console.log(error);
     throw error;

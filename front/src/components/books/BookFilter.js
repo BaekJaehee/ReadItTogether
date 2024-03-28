@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 
-const genres = ["판타지", "로맨스", "SF", "무협", "추리/미스터리", "공포/스릴러", "역사", "한국문학", "영미문학", "일본문학", "중국문학"];
+const genres = [
+  "액션", "호러", "미스터리", "판타지", "로맨스", "SF", 
+  "한국문학", "한국단편", "영미문학", "영미단편", "일본문학", "일본단편", 
+  "중국문학", "스페인문학", "북유럽문학", "라틴문학", "러시아문학", "동유럽문학", 
+  "독일문학", "프랑스문학"
+];
 
 const BookFilter = ({ onFilterChange }) => {
   const [selectedGenres, setSelectedGenres] = useState([]);

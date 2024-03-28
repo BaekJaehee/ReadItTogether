@@ -8,7 +8,7 @@ const handleCardList = () => {
 
   try {
     const response = axios.get(
-      `${API_BASE_URL}/postbox/list`,
+      `${API_BASE_URL}/card/list`,
       {
         withCredentials: true,
         headers: {
