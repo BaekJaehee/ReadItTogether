@@ -7,6 +7,7 @@ import com.ssafy.rit.back.entity.Card;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -20,21 +21,13 @@ public interface CardRepository extends JpaRepository<Card,Long> {
     @Query("SELECT COUNT(c) FROM Card c WHERE c.fromMemberId.id = :fromMemberId")
     int getSendCardCnt(@Param("fromMemberId")Long fromMemberId);
 
-
-
-    // 카드 ID로 카드 상세 정보 조회
-
-
-//    Page<Card> findByFromMemberId(Member fromMember, Pageable pageable);
-//    Page<Card> findByToMemberId(Member toMember, Pageable pageable);
-
     Page<Card> findByFromMemberIdAndDeletedBySenderIsFalse(Member fromMember, Pageable pageable);
     Page<Card> findByToMemberIdAndDeletedByRecipientIsFalse(Member toMember, Pageable pageable);
 
+    @Query("SELECT c FROM Card c WHERE c.fromMemberId IN :members AND c.toMemberId != :excludedMember")
+    List<Card> findByFromMemberIdInAndToMemberIdNot(@Param("members") List<Member> members, @Param("excludedMember") Member excludedMember);
 
-
-
-
-
+    @Query("SELECT c FROM Card c WHERE c.createdAt BETWEEN :startDate AND :endDate AND c.toMemberId != :excludedMember")
+    List<Card> findCardsBetweenDates(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, Member excludedMember);
 
 }

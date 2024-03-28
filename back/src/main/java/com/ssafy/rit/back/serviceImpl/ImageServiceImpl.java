@@ -36,7 +36,7 @@ public class ImageServiceImpl implements ImageService {
     private String bucket;
 
     // 굳이 해야 하나?
-//    private String localLocation = "C:\\Users\\SSAFY\\Desktop\\beforebucket\\";
+    private String localLocation = System.getProperty("java.io.tmpdir");
 
 
     @Override
@@ -45,26 +45,25 @@ public class ImageServiceImpl implements ImageService {
         MultipartFile file = request.getFile("upload");
 
         String fileName = file.getOriginalFilename();
-        String ext = fileName.substring(fileName.lastIndexOf("."));
-        String uuidFileName = UUID.randomUUID().toString() + ext;
+        String ext = fileName.substring(fileName.indexOf("."));
 
-        // S3에 직접 업로드
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(file.getSize());
-        metadata.setContentType(file.getContentType());
-        System.out.println(metadata);
-        s3Config.amazonS3Client().putObject(bucket, uuidFileName, file.getInputStream(), metadata);
+        String uuidFileName = UUID.randomUUID() + ext;
+        String localPath = localLocation + uuidFileName;
 
+        File localFile = new File(localPath);
+        file.transferTo(localFile);
 
+        s3Config.amazonS3Client().putObject(new PutObjectRequest(bucket, uuidFileName, localFile).withCannedAcl(CannedAccessControlList.PublicRead));
         String s3Url = s3Config.amazonS3Client().getUrl(bucket, uuidFileName).toString();
 
         // DB에서 Member profileImage 필드 갱신
         member.updateProfile(s3Url);
 
+        localFile.delete();
+
         return s3Url;
+
     }
-
-
 
 
     public Member getMemberForProfileUpload(String nickname) {
