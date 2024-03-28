@@ -11,6 +11,9 @@ import com.ssafy.rit.back.dto.card.responseDto.CardListResponseDto;
 import com.ssafy.rit.back.entity.Book;
 import com.ssafy.rit.back.entity.Card;
 import com.ssafy.rit.back.entity.Postbox;
+import com.ssafy.rit.back.exception.card.BookNotFoundException;
+import com.ssafy.rit.back.exception.card.CardNotFoundException;
+import com.ssafy.rit.back.exception.card.UnauthorizedCardDeletionException;
 import com.ssafy.rit.back.repository.*;
 import com.ssafy.rit.back.service.CardService;
 import com.ssafy.rit.back.util.CommonUtil;
@@ -49,13 +52,14 @@ public class CardServiceImpl implements CardService {
     public ResponseEntity<CardDetailResponse> CardDetail(long cardId) {
 
         Card card = cardRepository.findById(cardId)
-                .orElseThrow(() -> new RuntimeException("카드가 없는것같음"));
+                .orElseThrow(CardNotFoundException::new);
 
         // 카드<---->책
         Book book = card.getBookId();
         if (book == null) {
-            throw new RuntimeException("북이 존재하지않는데..흠");
+            throw new BookNotFoundException();
         }
+
 
         // 카드 상세 정보를 담을 DTO 생성
         CardDetailResponseDto responseDto = CardDetailResponseDto.builder()
@@ -108,13 +112,11 @@ public class CardServiceImpl implements CardService {
 
 
 
-
-
     @Override
     public ResponseEntity<CardDeleteResponse> CardDelete(CardRequestDto dto) {
         Member currentMember = commonUtil.getMember(); // 현재 로그인한 사용자 정보 가져오기
         Card card = cardRepository.findById(dto.getCardId()) // 카드 ID로 카드 조회
-                .orElseThrow(() -> new RuntimeException("Card not found"));
+                .orElseThrow(CardNotFoundException::new);
 
         // 현재 사용자가 카드의 보낸 사람인지 확인
         boolean isCurrentUserTheSender = card.getFromMemberId() != null && card.getFromMemberId().equals(currentMember);
@@ -123,9 +125,9 @@ public class CardServiceImpl implements CardService {
 
         if (!isCurrentUserTheSender && !isCurrentUserTheRecipient) {
             // 현재 사용자가 카드의 보낸 사람도, 받는 사람도 아닐 경우
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new CardDeleteResponse("넌 이걸 삭제할 자격이없스요.", false));
+            throw new UnauthorizedCardDeletionException();
         }
+
 
         // 현재 사용자가 보낸 카드일 경우, fromMemberId 관계를 제거
         if (isCurrentUserTheSender) {
@@ -150,7 +152,7 @@ public class CardServiceImpl implements CardService {
     public ResponseEntity<CardCreateResponse> CardCreate(CardCreateRequestDto dto) {
         // bookId를 통해서 책 정보 가져오기
         Book book = bookRepository.findById((int) dto.getBookId())
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(BookNotFoundException::new);
 
         // 현재 로그인한 사용자 정보 가져오기
         Member sender = commonUtil.getMember();

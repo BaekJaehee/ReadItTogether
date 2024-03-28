@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Collections;
 
-@RestControllerAdvice
+@RestControllerAdvice //전역처리
 @RequiredArgsConstructor
 public class BookGlobalExceptionHandler {
 
@@ -23,7 +23,7 @@ public class BookGlobalExceptionHandler {
         JSON_HEADERS.add(HttpHeaders.CONTENT_TYPE, "application/json");
     }
 
-    @ExceptionHandler(CommentException.class)
+    @ExceptionHandler(CommentException.class) //예외처리 핸들러
     public ResponseEntity<String> handleCommentException(CommentException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .headers(JSON_HEADERS)
