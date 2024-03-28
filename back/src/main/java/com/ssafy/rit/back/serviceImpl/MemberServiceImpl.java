@@ -15,6 +15,7 @@ import com.ssafy.rit.back.service.MemberService;
 import com.ssafy.rit.back.util.CommonUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,9 @@ public class MemberServiceImpl implements MemberService {
     private final JavaMailSender javaMailSender;
     private final RedisTemplate<String, String> redisTemplate;
     private final JWTUtil jwtUtil;
+
+    @Value("${profile.image}")
+    private String basicProfileImage;
 
     public MemberServiceImpl(MemberRepository memberRepository,
                              PasswordEncoder passwordEncoder,
@@ -66,6 +70,10 @@ public class MemberServiceImpl implements MemberService {
         int birth = Integer.parseInt(dto.getBirth());
         int gender = dto.getGender();
 
+
+
+
+
         Boolean isJoined = memberRepository.existsByEmail(email);
         if (isJoined) {
             return false;
@@ -78,6 +86,7 @@ public class MemberServiceImpl implements MemberService {
                 .nickname(nickname)
                 .birth(birth)
                 .gender(gender)
+                .profileImage(basicProfileImage)
                 .build();
 
         memberRepository.save(data);
