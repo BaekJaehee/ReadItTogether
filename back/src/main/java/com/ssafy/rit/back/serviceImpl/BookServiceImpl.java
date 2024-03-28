@@ -190,6 +190,7 @@ public class BookServiceImpl implements BookService {
 
         Member currentMember = commonUtil.getMember();
 
+        log.info("servife1");
         // 대상 코멘트가 있는지 확인 및 수정
         Comment comment = commentRepository.findById(dto.getCommentId())
                 .orElseThrow(CommentException::commentNotFoundException);

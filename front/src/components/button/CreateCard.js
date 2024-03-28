@@ -55,15 +55,6 @@ const CreateCard = ({ onClose }) => {
               <div className="col-span-1">
                 <p className="my-2 text-lg font-bold">제목</p>
                 <p className="my-2 text-md font-bold">출판사</p>
-                {/* <input 
-                  type="text" 
-                  id="comment" 
-                  name="comment" 
-                  value={comment} 
-                  onChange={(e) => setComment(e.target.value)} 
-                  className="border border-gray-300 p-2 rounded w-full mb-4" 
-                  placeholder="추천사를 10자 이상 입력해주세요" 
-                /> */}
                 <textarea id='comment' name='comment' placeholder="추천사를 10자 이상 입력해주세요" value={comment} onChange={(e) => setComment(e.target.value)} className="border border-gray-300 p-2 rounded w-full mb-4"></textarea>
               </div>
             </div>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { checkNicknameDuplicate } from "../../api/accounts/NicknameDuplicate";
 import changeNickname from "../../api/accounts/ChangeNickname";
+import fetchProfileInfo from "../../api/accounts/fetchProfileInfo";
 
 const EditNicknameModal = ({ onClose }) => {
   const [newNickname, setNewNickname] = useState('');
@@ -35,6 +36,7 @@ const EditNicknameModal = ({ onClose }) => {
       console.log(response);
       onClose();
       alert('닉네임이 변경되었습니다.');
+      await fetchProfileInfo(); // 프로필 정보 다시 가져오기
       return response;
     } catch (error) {
       console.error(error);
