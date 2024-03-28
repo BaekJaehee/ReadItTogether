@@ -80,6 +80,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String email = authentication.getName();
         Member member = memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
         Long memberId = member.getId();
+        String profileImage = member.getProfileImage();
+        String nickname = member.getNickname();
 
 
         String accessToken = jwtUtil.createJwt("Authorization", email, 600000L);
@@ -95,7 +97,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         log.info("-----------------------로그인 완료염-----------------------");
 
-        DataDto dataDto = new DataDto(accessToken, refreshToken, memberId);
+        DataDto dataDto = new DataDto(accessToken, refreshToken, memberId, profileImage, nickname);
         SignInResponseDto responseDto = new SignInResponseDto("Login Success", dataDto);
 
         ObjectMapper objectMapper = new ObjectMapper();
