@@ -23,9 +23,11 @@ const AddToShelf = async (bookId, isRead) => {
       }
     )
     console.log(response);
+    alert('등록되었습니다.')
     return response;
   } catch (error) {
     console.log(error);
+    alert('이미 등록된 책입니다.');
   }
 }
 
