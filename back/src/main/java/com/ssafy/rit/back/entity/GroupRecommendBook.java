@@ -1,7 +1,8 @@
 package com.ssafy.rit.back.entity;
 
 import java.time.LocalDate;
-import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,6 +28,7 @@ public class GroupRecommendBook {
     private LocalDate createdAt;
 
 //    관계 설정
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book bookId;

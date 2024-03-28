@@ -5,6 +5,7 @@ import com.ssafy.rit.back.dto.bookshelf.requestDto.BookshelfUploadRequestDto;
 import com.ssafy.rit.back.dto.bookshelf.response.BookshelfListResponse;
 import com.ssafy.rit.back.dto.bookshelf.response.BookshelfUpdateResponse;
 import com.ssafy.rit.back.dto.bookshelf.response.BookshelfUploadResponse;
+import com.ssafy.rit.back.dto.bookshelf.responseDto.BookshelfListResponseDto;
 import com.ssafy.rit.back.entity.Book;
 import com.ssafy.rit.back.entity.Bookshelf;
 import com.ssafy.rit.back.entity.Comment;
@@ -18,6 +19,10 @@ import com.ssafy.rit.back.service.BookshelfService;
 import com.ssafy.rit.back.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
@@ -28,9 +33,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -73,6 +76,7 @@ public class BookshelfServiceImpl implements BookshelfService {
                 .rating(rating)
                 .createdAt(LocalDate.now())
                 .cover(currentBook.getCover())
+                .title(currentBook.getTitle())
                 .build();
 
         bookshelfRepository.save(bookshelf);
@@ -99,7 +103,7 @@ public class BookshelfServiceImpl implements BookshelfService {
             frequencyMap.put(group, frequencyMap.getOrDefault(group, 0) + 1);
 
             int value = frequencyMap.get(group);
-            if(value >= max_v) {
+            if (value >= max_v) {
                 max_v = value;
                 max_key = group;
             }
@@ -136,8 +140,25 @@ public class BookshelfServiceImpl implements BookshelfService {
 
     // 책장 조회 하기
     @Override
-    public ResponseEntity<BookshelfListResponse> readBookshelfList(Long memberId) {
+    public ResponseEntity<BookshelfListResponse> readBookshelfList(Long memberId, int page, int size, int sort, String searchKeyword) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        switch (sort) {
+            case 0:
+                pageable = PageRequest.of(page, size, Sort.by("bookshelfId").descending());
+                break;
+            case 1:
+                pageable = PageRequest.of(page, size, Sort.by("rating").descending());
+                break;
+            case 2:
+                pageable = PageRequest.of(page, size, Sort.by("title"));
+                break;
+        }
+
+        Page<Bookshelf> bookshelfPage = bookshelfRepository.findAllByMemberIdAndSearchKeyword(memberId, searchKeyword, pageable);
+
+
         return null;
     }
-
 }
