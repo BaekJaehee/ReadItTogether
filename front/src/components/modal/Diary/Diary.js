@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Received from "./Received";
 import Sent from "./Sent";
+import handleCardList from "../../../api/card/HandleCardList";
 
 // 카드 등록일 기준으로 정렬
 
 const Diary = ({ onClose }) => {
+  const [receivedCards, setReceivedCards] = useState([]);
+  const [sentCards, setSentCards] = useState([]);
+  
   const handleCardOpen = () => {
     setShowButtons(false); // 카드가 열리면 버튼 숨김
   };
@@ -12,16 +16,39 @@ const Diary = ({ onClose }) => {
   const handleCardClose = () => {
     setShowButtons(true); // 카드가 닫히면 버튼 보이기
   }
-  const [currentComponent, setCurrentComponent] = useState(<Received onCardOpen={handleCardOpen} onCardClose={handleCardClose}/>);  // 열었을 시 기본은 받은 카드
 
+  // Cannot access 'handleCardOpen' before initialization
+  // const [currentComponent, setCurrentComponent] = useState(<Received onCardOpen={handleCardOpen} onCardClose={handleCardClose}/>);  // 열었을 시 기본은 받은 카드
+  const [currentComponent, setCurrentComponent] = useState('received');  // 열었을 시 기본은 받은 카드
   const [showButtons, setShowButtons] = useState(true);
 
+  useEffect(() => {
+    const fetchCardListInfo = async () => {
+      try {
+        const response = await handleCardList();
+        setReceivedCards(response.data.receivedCards.content);
+        setSentCards(response.data.sentCards.content);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchCardListInfo();
+  }, []);
+
+  // const handleReceivedClick = () => {
+  //   setCurrentComponent(<Received onCardOpen={handleCardOpen} onCardClose={handleCardClose}/>);
+  // };
+
+  // const handleSentClick = () => {
+  //   setCurrentComponent(<Sent onCardOpen={handleCardOpen} onCardClose={handleCardClose}/>);
+  // };
+
   const handleReceivedClick = () => {
-    setCurrentComponent(<Received onCardOpen={handleCardOpen} onCardClose={handleCardClose}/>);
+    setCurrentComponent('received');
   };
 
   const handleSentClick = () => {
-    setCurrentComponent(<Sent onCardOpen={handleCardOpen} onCardClose={handleCardClose}/>);
+    setCurrentComponent('sent');
   };
 
   // 모달 내에서 버튼을 클릭해도 모달이 닫히지 않도록
@@ -52,7 +79,13 @@ const Diary = ({ onClose }) => {
           </div>
         )}
         <div>
-          {currentComponent}
+          {/* {currentComponent} */}
+          {/* 삼항연산자 */}
+          {currentComponent === 'received' ? (
+            <Received cards={receivedCards} onCardOpen={handleCardOpen} onCardClose={handleCardClose} />
+          ) : (
+            <Sent cards={sentCards} onCardOpen={handleCardOpen} onCardClose={handleCardClose} />
+          )}
         </div>
       </div>
     </div>
