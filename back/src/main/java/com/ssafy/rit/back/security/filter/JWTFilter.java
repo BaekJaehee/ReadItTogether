@@ -58,7 +58,7 @@ public class JWTFilter extends OncePerRequestFilter  {
         String category = jwtUtil.getCategory(accessToken);
         if (!category.equals("Authorization")) {
             PrintWriter writer = response.getWriter();
-            writer.print("NO ACCESSTOKEN");
+            writer.print("IT'S NOT A ACCESSTOKEN");
 
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
@@ -75,7 +75,9 @@ public class JWTFilter extends OncePerRequestFilter  {
                 .build();
         CustomUserDetails customUserDetails = new CustomUserDetails(member);
 
+        // customUserDetails 사용해서 시큐리티 인증 토큰 생성
         Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, null);
+        // 세션에 사용자 등록
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
         filterChain.doFilter(request, response);

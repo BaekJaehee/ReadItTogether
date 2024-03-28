@@ -21,13 +21,11 @@ import java.io.IOException;
 @RestController
 public class ReissueController {
 
-    private final RefreshRepository refreshRepository;
     private final ReissueServiceImpl reissueService;
 
 
     @Autowired
-    public ReissueController(RefreshRepository refreshRepository, ReissueServiceImpl reissueService) {
-        this.refreshRepository = refreshRepository;
+    public ReissueController(ReissueServiceImpl reissueService) {
         this.reissueService = reissueService;
     }
 
