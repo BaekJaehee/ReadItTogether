@@ -1,7 +1,10 @@
 package com.ssafy.rit.back.exception.handler;
 
 import com.google.gson.Gson;
+import com.ssafy.rit.back.exception.card.BookNotFoundException;
 import com.ssafy.rit.back.exception.card.CardNotFoundException;
+import com.ssafy.rit.back.exception.card.UnauthorizedCardAccessException;
+import com.ssafy.rit.back.exception.card.UnauthorizedCardDeletionException;
 import com.ssafy.rit.back.exception.guestBook.GuestBookNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -29,6 +32,31 @@ public class CardGlobalExceptionHandler {
                 .headers(JSON_HEADERS)
                 .body(stringToGson(e.getMessage()));
     }
+
+    @ExceptionHandler(BookNotFoundException.class)
+    public ResponseEntity<String> handleBookNotFoundException(BookNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .headers(JSON_HEADERS)
+                .body(stringToGson(e.getMessage()));
+    }
+
+    @ExceptionHandler(UnauthorizedCardAccessException.class)
+    public ResponseEntity<String> handleUnauthorizedCardAccessException(UnauthorizedCardAccessException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .headers(JSON_HEADERS)
+                .body(stringToGson(e.getMessage()));
+    }
+
+    @ExceptionHandler(UnauthorizedCardDeletionException.class)
+    public ResponseEntity<String> handleUnauthorizedCardDeletionException(UnauthorizedCardDeletionException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .headers(JSON_HEADERS)
+                .body(stringToGson(e.getMessage()));
+    }
+
+
+
+
 
     public String stringToGson(String message){
         return gson.toJson(Collections.singletonMap("message", message));
