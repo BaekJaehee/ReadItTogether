@@ -7,6 +7,8 @@ const changePassword = async (oldPassword, newPassword) => {
     oldPassword: oldPassword,
     newPassword: newPassword
   }
+  
+  const accessToken = localStorage.getItem('accessToken');
 
   try {
     const response = await axios.put(
@@ -16,12 +18,16 @@ const changePassword = async (oldPassword, newPassword) => {
         withCredentials: true,
         headers: {
           "Content-Type": "application/json",
-          // "Authorization": `Bearer ${accessToken}`
+          "Authorization": `Bearer ${accessToken}`
         },
       }
     )
+    // 성공 시 로그아웃
+    localStorage.removeItem(`memberId`);
+    localStorage.removeItem(`accessToken`);
+    
     console.log(requestBody);
-    console.log(response);
+    // console.log(response.data);
     return response;
   } catch (error) {
     console.error("비밀번호 변경 실패", error);

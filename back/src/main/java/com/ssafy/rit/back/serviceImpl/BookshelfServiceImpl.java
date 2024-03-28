@@ -5,6 +5,7 @@ import com.ssafy.rit.back.dto.bookshelf.requestDto.BookshelfUploadRequestDto;
 import com.ssafy.rit.back.dto.bookshelf.response.BookshelfListResponse;
 import com.ssafy.rit.back.dto.bookshelf.response.BookshelfUpdateResponse;
 import com.ssafy.rit.back.dto.bookshelf.response.BookshelfUploadResponse;
+import com.ssafy.rit.back.dto.bookshelf.responseDto.BookshelfListResponseDto;
 import com.ssafy.rit.back.entity.Book;
 import com.ssafy.rit.back.entity.Bookshelf;
 import com.ssafy.rit.back.entity.Comment;
@@ -18,11 +19,20 @@ import com.ssafy.rit.back.service.BookshelfService;
 import com.ssafy.rit.back.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
+
+
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,6 +45,8 @@ public class BookshelfServiceImpl implements BookshelfService {
     private final BookshelfRepository bookshelfRepository;
     private final CommentRepository commentRepository;
 
+
+    // 책장에 책 등록하기
     @Override
     public ResponseEntity<BookshelfUploadResponse> uploadBookshelf(BookshelfUploadRequestDto dto) {
 
@@ -43,7 +55,11 @@ public class BookshelfServiceImpl implements BookshelfService {
 
         Book currentBook = bookRepository.findById(dto.getBookId()).orElseThrow(BookNotFoundException::new);
 
-        bookshelfRepository.findByBookIdAndMemberId(currentBook, currentMember).orElseThrow(BookshelfException::existException);
+
+        bookshelfRepository.findByBookIdAndMemberId(currentBook, currentMember)
+                .ifPresent(s -> {
+                    throw BookshelfException.existException();
+                });
 
         Optional<Comment> commentOptional = commentRepository.findByBookIdAndMemberId(currentBook, currentMember);
 
@@ -60,9 +76,40 @@ public class BookshelfServiceImpl implements BookshelfService {
                 .rating(rating)
                 .createdAt(LocalDate.now())
                 .cover(currentBook.getCover())
+                .title(currentBook.getTitle())
                 .build();
 
         bookshelfRepository.save(bookshelf);
+
+        // 유저의 책 성향 업데이트 shelfGroup
+        List<Bookshelf> bookshelfList = bookshelfRepository.findAllByMemberId(currentMember);
+
+        List<Integer> bookIds = bookshelfList.stream()
+                .filter(b -> b.getIsRead() == 1)
+                .map(b -> b.getBookId().getId())
+                .toList();
+
+        List<Book> books = bookRepository.findAllByBookIds(bookIds);
+
+        List<Integer> groupList = books.stream()
+                .map(Book::getBookGroup)
+                .toList();
+
+        HashMap<Integer, Integer> frequencyMap = new HashMap<>();
+        int max_v = 0;
+        int max_key = currentMember.getShelfGroup();
+
+        for (Integer group : groupList) {
+            frequencyMap.put(group, frequencyMap.getOrDefault(group, 0) + 1);
+
+            int value = frequencyMap.get(group);
+            if (value >= max_v) {
+                max_v = value;
+                max_key = group;
+            }
+        }
+
+        currentMember.setShelfGroup(max_key);
 
         BookshelfUploadResponse response = new BookshelfUploadResponse("책 저장에 성공했습니다.", true);
 
@@ -90,9 +137,28 @@ public class BookshelfServiceImpl implements BookshelfService {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+
+    // 책장 조회 하기
     @Override
-    public ResponseEntity<BookshelfListResponse> readBookshelfList(Long memberId) {
+    public ResponseEntity<BookshelfListResponse> readBookshelfList(Long memberId, int page, int size, int sort, String searchKeyword) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        switch (sort) {
+            case 0:
+                pageable = PageRequest.of(page, size, Sort.by("bookshelfId").descending());
+                break;
+            case 1:
+                pageable = PageRequest.of(page, size, Sort.by("rating").descending());
+                break;
+            case 2:
+                pageable = PageRequest.of(page, size, Sort.by("title"));
+                break;
+        }
+
+        Page<Bookshelf> bookshelfPage = bookshelfRepository.findAllByMemberIdAndSearchKeyword(memberId, searchKeyword, pageable);
+
+
         return null;
     }
-
 }

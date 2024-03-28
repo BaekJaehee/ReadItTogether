@@ -13,6 +13,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class CommentListResponseDto {
 
+    private Long commentId;
+
     private String nickname;
 
     private int rating;
@@ -20,5 +22,9 @@ public class CommentListResponseDto {
     private String comment;
 
     private LocalDate createAt;
+
+    private Long memberId;
+
+    private String profileImage;
 
 }
