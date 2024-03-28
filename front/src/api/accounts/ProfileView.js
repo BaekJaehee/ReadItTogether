@@ -19,7 +19,8 @@ const profileView = async () => {
     )
 
     console.log(response);
-    console.log(response.data.genreNoList)
+    console.log(response.data.profileImage);
+    // console.log(response.data.genreNoList)
     
     return response;
   } catch (error) {
