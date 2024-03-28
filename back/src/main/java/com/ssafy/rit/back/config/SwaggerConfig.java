@@ -94,6 +94,14 @@ import java.util.Arrays;
         }
 
         @Bean
+        public GroupedOpenApi recommendAPI() {
+            return GroupedOpenApi.builder()
+                    .group("recommend-api")
+                    .pathsToMatch("/recommends/**")
+                    .build();
+        }
+
+        @Bean
         public OpenAPI openAPI(){
             SecurityScheme securityScheme = new SecurityScheme()
                     .type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")
