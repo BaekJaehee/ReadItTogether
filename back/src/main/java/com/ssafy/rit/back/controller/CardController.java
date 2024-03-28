@@ -40,7 +40,7 @@ public class CardController {
     @GetMapping("/list")
     public ResponseEntity<Map<String, Object>> getCardList(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "8") int size) {
+            @RequestParam(defaultValue = "4") int size) {
         return cardService.CardList(page, size);
     }
 }
