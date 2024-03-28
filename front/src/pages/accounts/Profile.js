@@ -193,7 +193,7 @@ const Profile = () => {
               {/* {dataValues} */}
             </div>
             {/* 설정 톱니바퀴 */}
-            <div className="relative right-0" onClick={ handleSettingsClick }>
+            <div className="relative right-0 cursor-pointer" onClick={ handleSettingsClick }>
               <img className="w-5" src={settings} alt="" />
             </div>
           </div>
