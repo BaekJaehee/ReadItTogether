@@ -22,18 +22,18 @@ const Diary = ({ onClose }) => {
   const [currentComponent, setCurrentComponent] = useState('received');  // 열었을 시 기본은 받은 카드
   const [showButtons, setShowButtons] = useState(true);
 
-  useEffect(() => {
-    const fetchCardListInfo = async () => {
-      try {
-        const response = await handleCardList();
-        setReceivedCards(response.data.receivedCards.content);
-        setSentCards(response.data.sentCards.content);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    fetchCardListInfo();
-  }, []);
+  // useEffect(() => {
+  //   const fetchCardListInfo = async () => {
+  //     try {
+  //       const response = await handleCardList();
+  //       setReceivedCards(response.data.receivedCards.content);
+  //       setSentCards(response.data.sentCards.content);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   }
+  //   fetchCardListInfo();
+  // }, []);
 
   // const handleReceivedClick = () => {
   //   setCurrentComponent(<Received onCardOpen={handleCardOpen} onCardClose={handleCardClose}/>);

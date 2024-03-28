@@ -2,16 +2,16 @@ import axios from "axios";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-const handleCardList = (page = 0, size = 4) => {
-
+const handleCardList = async (page = 0, size = 4) => {
   const accessToken = localStorage.getItem("accessToken");
 
   try {
-    const response = axios.get(
+    const response = await axios.get(
       `${API_BASE_URL}/card/list`,
       {
         withCredentials: true,
         headers: {
+          "Content-Type": "application/json",
           "Authorization": `Bearer ${accessToken}`
         },
         params: {
@@ -19,9 +19,8 @@ const handleCardList = (page = 0, size = 4) => {
           size: size
         }
       }
-    )
-    console.log(response);
-    return response;
+    );
+    return response.data;
   } catch (error) {
     console.error(error);
     throw error;
