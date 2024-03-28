@@ -5,8 +5,8 @@ import IntroForm from "../../api/llibrary/intro/IntroForm";
 import logo from "../../assets/navbar/logo2.png";
 import deleteButton from "../../assets/profile/delete.png";
 
-const Intro = ({ onClose, onUpdate }) => {
-  const [text, setText] = useState("");
+const Intro = ({ onClose, onUpdate, introText }) => {
+  const [text, setText] = useState(introText);
   const modalRef = useRef();
 
   const handleSubmit = async (event) => {
@@ -64,6 +64,7 @@ const Intro = ({ onClose, onUpdate }) => {
               className="w-full h-[200px] p-2 border rounded resize-none text-xs text-gray-600"
               value={text}
               onChange={(e) => setText(e.target.value)}
+              maxLength={120}
             ></textarea>
           </div>
         </form>
