@@ -37,6 +37,9 @@ public class Bookshelf {
     @Column(name = "cover")
     private String cover;
 
+    @Column(name = "title")
+    private String title;
+
 //  관계 설정
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
