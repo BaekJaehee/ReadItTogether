@@ -29,6 +29,9 @@ public interface BookshelfRepository extends JpaRepository<Bookshelf, Integer> {
     List<Integer> getBookIdListFromBookshelf(@Param("memberId")Long memberId, @Param("startDate") LocalDate startDate, @Param("endDate")LocalDate endDate);
 
 
+    @Query("SELECT b FROM Bookshelf b WHERE b.memberId.id IN :memberIds")
+    List<Bookshelf> findAllByMemberIdIn(@Param("memberIds") List<Long> memberIds);
+
     List<Bookshelf> findAllByMemberId(Member currentMember);
 
     List<Bookshelf> findAllByMemberId_Id(Long memberId);
@@ -40,3 +43,8 @@ public interface BookshelfRepository extends JpaRepository<Bookshelf, Integer> {
 
 
 }
+
+
+
+
+

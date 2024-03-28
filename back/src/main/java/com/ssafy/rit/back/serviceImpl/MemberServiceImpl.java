@@ -63,7 +63,7 @@ public class MemberServiceImpl implements MemberService {
         String password = dto.getPassword();
         String name = dto.getName();
         String nickname = dto.getNickname();
-        String birth = dto.getBirth();
+        int birth = Integer.parseInt(dto.getBirth());
         int gender = dto.getGender();
 
         Boolean isJoined = memberRepository.existsByEmail(email);
