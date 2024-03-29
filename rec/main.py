@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 from models.Model import Comment, Book, MemberRecommendBook
 
 # 동기 엔진 및 세션 생성
-SYNC_DB_URL = "mysql+pymysql://root:1234@j10d206.p.ssafy.io/ssafy"
+SYNC_DB_URL = "mysql+pymysql://root:!A123456bc%40@j10d206.p.ssafy.io:3306/ssafy"
 engine = create_engine(SYNC_DB_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
