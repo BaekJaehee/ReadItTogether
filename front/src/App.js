@@ -27,10 +27,6 @@ function App() {
       <AuthProvider>
         <PageLayout>
           <Routes>
-            <Route path="/:memberId" element={<Library />} />
-            <Route path="/detail-book/:bookId" element={<DetailBook />} />
-            <Route path="/bookshelf/:memberId" element={<Bookshelf />} />
-
             <Route element={<PublicRoute />}>
               <Route path="/" element={<Login />} />
               <Route path="/login" element={<Login />} />
@@ -38,12 +34,15 @@ function App() {
               <Route path="/find-password" element={<FindPassword />} />
             </Route>
 
-            <Route element={<PrivateRoute />}>
+              <Route path="/bookshelf/:memberId" element={<Bookshelf />} />
+              <Route path="/detail-book/:bookId" element={<DetailBook />} />
+              <Route path="/:memberId" element={<Library />} />
               <Route path="/recommend-book" element={<RecommendBook />} />
               <Route path="/search" element={<SearchPage />} />
               <Route path="/modify/:memberId" element={<ModifyProfile />} />
               <Route path="/profile/:memberId" element={<Profile />} />
               <Route path="/diary/:memberId" element={<Diary />} />
+            <Route element={<PrivateRoute />}>
               <Route path="/logout" element={<Logout />} />
             </Route>
           </Routes>
