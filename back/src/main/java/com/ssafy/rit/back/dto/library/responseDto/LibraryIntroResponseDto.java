@@ -14,4 +14,8 @@ public class LibraryIntroResponseDto {
     private int isMine;
 
     private int isReceive;
+
+    private String nickname;
+
+    private String profileImage;
 }
