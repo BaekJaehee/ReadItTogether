@@ -163,7 +163,7 @@ public class BookshelfServiceImpl implements BookshelfService {
                     String genresStr = bookshelf.getBookId().getGenre(); // "action, mystery" 형식의 문자열을 가져옵니다.
                     List<String> genresList = Arrays.asList(genresStr.split("\\s*,\\s*")); // 쉼표와 쉼표 주변의 공백을 기준으로 문자열을 분리합니다.
                     return BookshelfListResponseDto.builder()
-                            .bookId(bookshelf.getId())
+                            .bookId(bookshelf.getBookId().getId())
                             .title(bookshelf.getTitle())
                             .cover(bookshelf.getCover())
                             .isRead(bookshelf.getIsRead())
