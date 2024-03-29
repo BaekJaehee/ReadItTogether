@@ -126,8 +126,8 @@ const Library = () => {
             />
           )}
         </div>
-        {/* 1234 */}
-        1234
+        {/* 연습용 */}
+        
         <div className="group flex items-center justify-center  overflow-hidden">
           <button onClick={openMailBox}>
             <img
