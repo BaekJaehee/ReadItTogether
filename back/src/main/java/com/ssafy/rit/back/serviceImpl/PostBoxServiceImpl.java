@@ -9,6 +9,7 @@ import com.ssafy.rit.back.entity.Card;
 import com.ssafy.rit.back.entity.Member;
 import com.ssafy.rit.back.entity.Postbox;
 import com.ssafy.rit.back.exception.card.CardNotFoundException;
+import com.ssafy.rit.back.exception.postBox.PostBoxCantOpenException;
 import com.ssafy.rit.back.repository.CardRepository;
 import com.ssafy.rit.back.repository.MemberRepository;
 import com.ssafy.rit.back.repository.PostBoxRepository;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -43,16 +45,18 @@ public class PostBoxServiceImpl implements PostBoxService {
 
         Member currentMember = commonUtil.getMember();
 
+        if (currentMember.getIsReceivable() == 0) {
+            throw new PostBoxCantOpenException();
+        }
+
         LocalDate today = LocalDate.now();
         LocalDate startOfWeek = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
         LocalDate endOfWeek = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
 
         List<Postbox> weeklyPostboxes = postBoxRepository.findAllByMemberIdAndCreationDateBetween(currentMember, startOfWeek, endOfWeek);
 
-        // 이번주에 받은 우편이 없을 경우
         if (weeklyPostboxes.isEmpty()) {
             List<Card> cards = cardRepository.findRandomCards();
-
             List<Member> allByShelfGroup = memberRepository.findAllByShelfGroup(currentMember.getShelfGroup());
             List<Card> byFromMemberIdIn = cardRepository.findByFromMemberIdInAndToMemberIdNot(allByShelfGroup, currentMember);
             if (!byFromMemberIdIn.isEmpty()) {
@@ -75,7 +79,6 @@ public class PostBoxServiceImpl implements PostBoxService {
 
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
-        // 이번주에 받은 우편이 있을 경우
         else {
             List<ReceiveCardsDto> cardsDto = weeklyPostboxes.stream()
                     .map(this::convertPostboxToDto)
@@ -89,6 +92,7 @@ public class PostBoxServiceImpl implements PostBoxService {
 
     // 우편함에 있는 카드를 내 다이어리에 저장
     @Override
+    @Transactional
     public ResponseEntity<PostBoxToCardCreationResponse> createPostBoxToCard(PostBoxToCardCreationRequestDto postBoxToCardCreationRequestDto) {
 
         Member currentMember = commonUtil.getMember();
@@ -105,6 +109,7 @@ public class PostBoxServiceImpl implements PostBoxService {
                 .build();
 
         cardRepository.save(saveCard);
+        currentMember.setIsReceivable(0);
 
         PostBoxToCardCreationResponse response = new PostBoxToCardCreationResponse("다이어리에 카드가 저장되었습니다.", true);
 
