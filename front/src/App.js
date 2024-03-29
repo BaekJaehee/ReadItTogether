@@ -19,25 +19,18 @@ import SignUp from "./pages/accounts/SignUp";
 import Diary from "./components/modal/Diary/Diary";
 import ModifyProfile from "./pages/accounts/ModifyProfile";
 
+import SearchPage from "./pages/recomend/SearchPage";
+
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <PageLayout>
           <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/find-password" element={<FindPassword />} />
             <Route path="/:memberId" element={<Library />} />
-            <Route path="/profile/:memberId" element={<Profile />} />
-            <Route path="/logout" element={<Logout />} />
-            <Route path="/recommend-book" element={<RecommendBook />} />
-            <Route path="/detail-book/:bookId" element={<DetailBook />} />
             <Route path="/bookshelf" element={<Bookshelf />} />
-            <Route path="/diary/:memberId" element={<Diary />} />
-            <Route path="/modify/:memberId" element={<ModifyProfile/>} />
+            <Route path="/detail-book/:bookId" element={<DetailBook />} />
 
-            {/* 유저 인증 상태 관리 */}
             <Route element={<PublicRoute />}>
               <Route path="/" element={<Login />} />
               <Route path="/login" element={<Login />} />
@@ -45,12 +38,11 @@ function App() {
               <Route path="/find-password" element={<FindPassword />} />
             </Route>
 
-            <Route path="/:memberId" element={<Library />} />
             <Route element={<PrivateRoute />}>
-              <Route path="/profile/:memberId" element={<Profile />} />
               <Route path="/recommend-book" element={<RecommendBook />} />
-              <Route path="/detail-book/:bookId" element={<DetailBook />} />
-              <Route path="/bookshelf" element={<Bookshelf />} />
+              <Route path="/search" element={<SearchPage />} />
+              <Route path="/modify/:memberId" element={<ModifyProfile />} />
+              <Route path="/profile/:memberId" element={<Profile />} />
               <Route path="/diary/:memberId" element={<Diary />} />
               <Route path="/logout" element={<Logout />} />
             </Route>

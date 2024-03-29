@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
+import SearchForm from "../../api/book/SearchForm";
 import SideBar from "./SideBar";
 
 import "../../App.css";
@@ -11,8 +12,10 @@ import search from "../../assets/navbar/search.png";
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false); // 검색 입력 창 상태
+  const [searchTerm, setSearchTerm] = useState("");
   const navRef = useRef(); // 네비게이션 바와 사이드바를 위한 ref
   const location = useLocation();
+  const navigate = useNavigate();
   const memberId = localStorage.getItem("memberId");
 
   const toggleMenu = () => {
@@ -45,6 +48,14 @@ const NavBar = () => {
     };
   }, [navRef]);
 
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+    if (event.key === "Enter") {
+      navigate(`/search?query=${searchTerm}`);
+    }
+  };
+
   return (
     <nav
       ref={navRef}
@@ -71,10 +82,13 @@ const NavBar = () => {
         {/* 검색 입력 창, isSearchOpen 상태에 따라 표시 여부 결정 */}
         <input
           type="text"
+          value={searchTerm}
           className={`text-xs transition-width duration-300 ease-in-out ${
             isSearchOpen ? "w-48" : "w-0"
           } h-8 pl-2`}
           style={{ visibility: isSearchOpen ? "visible" : "hidden" }}
+          onChange={handleSearch}
+          onKeyDown={handleSearch}
           placeholder="제목 및 작가 검색..."
         />
       </div>
