@@ -67,6 +67,15 @@ public class GroupRecommendListServiceImpl implements GroupRecommendListService 
         changeRecommendList(all, bestGroupRecList);
     }
 
+    @Override
+    @Transactional
+    public void changeIsReceivable() {
+        List<Member> allMember = memberRepository.findAll();
+        for (Member member : allMember) {
+            member.setIsReceivable(1);
+        }
+    }
+
     private void changeRecommendList(List<Member> allByShelfGroup, List<GroupRecommendBook> allByRecList) {
         List<Long> memberIds = allByShelfGroup.stream().map(Member::getId).collect(Collectors.toList());
         List<Bookshelf> booksReadByGroup = bookshelfRepository.findAllByMemberIdIn(memberIds);
@@ -89,7 +98,7 @@ public class GroupRecommendListServiceImpl implements GroupRecommendListService 
             Book book = top10Books.get(thisRecommendBook);
             recommendBook.setBookId(book);
             recommendBook.setCover(book.getCover());
-            groupRecommendBookRepository.save(recommendBook);
+            recommendBook.setCreatedAt(LocalDate.now());
         }
     }
 }

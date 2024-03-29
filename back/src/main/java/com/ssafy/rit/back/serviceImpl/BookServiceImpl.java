@@ -120,16 +120,10 @@ public class BookServiceImpl implements BookService {
             throw CommentException.commentExistException();
         }
 
-        // 평점 안줬을 때
-        if (dto.getRating() < 1) {
-            throw CommentException.ratingException();
-        }
-
         // 댓글 작성 안하거나 길이가 넘을 때
         if (dto.getComment() == null || dto.getComment().isEmpty() || dto.getComment().length() > 200) {
             throw CommentException.commentLengthException();
         }
-
 
         Comment newComment = Comment.builder()
                 .bookId(currentBook)
