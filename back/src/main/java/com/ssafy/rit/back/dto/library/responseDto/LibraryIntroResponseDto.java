@@ -22,4 +22,6 @@ public class LibraryIntroResponseDto {
     private int followingNum;
 
     private int followerNum;
+
+    private int isFollowing;
 }
