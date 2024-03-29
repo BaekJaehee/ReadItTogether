@@ -12,5 +12,5 @@ public interface BookshelfService {
 
     ResponseEntity<BookshelfUpdateResponse> updateBookshelf(BookshelfUpdateRequestDto dto);
 
-    ResponseEntity<BookshelfListResponse> readBookshelfList(Long memberId, int page, int size, int sort, String searchKeyword);
+    ResponseEntity<BookshelfListResponse> readBookshelfList(Long toMemberId, int page, int size, int sort, String searchKeyword);
 }

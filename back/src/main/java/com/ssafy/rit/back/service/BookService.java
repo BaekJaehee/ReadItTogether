@@ -17,4 +17,5 @@ public interface BookService {
     ResponseEntity<CommentUpdateResponse> updateComment(CommentUpdateRequestDto dto);
 
     ResponseEntity<CommentDeleteResponse> deleteComment(Long commentId);
+
 }
