@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import CommentForm from "../../api/book/comment/CommentForm";
 
@@ -25,6 +25,7 @@ const CreateComment = ({ bookId }) => {
     setCommentInput(""); // 입력 필드 초기화
     setRating(0); // 평점 초기화
   };
+
 
   const handleMouseEnter = (index) => {
     setHover(index);
