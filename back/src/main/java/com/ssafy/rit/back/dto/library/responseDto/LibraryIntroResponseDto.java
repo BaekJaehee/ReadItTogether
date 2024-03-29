@@ -24,4 +24,6 @@ public class LibraryIntroResponseDto {
     private int followerNum;
 
     private int isFollowing;
+
+    private String email;
 }
