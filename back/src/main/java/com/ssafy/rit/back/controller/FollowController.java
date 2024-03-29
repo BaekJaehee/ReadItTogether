@@ -69,7 +69,7 @@ public class FollowController {
         }
     }
 
-    @DeleteMapping("/follow/{targetEmail}")
+    @PostMapping("/follow/{targetEmail}")
     public ResponseEntity<FollowResponseDto> unfollow(@PathVariable("targetEmail")String targetEmail, @RequestBody FollowRequestDto dto) throws JsonProcessingException {
 
         try {
