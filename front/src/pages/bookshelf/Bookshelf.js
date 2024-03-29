@@ -12,7 +12,15 @@ const Bookshelf = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [bookshelfInfo, setBookshelfInfo] = useState([]);
-
+  // const [bookshelfInfo, setBookshelfInfo] = useState({
+  //   bookId: 0,
+  //   title: "",
+  //   cover: "",
+  //   isRead: 0,
+  //   rating: 0,
+  //   genres: []
+  // });
+  
   const handleFilterChange = (newFilter) => {
     setFilter(newFilter);
     // 필터링 로직: API 요청, 상태 업데이트
@@ -33,8 +41,9 @@ const Bookshelf = () => {
     const fetchBookshelfList = async () => {
       try {
         const response = await GetBookShelfList(memberId);
-        setBookshelfInfo(response);
-        console.log("책장 목록: ", response);
+        // setBookshelfInfo(response.data);
+        setBookshelfInfo(Object.values(response.data));
+        console.log("책장 목록: ", response.data);
       } catch (error) {
         console.log("책장 목록을 가져오는 데 실패했습니다: ", error);
       }
@@ -42,6 +51,9 @@ const Bookshelf = () => {
     fetchBookshelfList();
   }, []); // 렌더링 될 때마다 갱신
   // }, [memberId]);
+
+  // const bookshelfArray = Object.values(bookshelfInfo);  // 객체를 배열 형식으로(map 쓰기 위함)
+  // console.log(bookshelfArray);
 
   return (
     <div className="bg-sky-100 absolute inset-0 m-20">
@@ -68,6 +80,39 @@ const Bookshelf = () => {
       <div className="flex justify-center my-3">
         <div className="grid grid-cols-4 gap-4">
           {/* 여기에 책 나옴 */}
+          {/* {bookshelfArray.map((book) => (
+            <div 
+              key={book.bookId}
+              className="m-3 cursor-pointer"
+              onClick={() => handleClickBook(book.bookId)}
+            >
+              <img src={book.cover} alt="cover" className="w-48 h-72" />
+              <p className="text-center m-1 font-bold">{book.title}</p>
+            </div>
+          ))} */}
+          {bookshelfInfo.map((book) => (
+            <div 
+              key={book.bookId}
+              className="m-3 cursor-pointer"
+              onClick={() => handleClickBook(book.bookId)}
+            >
+              <img src={book.cover} alt="cover" className="w-48 h-72" />
+              <p className="text-center m-1 font-bold">{book.title}</p>
+            </div>
+          ))}
+
+          {/* {bookshelfInfo.map((book) => (
+            <div
+              key={book.bookId}
+              className="m-3 cursor-pointer"
+              onClick={() => handleClickBook(book.bookId)}
+            >
+              <img src={book.cover} alt="cover" className="w-48 h-72" />
+              <p className="text-center m-1 font-bold">{book.title}</p>
+            </div>
+          ))} */}
+
+
           {/* {bookshelfInfo.map((book) => (
             <div
               key={book.id}
