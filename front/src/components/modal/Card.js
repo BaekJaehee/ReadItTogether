@@ -1,13 +1,29 @@
 import React, { useState, useEffect } from "react";
 import handleCardDetail from "../../api/card/HandleCardDetail";
+import handleCardDelete from "../../api/card/HandleCardDelete";
 
 import diaryButton from "../../assets/library/diaryButton.png";
+import deleteButton from "../../assets/library/deleteButton.png";
 
-const Card = ({ item, onClose }) => {
+const Card = ({ item, onClose, onDelete }) => {
   const [cardDetail, setCardDetail] = useState(""); // 형식 제발 null로 하지말고
   const memberId = localStorage.getItem("memberId")
   // const { from_m_id, comment } = cardData;  // card 테이블에만 있는 정보
   // item은 card와 book에서 조인해서 받아온 정보
+
+  const handleDelete = async (e) => {
+    e.preventDefault(e);
+    try {
+      // const response = await handleCardDelete(item.cardId);
+      await handleCardDelete(item.cardId);
+      alert('카드가 삭제되었습니다.');
+      onClose();
+      onDelete(item.cardId);
+      // return response;
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   useEffect(() => {
     const fetchCardDetail = async () => {
@@ -54,6 +70,10 @@ const Card = ({ item, onClose }) => {
       <div className="flex justify-center mt-4">
         <button onClick={onClose}>
           <img className="w-7 h-7" src={diaryButton} alt="뒤로가기"/>
+        </button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <button onClick={handleDelete}>
+          <img className="w-7 h-7" src={deleteButton} alt="삭제하기" />
         </button>
       </div>
     </div>
