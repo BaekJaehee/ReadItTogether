@@ -13,7 +13,7 @@ const IntroGet = async (memberId) => {
       },
     });
     console.log(response.data.data);
-    return response.data.data.intro;
+    return response.data.data;
   } catch (error) {
     console.error("소개글을 불러오는 데 실패했습니다:", error);
   }

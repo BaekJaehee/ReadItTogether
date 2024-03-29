@@ -2,6 +2,7 @@ package com.ssafy.rit.back.serviceImpl;
 
 import com.ssafy.rit.back.dto.bookshelf.requestDto.BookshelfUpdateRequestDto;
 import com.ssafy.rit.back.dto.bookshelf.requestDto.BookshelfUploadRequestDto;
+import com.ssafy.rit.back.dto.bookshelf.response.BookshelfDeleteResponse;
 import com.ssafy.rit.back.dto.bookshelf.response.BookshelfListResponse;
 import com.ssafy.rit.back.dto.bookshelf.response.BookshelfUpdateResponse;
 import com.ssafy.rit.back.dto.bookshelf.response.BookshelfUploadResponse;
@@ -25,10 +26,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -116,6 +114,7 @@ public class BookshelfServiceImpl implements BookshelfService {
 
     }
 
+
     @Override
     public ResponseEntity<BookshelfUpdateResponse> updateBookshelf(BookshelfUpdateRequestDto dto) {
 
@@ -167,12 +166,31 @@ public class BookshelfServiceImpl implements BookshelfService {
                             .title(bookshelf.getTitle())
                             .cover(bookshelf.getCover())
                             .isRead(bookshelf.getIsRead())
-                            .genres(genresList) // 분리한 장르 리스트를 설정합니다.
+                            .genres(genresList)
                             .build();
                 })
                 .toList();
 
         BookshelfListResponse response = new BookshelfListResponse("책 조회 성공", bookshelfListResponseDtos);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<BookshelfDeleteResponse> deleteBookshelf(Integer bookshelfId) throws BookshelfException {
+
+        Member currentMember = commonUtil.getMember();
+
+        Bookshelf currentBookshelf = bookshelfRepository.findById(bookshelfId)
+                .orElseThrow(() -> new BookshelfException("책장을 찾을 수 없습니다."));
+
+        if (Objects.equals(currentBookshelf.getMemberId().getId(), currentMember.getId())) {
+            bookshelfRepository.delete(currentBookshelf);
+        } else {
+            throw BookshelfException.notMemberException();
+        }
+
+        BookshelfDeleteResponse response = new BookshelfDeleteResponse("책장에서 책 삭제 성공", true);
 
         return ResponseEntity.ok(response);
     }
