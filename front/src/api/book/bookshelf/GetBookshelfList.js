@@ -21,7 +21,8 @@ const GetBookShelfList = async (memberId, page = 0, size = 10, sort = 0, searchK
           searchKeyword: searchKeyword
         }
       }
-    )
+    );
+    console.log(response);
     return response;
   } catch (error) {
     console.error(error);

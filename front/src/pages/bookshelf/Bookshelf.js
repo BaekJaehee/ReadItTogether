@@ -28,17 +28,20 @@ const Bookshelf = () => {
     navigate.pushState(`/detail-book/${bookId}`);  // 페이지 이동(or 새 탭)
   }
 
+
   useEffect(() => {
     const fetchBookshelfList = async () => {
       try {
         const response = await GetBookShelfList(memberId);
-        setBookshelfInfo(response.data);
+        setBookshelfInfo(response);
+        console.log("책장 목록: ", response);
       } catch (error) {
         console.log("책장 목록을 가져오는 데 실패했습니다: ", error);
       }
     };
     fetchBookshelfList();
-  }, [memberId]);
+  }, []); // 렌더링 될 때마다 갱신
+  // }, [memberId]);
 
   return (
     <div className="bg-sky-100 absolute inset-0 m-20">
@@ -65,6 +68,18 @@ const Bookshelf = () => {
       <div className="flex justify-center my-3">
         <div className="grid grid-cols-4 gap-4">
           {/* 여기에 책 나옴 */}
+          {/* {bookshelfInfo.map((book) => (
+            <div
+              key={book.id}
+              className="m-3"
+              onClick={() => handleClickBook(book.id)}
+            >
+              <img src={book.image} alt="cover" className="w-48 h-72" />
+              <p className="text-center m-1 font-bold">{book.title}</p>
+            </div>
+          ))} */}
+
+          {/* 이건 검색 필터 추가했을 때 */}
           {/* {searchResults.length > 0 || !isSearching ? (
           searchResults.map((book) => (
             <div key={book.id} className="m-3" onClick={() => handleClickBook(book.id)}>
@@ -80,9 +95,9 @@ const Bookshelf = () => {
             </div>
           ))
         )} */}
-          <div className="my-3 mx-8 flex flex-col items-center">
+          {/* 도서 커버나 제목을 클릭하면 해당 도서 상세 페이지로 이동(onClick) */}
+          {/* <div className="my-3 mx-8 flex flex-col items-center">
             <div>
-              {/* 도서 커버나 제목을 클릭하면 해당 도서 상세 페이지로 이동(onClick) */}
               <img src="https://image.yes24.com/momo/TopCate60/MidCate07/5962038.jpg" alt="cover" className="w-48 h-72 cursor-pointer" onClick={handleClickBook}/>
               <p className="text-center m-1 font-bold cursor-pointer" onClick={handleClickBook}>제목</p>
             </div>
@@ -119,7 +134,7 @@ const Bookshelf = () => {
           <div className="m-3 flex flex-col items-center">
             <img src="https://image.yes24.com/goods/122426425/XL" alt="cover" className="w-48 h-72 cursor-pointer" onClick={handleClickBook}/>
             <p className="text-center m-1 font-bold cursor-pointer" onClick={handleClickBook}>제목</p>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
