@@ -2,6 +2,7 @@ package com.ssafy.rit.back.controller;
 
 import com.ssafy.rit.back.dto.bookshelf.requestDto.BookshelfUpdateRequestDto;
 import com.ssafy.rit.back.dto.bookshelf.requestDto.BookshelfUploadRequestDto;
+import com.ssafy.rit.back.dto.bookshelf.response.BookshelfDeleteResponse;
 import com.ssafy.rit.back.dto.bookshelf.response.BookshelfListResponse;
 import com.ssafy.rit.back.dto.bookshelf.response.BookshelfUpdateResponse;
 import com.ssafy.rit.back.dto.bookshelf.response.BookshelfUploadResponse;
@@ -31,6 +32,12 @@ public class BookshelfController {
     @Operation(summary = "읽은 책 읽을 책 이동", description = "읽은 책 < - > 읽을 책 서로 이동 하기")
     public ResponseEntity<BookshelfUpdateResponse> updateBookshelf(@RequestBody BookshelfUpdateRequestDto dto) {
         return bookshelfService.updateBookshelf(dto);
+    }
+
+    @DeleteMapping("/{bookshelfId}")
+    @Operation( summary = "책장에서 책 삭제", description = "bookshelfId를 조회하여 삭제 합니다.")
+    public ResponseEntity<BookshelfDeleteResponse> deleteBookshelf(@PathVariable("bookshelfId") Integer bookshelfId) {
+        return bookshelfService.deleteBookshelf(bookshelfId);
     }
 
     @GetMapping("/{toMemberId}")
