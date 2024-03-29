@@ -36,7 +36,7 @@ const AddShelf = ({ bookId }) => {
             &times;
           </span> */}
           <div className="flex justify-center">
-            <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded flex items-center mr-4" onClick={() => handleAddToShelf(0)}>
+            <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded flex items-center mr-4" onClick={() => handleAddToShelf(1)}>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
@@ -45,7 +45,7 @@ const AddShelf = ({ bookId }) => {
                 <span>이 책을 읽으셨나요?</span>
               </div>
             </button>
-            <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded flex items-center mr-4" onClick={() => handleAddToShelf(1)}>
+            <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded flex items-center mr-4" onClick={() => handleAddToShelf(0)}>
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
