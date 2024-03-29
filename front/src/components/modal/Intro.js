@@ -14,7 +14,7 @@ const Intro = ({ onClose, onUpdate, introText }) => {
     try {
       // API 호출
       await IntroForm(text);
-      onUpdate(text)
+      onUpdate(text);
       onClose(); // 모달 닫기
     } catch (error) {
       console.error("방명록 에러:", error);
@@ -49,8 +49,8 @@ const Intro = ({ onClose, onUpdate, introText }) => {
         <hr className="mt-3 border-gray-300" />
         <form onSubmit={handleSubmit}>
           <div className="flex items-center justify-between my-2">
-            <p className="text-gray-500 font-semibold text-sm font-serif italic leading-normal">
-              Guest Book
+            <p className="text-gray-500 font-semibold text-sm font-serif italic leading-normal ml-2">
+              Intro message
             </p>
             <button
               type="submit"
