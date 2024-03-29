@@ -4,7 +4,6 @@ import com.ssafy.rit.back.dto.library.requestDto.LibraryIntroUpdateRequestDto;
 import com.ssafy.rit.back.dto.library.response.LibraryIntroResponse;
 import com.ssafy.rit.back.dto.library.response.LibraryIntroUpdateResponse;
 import com.ssafy.rit.back.dto.library.responseDto.LibraryIntroResponseDto;
-import com.ssafy.rit.back.entity.Follow;
 import com.ssafy.rit.back.entity.Member;
 import com.ssafy.rit.back.exception.member.MemberNotFoundException;
 import com.ssafy.rit.back.repository.FollowRepository;
@@ -13,12 +12,9 @@ import com.ssafy.rit.back.service.LibraryService;
 import com.ssafy.rit.back.util.CommonUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -63,9 +59,7 @@ public class LibraryServiceImpl implements LibraryService {
     public ResponseEntity<LibraryIntroUpdateResponse> updateLibraryIntro(LibraryIntroUpdateRequestDto libraryIntroUpdateRequestDto) {
 
         Member currnetMember = commonUtil.getMember();
-
         currnetMember.setIntro(libraryIntroUpdateRequestDto.getIntro());
-
         LibraryIntroUpdateResponse response = new LibraryIntroUpdateResponse("서재 소개글 수정 완료", true);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
