@@ -33,13 +33,13 @@ public class BookshelfController {
         return bookshelfService.updateBookshelf(dto);
     }
 
-    @GetMapping("/{memberId}")
+    @GetMapping("/{toMemberId}")
     @Operation(summary = "책장에 담은 책 리스트 조회", description = "유저가 책장")
-    public ResponseEntity<BookshelfListResponse> readBookshelfList(@PathVariable("memberId") Long memberId,
+    public ResponseEntity<BookshelfListResponse> readBookshelfList(@PathVariable("toMemberId") Long toMemberId,
                                                                    @RequestParam(value = "page", defaultValue = "0") int page,
                                                                    @RequestParam(value = "size", defaultValue = "10") int size,
                                                                    @RequestParam(value = "sort", defaultValue = "0") int sort,
                                                                    @RequestParam(value = "searchKeyword", required = false) String searchKeyword) {
-        return bookshelfService.readBookshelfList(memberId, page, size, sort, searchKeyword);
+        return bookshelfService.readBookshelfList(toMemberId, page, size, sort, searchKeyword);
     }
 }

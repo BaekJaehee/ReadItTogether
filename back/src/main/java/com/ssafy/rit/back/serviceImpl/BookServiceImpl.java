@@ -11,6 +11,7 @@ import com.ssafy.rit.back.exception.Book.CommentException;
 import com.ssafy.rit.back.repository.*;
 import com.ssafy.rit.back.service.BookService;
 import com.ssafy.rit.back.util.CommonUtil;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -138,12 +139,10 @@ public class BookServiceImpl implements BookService {
                 .memberId(currentMember)
                 .build();
 
-        currentBook.setRating(
-                ((currentBook.getRating() * currentBook.getComments().size()) + dto.getRating()) / (currentBook.getComments().size() + 1)
-                );
-        currentBook.setReviewerCnt(currentBook.getReviewerCnt() + 1);
-
         commentRepository.save(newComment);
+
+        // 평점 업데이트
+        this.updateBookRating(currentBook.getId());
 
         CommentCreationResponse response = new CommentCreationResponse("책 코멘트 등록이 완료 되었습니다.", true);
 
@@ -152,6 +151,7 @@ public class BookServiceImpl implements BookService {
 
     // 코멘트 수정
     @Override
+    @Transactional
     public ResponseEntity<CommentUpdateResponse> updateComment(CommentUpdateRequestDto dto) {
 
         Member currentMember = commonUtil.getMember();
@@ -173,18 +173,16 @@ public class BookServiceImpl implements BookService {
 
         Book currentBook = bookRepository.findById(dto.getBookId()).orElseThrow(BookNotFoundException::new);
 
-        // 평점 갱신 : ( (현재 평균점수 x 댓글 갯수) - 원래 평점 + 바꾼 평점 ) / 댓글 갯수
-        currentBook.setRating(
-                ((currentBook.getRating() * currentBook.getComments().size()) - comment.getRating() + dto.getRating()) / (currentBook.getComments().size())
-        );
-
         // 코멘트 내용 및 평점 업데이트
         comment.setComment(dto.getComment());
         comment.setRating(dto.getRating());
-        comment.setCreatedAt(LocalDate.now()); // 업데이트된 날짜 설정, 필드가 존재한다면
+        comment.setCreatedAt(LocalDate.now());
 
         // 수정된 코멘트 저장
         commentRepository.save(comment);
+
+        // 평점 업데이트
+        this.updateBookRating(currentBook.getId());
 
         // 성공 메세지 주기
         CommentUpdateResponse response = CommentUpdateResponse.builder()
@@ -197,6 +195,7 @@ public class BookServiceImpl implements BookService {
 
     // 코멘트 삭제
     @Override
+    @Transactional
     public ResponseEntity<CommentDeleteResponse> deleteComment(Long commentId) {
 
         // 접속 유저 체크
@@ -211,32 +210,30 @@ public class BookServiceImpl implements BookService {
             throw CommentException.memberNotEqualException();
         }
 
-        // comment entity 에 저장되어있는 BookId는 사실 Book 전체 정보이다 (추후에 객체 이름 수정 필요)
-        Book currentBook = comment.getBookId();
-
-        // 댓글 갯수 및 평점 갱신
-        currentBook.setReviewerCnt(currentBook.getReviewerCnt() - 1);
-
-        if (currentBook.getReviewerCnt() == 0) {
-            currentBook.setRating(0);
-        } else {
-        currentBook.setRating(
-                ((currentBook.getRating() * currentBook.getComments().size()) - comment.getRating()) / (currentBook.getComments().size())
-            );
-        }
-
         // 삭제
         commentRepository.delete(comment);
+
+        // 평점 업데이트
+        this.updateBookRating(comment.getBookId().getId());
 
         CommentDeleteResponse response = CommentDeleteResponse.builder()
                 .message("코멘트 삭제 성공")
                 .data(true)
                 .build();
 
-        bookRepository.save(currentBook);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    public void updateBookRating(Integer bookId) {
+        Integer averageRating = bookRepository.findAverageRatingByBookId(bookId);
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new EntityNotFoundException("Book not found"));
+        book.setRating(averageRating);
+
+        Integer countComment = bookRepository.findCountCommentByBookId(bookId);
+        book.setReviewerCnt(countComment);
+
+        bookRepository.save(book);
+    }
 
 }
