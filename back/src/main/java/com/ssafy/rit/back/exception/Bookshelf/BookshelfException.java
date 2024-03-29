@@ -11,4 +11,8 @@ public class BookshelfException extends RuntimeException{
         return new BookshelfException("이미 책장에 등록 되어 있습니다.");
     }
 
+    public static BookshelfException notMemberException() {
+        return new BookshelfException("삭제 권한이 없습니다.");
+    }
+
 }
