@@ -92,7 +92,7 @@ const Bookshelf = () => {
     // 스크롤이 페이지 하단에 도달하면 추가 데이터를 불러옴
     if (scrollTop + clientHeight >= scrollHeight - 100) {
       fetchMoreData();
-      // toggleRead(); // 무한 스크롤 시 컴포넌트 토글도 함께 작동하도록 추가
+      // toggleRead(); // 무한 스크롤 시 컴포넌트 토글도 함께 작동하도록 추가 -> 이러면 depth 오류
     }
   };
   
