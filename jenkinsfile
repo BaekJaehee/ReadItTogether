@@ -100,6 +100,7 @@ pipeline {
                                 "--build-arg HOST_URL='${env.HOST_URL}' " +
                                 "--build-arg BUCKET_NAME='${env.BUCKET_NAME}' " +
                                 "--build-arg AWS_SECRET_KEY='${env.AWS_SECRET_KEY}' " +
+                                "--build-arg BASIC_PROFILE_IMAGE='${env.BASIC_PROFILE_IMAGE}' " +
                                 "--build-arg AWS_ACCESS_KEY='${env.AWS_ACCESS_KEY}' " +
                                 "--build-arg DATABASE_PASSWORD='${env.DATABASE_PASSWORD}' .")
 
