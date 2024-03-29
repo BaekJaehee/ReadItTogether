@@ -28,8 +28,8 @@ function App() {
         <PageLayout>
           <Routes>
             <Route path="/:memberId" element={<Library />} />
-            <Route path="/bookshelf" element={<Bookshelf />} />
             <Route path="/detail-book/:bookId" element={<DetailBook />} />
+            <Route path="/bookshelf/:memberId" element={<Bookshelf />} />
 
             <Route element={<PublicRoute />}>
               <Route path="/" element={<Login />} />
