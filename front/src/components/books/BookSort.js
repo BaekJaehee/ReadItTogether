@@ -33,10 +33,10 @@ const BookSort = () => {
   return (
     <div>
       <select onChange={handleSortChange} className="mr-2">
-      <option value="default">등록순</option>
-        <option value="name">이름순</option>
-        <option value="rating">별점순</option>
-        <option value="publishDate">출간일순</option>
+      <option value="0">등록순</option>
+        <option value="1">평점순</option>
+        <option value="2">제목순</option>
+        {/* <option value="publishDate">출간일순</option> */}
       </select>
       <select onChange={handleOrder}>
         <option value="asc">오름차순</option>
