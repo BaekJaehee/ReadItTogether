@@ -136,6 +136,7 @@ const SignUp = () => {
     try {
       const response = await handleSignUp(name, email, password, nickname, birth, gender);
       console.log(response);
+      alert('회원가입에 성공했습니다.')
       navigate("/login");
     } catch (error) {
       throw error;
