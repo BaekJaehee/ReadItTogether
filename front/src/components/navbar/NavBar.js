@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import SideBar from "./SideBar";
+import fetchProfileInfo from "../../api/accounts/fetchProfileInfo";
 
 import "../../App.css";
 import logo from "../../assets/navbar/logo.png";
@@ -11,9 +12,26 @@ import search from "../../assets/navbar/search.png";
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false); // 검색 입력 창 상태
+  const [profileInfo, setProfileInfo] = useState({
+    nickname: "닉네임",
+    profileImage: ""
+  }); // 프로필 정보 상태 변수를 여기에 추가
   const navRef = useRef(); // 네비게이션 바와 사이드바를 위한 ref
   const location = useLocation();
   const memberId = localStorage.getItem("memberId");
+
+    // 프로필 정보 가져오기
+    useEffect(() => {
+      const getProfileData = async () => {
+        try {
+          const data = await fetchProfileInfo();
+          setProfileInfo(data);
+        } catch (error) {
+          console.error("프로필 정보를 가져오는 데 실패했습니다:", error);
+        }
+      };
+      getProfileData();
+    }, [isOpen]); // 사이드바 Open 상태가 바뀔 때마다 정보 가져옴
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -88,7 +106,7 @@ const NavBar = () => {
         <button className="fixed ml-4 mt-6" onClick={toggleMenu}>
           <img className="w-5" src={burger} alt="햄버거" />
         </button>
-        <SideBar />
+        <SideBar profileInfo={profileInfo} />
       </div>
     </nav>
   );

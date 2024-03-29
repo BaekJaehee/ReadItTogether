@@ -1,50 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import FollowModal from "../modal/FollowModal";
 
 // 로고
 import logo from "../../assets/navbar/logo2.png";
-import man from "../../assets/profile/man.png";
 
-import noImg from "../../assets/profile/noImg.png"
-
-const SideBar = () => {
+const SideBar = ({ profileInfo }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const memberId = localStorage.getItem('memberId')
-  const [profileInfo, setProfileInfo] = useState({
-    nickname: "닉네임",
-    profileImage: noImg
-  })
-  
-  // 로그인한 유저가 바뀔 때마다
-  useEffect(() => {
-    const storedProfileInfo = {
-      nickname: localStorage.getItem("nickname"),
-      profileImage: localStorage.getItem("profileImage")
-    };
-    setProfileInfo(storedProfileInfo);
-  }, [memberId]);
-
-  // 이미지나 닉네임이 바뀌었을 때
-  useEffect(() => {
-    const handleStorageChange = (event) => {
-      if (event.key === "nickname" || event.key === "profileImage") {
-        setProfileInfo({
-          nickname: localStorage.getItem("nickname"),
-          profileImage: localStorage.getItem("profileImage")
-        });
-      }
-    };
-
-    // 이벤트 리스너 등록
-    window.addEventListener('storage', handleStorageChange);
-
-    // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, []); // 컴포넌트가 처음 렌더링될 때만 실행
 
   return (
     <nav className="flex flex-col h-full">
@@ -69,17 +33,13 @@ const SideBar = () => {
         {/* 유저 프로필 바로가기 */}
         <Link to={`/profile/${memberId}`}>
           <div className="flex flex-col items-center mb-4">
-            {/* <img
-              className="w-20 h-20 rounded-full mb-2"
-              src={man}
-              alt="프로필 사진"
-            /> */}
+            {/* 프로필 사진 */}
             <img
               className="w-20 h-20 rounded-full mb-2"
               src={profileInfo.profileImage}
               alt="프로필 사진"
             />
-            {/* <p className="text-sm font-semibold">닉네임</p> */}
+            {/* 닉네임 */}
             <p className="text-sm font-semibold">{profileInfo.nickname}</p>
           </div>
         </Link>
