@@ -47,6 +47,7 @@ public class LibraryServiceImpl implements LibraryService {
                 .profileImage(thisMember.getProfileImage())
                 .isFollowing(isFollowing)
                 .intro(thisMember.getIntro())
+                .email(thisMember.getEmail())
                 .followerNum(followRepository.countByFollowerMember(currentMember))
                 .followingNum(followRepository.countByFollowingMember(currentMember))
                 .build();
