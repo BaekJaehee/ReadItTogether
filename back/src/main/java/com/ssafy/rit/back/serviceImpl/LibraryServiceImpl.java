@@ -44,8 +44,8 @@ public class LibraryServiceImpl implements LibraryService {
                 .isFollowing(isFollowing)
                 .intro(thisMember.getIntro())
                 .email(thisMember.getEmail())
-                .followerNum(followRepository.countByFollowerMember(currentMember))
-                .followingNum(followRepository.countByFollowingMember(currentMember))
+                .followerNum(followRepository.countByFollowerMember(thisMember))
+                .followingNum(followRepository.countByFollowingMember(thisMember))
                 .build();
 
         LibraryIntroResponse response = new LibraryIntroResponse("서재 방문 성공", detailDto);
