@@ -141,6 +141,7 @@ public class BookServiceImpl implements BookService {
 
         commentRepository.save(newComment);
 
+        // 평점 업데이트
         this.updateBookRating(currentBook.getId());
 
         CommentCreationResponse response = new CommentCreationResponse("책 코멘트 등록이 완료 되었습니다.", true);
@@ -175,11 +176,12 @@ public class BookServiceImpl implements BookService {
         // 코멘트 내용 및 평점 업데이트
         comment.setComment(dto.getComment());
         comment.setRating(dto.getRating());
-        comment.setCreatedAt(LocalDate.now()); // 업데이트된 날짜 설정, 필드가 존재한다면
+        comment.setCreatedAt(LocalDate.now());
 
         // 수정된 코멘트 저장
         commentRepository.save(comment);
 
+        // 평점 업데이트
         this.updateBookRating(currentBook.getId());
 
         // 성공 메세지 주기
@@ -208,13 +210,10 @@ public class BookServiceImpl implements BookService {
             throw CommentException.memberNotEqualException();
         }
 
-        // comment entity 에 저장되어있는 BookId는 사실 Book 전체 정보이다 (추후에 객체 이름 수정 필요)
-//        Book currentBook = comment.getBookId();
-
         // 삭제
         commentRepository.delete(comment);
 
-//        log.info("(3) {}", currentBook.getId());
+        // 평점 업데이트
         this.updateBookRating(comment.getBookId().getId());
 
         CommentDeleteResponse response = CommentDeleteResponse.builder()
