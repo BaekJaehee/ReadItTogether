@@ -12,9 +12,8 @@ public interface BookService {
 
     ResponseEntity<CommentCreationResponse> createComment(CommentCreationRequestDto dto);
 
-//    ResponseEntity<CommentListResponse> readCommentList(int bookId, int page, int size);
-
     ResponseEntity<CommentUpdateResponse> updateComment(CommentUpdateRequestDto dto);
 
     ResponseEntity<CommentDeleteResponse> deleteComment(Long commentId);
+
 }

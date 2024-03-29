@@ -2,6 +2,7 @@ package com.ssafy.rit.back.serviceImpl;
 
 import com.ssafy.rit.back.dto.bookshelf.requestDto.BookshelfUpdateRequestDto;
 import com.ssafy.rit.back.dto.bookshelf.requestDto.BookshelfUploadRequestDto;
+import com.ssafy.rit.back.dto.bookshelf.response.BookshelfDeleteResponse;
 import com.ssafy.rit.back.dto.bookshelf.response.BookshelfListResponse;
 import com.ssafy.rit.back.dto.bookshelf.response.BookshelfUpdateResponse;
 import com.ssafy.rit.back.dto.bookshelf.response.BookshelfUploadResponse;
@@ -25,10 +26,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -116,6 +114,7 @@ public class BookshelfServiceImpl implements BookshelfService {
 
     }
 
+
     @Override
     public ResponseEntity<BookshelfUpdateResponse> updateBookshelf(BookshelfUpdateRequestDto dto) {
 
@@ -138,7 +137,7 @@ public class BookshelfServiceImpl implements BookshelfService {
 
     // 책장 조회 하기
     @Override
-    public ResponseEntity<BookshelfListResponse> readBookshelfList(Long memberId, int page, int size, int sort, String searchKeyword) {
+    public ResponseEntity<BookshelfListResponse> readBookshelfList(Long toMemberId, int page, int size, int sort, String searchKeyword) {
 
         Pageable pageable = PageRequest.of(page, size);
 
@@ -154,7 +153,7 @@ public class BookshelfServiceImpl implements BookshelfService {
                 break;
         }
 
-        Member currentMember = memberRepository.findById(memberId).orElseThrow();
+        Member currentMember = memberRepository.findById(toMemberId).orElseThrow();
 
         Page<Bookshelf> bookshelfPage = bookshelfRepository.findAllByMemberIdAndSearchKeyword(currentMember, searchKeyword, pageable);
 
@@ -163,16 +162,35 @@ public class BookshelfServiceImpl implements BookshelfService {
                     String genresStr = bookshelf.getBookId().getGenre(); // "action, mystery" 형식의 문자열을 가져옵니다.
                     List<String> genresList = Arrays.asList(genresStr.split("\\s*,\\s*")); // 쉼표와 쉼표 주변의 공백을 기준으로 문자열을 분리합니다.
                     return BookshelfListResponseDto.builder()
-                            .bookId(bookshelf.getId())
+                            .bookId(bookshelf.getBookId().getId())
                             .title(bookshelf.getTitle())
                             .cover(bookshelf.getCover())
                             .isRead(bookshelf.getIsRead())
-                            .genres(genresList) // 분리한 장르 리스트를 설정합니다.
+                            .genres(genresList)
                             .build();
                 })
                 .toList();
 
         BookshelfListResponse response = new BookshelfListResponse("책 조회 성공", bookshelfListResponseDtos);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<BookshelfDeleteResponse> deleteBookshelf(Integer bookshelfId) throws BookshelfException {
+
+        Member currentMember = commonUtil.getMember();
+
+        Bookshelf currentBookshelf = bookshelfRepository.findById(bookshelfId)
+                .orElseThrow(() -> new BookshelfException("책장을 찾을 수 없습니다."));
+
+        if (Objects.equals(currentBookshelf.getMemberId().getId(), currentMember.getId())) {
+            bookshelfRepository.delete(currentBookshelf);
+        } else {
+            throw BookshelfException.notMemberException();
+        }
+
+        BookshelfDeleteResponse response = new BookshelfDeleteResponse("책장에서 책 삭제 성공", true);
 
         return ResponseEntity.ok(response);
     }
