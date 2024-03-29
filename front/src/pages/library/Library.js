@@ -88,7 +88,7 @@ const Library = () => {
     <div className="min-h-screen min-w-full overflow-auto">
       {/* 배경 벽지 */}
       <div className="bg-sky-100 absolute inset-0 min-w-full min-h-full"></div>
-
+     
       {/* 이미지 */}
       <div className="relative min-w-full min-h-full">
         <img
