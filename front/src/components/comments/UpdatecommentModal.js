@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 
-import UpdateComentForm from "../../api/book/comment/UpdateComentForm";
+import UpdateComentForm from "../../api/book/comment/UpdateCommentForm";
 
 const UpdateCommentModal = ({
   onClose,
@@ -39,7 +39,7 @@ const UpdateCommentModal = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside); // 클린업 함수에서 이벤트 리스너 제거
     };
-  }, [onClose]);
+  }, []);
 
   const handleMouseEnter = (index) => {
     setHover(index);

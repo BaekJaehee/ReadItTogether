@@ -66,7 +66,7 @@ const CreateCard = ({ bookId, cover, title, author, publisher }) => {
                   className="border border-gray-300 p-2 rounded w-full mb-4" 
                   placeholder="추천사를 10자 이상 입력해주세요" 
                 /> */}
-                <textarea id='comment' name='comment' placeholder="추천사를 10자 이상 입력해주세요" value={comment} onChange={(e) => setComment(e.target.value)} className="border border-gray-300 p-2 rounded w-full mb-4"></textarea>
+                <textarea id='comment' name='comment' placeholder="추천사를 10자 이상 입력해주세요" value={comment} onChange={(e) => setComment(e.target.value)} className="border border-gray-300 p-2 rounded w-full mb-4 resize-none h-36"></textarea>
               </div>
             </div>
             <div className="flex justify-center">
