@@ -4,6 +4,9 @@ const fetchProfileInfo = async () => {
   try {
     const response = await profileView();
     const { profileImage, nickname, email, followList, followerList, evaluatedBookCnt, likedBookCnt, sendCardCnt, genreNoList } = response.data;
+    // 이쪽에서 업데이트
+    localStorage.setItem("profileImage", profileImage);
+    localStorage.setItem("nickname", nickname);
     return {
       profileImage,
       nickname,

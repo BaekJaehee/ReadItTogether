@@ -11,5 +11,5 @@ import java.util.List;
 @AllArgsConstructor
 public class PostBoxListResponseDto {
 
-    private List<ReceiveCardsDto> dto;
+    private List<ReceiveCardsDto> cards;
 }

@@ -10,6 +10,7 @@ import com.ssafy.rit.back.entity.Member;
 import com.ssafy.rit.back.entity.Postbox;
 import com.ssafy.rit.back.exception.card.CardNotFoundException;
 import com.ssafy.rit.back.repository.CardRepository;
+import com.ssafy.rit.back.repository.MemberRepository;
 import com.ssafy.rit.back.repository.PostBoxRepository;
 import com.ssafy.rit.back.service.PostBoxService;
 import com.ssafy.rit.back.util.CommonUtil;
@@ -21,8 +22,8 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,6 +35,7 @@ public class PostBoxServiceImpl implements PostBoxService {
     private final CardRepository cardRepository;
     private final CommonUtil commonUtil;
     private final PostBoxRepository postBoxRepository;
+    private final MemberRepository memberRepository;
 
     // 우편함 조회 로직
     @Override
@@ -49,8 +51,22 @@ public class PostBoxServiceImpl implements PostBoxService {
 
         // 이번주에 받은 우편이 없을 경우
         if (weeklyPostboxes.isEmpty()) {
-            // TODO: Random 추천에서 추천 시스템 로직 적용으로 변경해야 합니다.
             List<Card> cards = cardRepository.findRandomCards();
+
+            List<Member> allByShelfGroup = memberRepository.findAllByShelfGroup(currentMember.getShelfGroup());
+            List<Card> byFromMemberIdIn = cardRepository.findByFromMemberIdInAndToMemberIdNot(allByShelfGroup, currentMember);
+            if (!byFromMemberIdIn.isEmpty()) {
+                Collections.shuffle(byFromMemberIdIn);
+                Card randomCardFromThisWeek = byFromMemberIdIn.get(0);
+                cards.set(0, randomCardFromThisWeek);
+            }
+
+            List<Card> thisWeekCards = cardRepository.findCardsBetweenDates(startOfWeek, endOfWeek, currentMember);
+            if (!thisWeekCards.isEmpty()) {
+                Collections.shuffle(thisWeekCards);
+                Card randomCardFromThisWeek = thisWeekCards.get(0);
+                cards.set(1, randomCardFromThisWeek);
+            }
 
             List<ReceiveCardsDto> cardsDto = convertCardsToDto(cards);
             createPostboxesForCurrentMember(cards, currentMember);

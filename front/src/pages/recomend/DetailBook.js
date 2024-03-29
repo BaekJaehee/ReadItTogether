@@ -91,11 +91,11 @@ const DetailBook = () => {
             <div className="flex-col">
               <div className="mb-2">
                 {/* 책장 추가 버튼 + 모달 */}
-                <AddShelf />
+                <AddShelf bookId={bookId} />
               </div>
               <div className="mb-2">
                 {/* 카드 작성 버튼 + 모달 */}
-                <CreateCard />
+                <CreateCard bookId={bookId} cover={bookInfo.cover} title={bookInfo.title} author={bookInfo.author} publisher={bookInfo.publisher} />
               </div>
             </div>
           </div>

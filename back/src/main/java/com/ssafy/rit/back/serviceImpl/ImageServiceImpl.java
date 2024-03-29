@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -36,10 +38,10 @@ public class ImageServiceImpl implements ImageService {
     // 굳이 해야 하나?
     private String localLocation = System.getProperty("java.io.tmpdir");
 
+
     @Override
     @Transactional
     public String imageUpload(MultipartRequest request, Member member) throws IOException {
-
         MultipartFile file = request.getFile("upload");
 
         String fileName = file.getOriginalFilename();
@@ -60,8 +62,8 @@ public class ImageServiceImpl implements ImageService {
         localFile.delete();
 
         return s3Url;
-    }
 
+    }
 
 
     public Member getMemberForProfileUpload(String nickname) {
