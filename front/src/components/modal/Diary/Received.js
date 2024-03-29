@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 // import axios from "axios";
-import dummy from '../../../assets/MOCK_DATA';
 import Card from '../Card';
 import handleCardList from "../../../api/card/HandleCardList";
 
@@ -52,12 +51,17 @@ const Received = ({ onCardOpen, onCardClose, cards }) => {
       onCardClose();  // 닫을 때도 똑같이
     }
   }
+  const handleDeleteAndUpdate = (deletedCardId) => {
+    setCurrentPageDataReceived(prevData =>
+      prevData.filter(card => card.cardId !== deletedCardId)
+    );
+  };
   
   return (
     <div>
       <h1 className="text-xl font-medium leading-6 text-gray-900 text-center my-5">받은 카드</h1>
       {selectedItem ? (
-        <Card item={selectedItem} onClose={closeCard} />
+        <Card item={selectedItem} onClose={closeCard} onDelete={handleDeleteAndUpdate} />
       ) : (
         <>
           <div className="grid grid-cols-2 gap-4">

@@ -26,7 +26,7 @@ const Sent = ({ onCardOpen, onCardClose, cards }) => {
       }
     };
     fetchData(); // 페이지가 변경될 때마다 데이터 다시 불러오기
-  }, [page, limit]); // 페이지 또는 limit
+  }, [page, limit, cards]); // 페이지 또는 limit
   
   // 페이지 이동
   const goToPrev = () => {
