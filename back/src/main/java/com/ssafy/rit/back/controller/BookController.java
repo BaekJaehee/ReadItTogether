@@ -35,13 +35,7 @@ public class BookController {
     public ResponseEntity<CommentCreationResponse> createComment(@RequestBody CommentCreationRequestDto dto){
         return bookService.createComment(dto);
     }
-    // 코멘트 조회
-//    @GetMapping("/comment/{bookId}")
-//    public ResponseEntity<CommentListResponse> readCommentList(@PathVariable("bookId") int bookId,
-//                                                               @RequestParam(value = "page", defaultValue = "0") int page,
-//                                                               @RequestParam(value = "size", defaultValue = "8") int size) {
-//        return bookService.readCommentList(bookId, page, size);
-//    }
+
     // 코멘트 수정
     @PatchMapping("/comment")
     @Operation(summary = "책 코멘트 수정", description = "책 코멘트 수정")
