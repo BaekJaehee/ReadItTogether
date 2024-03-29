@@ -23,8 +23,6 @@ const BookDetail = async (bookId, page = 0, size = 8) => {
         size: size
       }
     });
-    console.log(response.data);
-    // console.log(response.data.info);
     return response.data;
   } catch (error) {
     console.error(error);
