@@ -18,4 +18,8 @@ public class LibraryIntroResponseDto {
     private String nickname;
 
     private String profileImage;
+
+    private int followingNum;
+
+    private int followerNum;
 }

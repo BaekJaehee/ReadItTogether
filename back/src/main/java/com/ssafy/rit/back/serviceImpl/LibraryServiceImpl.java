@@ -6,6 +6,7 @@ import com.ssafy.rit.back.dto.library.response.LibraryIntroUpdateResponse;
 import com.ssafy.rit.back.dto.library.responseDto.LibraryIntroResponseDto;
 import com.ssafy.rit.back.entity.Member;
 import com.ssafy.rit.back.exception.member.MemberNotFoundException;
+import com.ssafy.rit.back.repository.FollowRepository;
 import com.ssafy.rit.back.repository.MemberRepository;
 import com.ssafy.rit.back.service.LibraryService;
 import com.ssafy.rit.back.util.CommonUtil;
@@ -22,6 +23,7 @@ public class LibraryServiceImpl implements LibraryService {
 
     private final MemberRepository memberRepository;
     private final CommonUtil commonUtil;
+    private final FollowRepository followRepository;
 
     // 다른 사람 서재 방문 시 받을 intro 데이터
     @Override
@@ -40,6 +42,8 @@ public class LibraryServiceImpl implements LibraryService {
                 .nickname(thisMember.getNickname())
                 .profileImage(thisMember.getProfileImage())
                 .intro(thisMember.getIntro())
+                .followerNum(followRepository.countByFollowerMember(currentMember))
+                .followingNum(followRepository.countByFollowingMember(currentMember))
                 .build();
 
         LibraryIntroResponse response = new LibraryIntroResponse("서재 방문 성공", detailDto);
