@@ -8,11 +8,8 @@ import FollowModal from "../../components/modal/FollowModal";
 import EditNicknameModal from "../../components/modal/EditNicknameModal";
 import EditImageModal from "../../components/modal/EditImageModal";
 
-import man from "../../assets/profile/man.png";
-import grahp from "../../assets/profile/grahp.png";
 import settings from "../../assets/profile/settings.png";
 import edit from "../../assets/profile/edit.png"
-import noImg from "../../assets/profile/noImg.png"
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -37,7 +34,7 @@ const Profile = () => {
   let follwerCount = profileInfo.followerList.length
 
   // 프로필 이미지가 없는 경우 기본 이미지로 대체
-  const profileImageSrc = profileInfo.profileImage ? profileInfo.profileImage : noImg;
+  // const profileImageSrc = profileInfo.profileImage ? profileInfo.profileImage : noImg;
 
   useEffect(() => {
     const storedMemberId = localStorage.getItem("memberId");
@@ -128,7 +125,8 @@ const Profile = () => {
                 /> */}
                 <img
                   className="w-52 h-52 rounded-full mb-2"
-                  src={profileImageSrc}
+                  // src={profileImageSrc}
+                  src={profileInfo.profileImage}
                   alt="프로필 이미지"
                 />
                 <button className="absolute bottom-1 right-56 cursor-pointer" onClick={() => setIsImageEditOpen(true)}>
@@ -149,7 +147,7 @@ const Profile = () => {
                 )}
               </div>
               <p className="underline text-gray-500 text-xs mb-2">
-                {/* example@naver.com */}
+                {/* 이메일 */}
                 {profileInfo.email}
               </p>
               {/* 팔로우 수 */}
@@ -158,13 +156,13 @@ const Profile = () => {
                   {/* 팔로잉 */}
                   <div className="flex mr-2">
                     <p className="text-gray-500 mr-2">팔로잉</p>
-                    {/* <p className="font-semibold">137</p> */}
+                    {/* 팔로잉 수 */}
                     <p className="font-semibold">{followCount}</p>
                   </div>
                   {/* 팔로워 */}
                   <div className="flex">
                     <p className="text-gray-500 mr-2">팔로워</p>
-                    {/* <p className="font-semibold">936</p> */}
+                    {/* 팔로워 수 */}
                     <p className="font-semibold">{follwerCount}</p>
                   </div>
                 </div>
@@ -182,18 +180,17 @@ const Profile = () => {
 
             {/* 그래프 넣는 곳 */}
             <div className="flex-1">
-              {/* <img src={grahp} alt="임시 그래프" /> */}
               <div>
                 {/* 도넛 그래프를 그릴 canvas 요소 */}
                 <DoughnutChart dataLabels={dataLabels} dataValues={dataValues} />
               </div>
-              {/* {profileInfo.genreNoList} */}
+              {/* {profileInfo.genreNoList}<br/> */}
               {/* {genreCountByName} */}
-              {/* {dataLabels} */}
-              {/* {dataValues} */}
+              {/* {dataLabels}<br/> */}
+              {/* {dataValues}<br/> */}
             </div>
             {/* 설정 톱니바퀴 */}
-            <div className="relative right-0" onClick={ handleSettingsClick }>
+            <div className="relative right-0 cursor-pointer" onClick={ handleSettingsClick }>
               <img className="w-5" src={settings} alt="" />
             </div>
           </div>
@@ -204,17 +201,14 @@ const Profile = () => {
             <div className="flex justify-between mt-4 mx-10 font-semibold text-sm">
               <div className="flex-col">
                 <p>평가 완료한 책</p>
-                {/* <p className="flex items-center justify-center text-2xl">136</p> */}
                 <p className="flex items-center justify-center text-2xl">{profileInfo.evaluatedBookCnt}</p>
               </div>
               <div className="flex-col">
                 <p>관심 있는 책</p>
-                {/* <p className="flex items-center justify-center text-2xl">29</p> */}
                 <p className="flex items-center justify-center text-2xl">{profileInfo.likedBookCnt}</p>
               </div>
               <div className="flex-col">
                 <p>내가 쓴 카드</p>
-                {/* <p className="flex items-center justify-center text-2xl">12</p> */}
                 <p className="flex items-center justify-center text-2xl">{profileInfo.sendCardCnt}</p>
               </div>
             </div>

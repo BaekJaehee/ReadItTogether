@@ -9,7 +9,7 @@ import PublicRoute from "./authentication/routers/PublicRouter";
 import Library from "./pages/library/Library";
 import Login from "./pages/accounts/Login";
 import FindPassword from "./pages/accounts/FindPassword";
-import Bookshelf from "./pages/library/Bookshelf";
+import Bookshelf from "./pages/bookshelf/Bookshelf";
 import Profile from "./pages/accounts/Profile";
 import RecommendBook from "./pages/recomend/RecommendBook";
 import DetailBook from "./pages/recomend/DetailBook";

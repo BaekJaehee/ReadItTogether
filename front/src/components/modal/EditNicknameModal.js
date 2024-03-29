@@ -34,6 +34,8 @@ const EditNicknameModal = ({ onClose }) => {
     try {
       const response = await changeNickname(newNickname);
       console.log(response);
+      // 닉네임 변경 성공 시 nickname 업데이트
+      // localStorage.setItem("nickname", newNickname);
       onClose();
       alert('닉네임이 변경되었습니다.');
       await fetchProfileInfo(); // 프로필 정보 다시 가져오기
