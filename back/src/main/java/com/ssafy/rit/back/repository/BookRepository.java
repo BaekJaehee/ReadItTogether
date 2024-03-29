@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BookRepository extends JpaRepository<Book, Integer> {
 
@@ -16,4 +17,8 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
 
     @Query("SELECT b from Book b WHERE b.id IN :bookIds")
     List<Book> findAllByBookIds(@Param("bookIds") List<Integer> bookIds);
+
+    @Query("SELECT AVG(c.rating) FROM Comment c WHERE c.bookId.id = :bookId")
+    Integer findAverageRatingByBookId(@Param("bookId") Integer bookId);
+
 }
