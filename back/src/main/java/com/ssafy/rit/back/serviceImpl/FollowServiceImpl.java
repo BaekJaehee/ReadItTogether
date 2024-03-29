@@ -8,6 +8,7 @@ import com.ssafy.rit.back.exception.follow.FollowNotFoundException;
 import com.ssafy.rit.back.exception.follow.FollowSelfException;
 import com.ssafy.rit.back.repository.FollowRepository;
 import com.ssafy.rit.back.service.FollowService;
+import com.ssafy.rit.back.util.CommonUtil;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +21,14 @@ public class FollowServiceImpl implements FollowService {
 
     private final FollowRepository followRepository;
 
+
     public FollowServiceImpl(FollowRepository followRepository) {
         this.followRepository = followRepository;
     }
 
     @Override
     public void follow(Member following, Member follower) {
+
         if (follower == following) {
             throw new FollowSelfException();
         }
