@@ -5,6 +5,7 @@ const WriteFormModal = ({
   setPostItContent,
   handleSubmit,
   handleCloseAll,
+  refreshList
 }) => {
   return (
     <div
