@@ -2,6 +2,7 @@ package com.ssafy.rit.back.controller;
 
 import com.ssafy.rit.back.dto.bookshelf.requestDto.BookshelfUpdateRequestDto;
 import com.ssafy.rit.back.dto.bookshelf.requestDto.BookshelfUploadRequestDto;
+import com.ssafy.rit.back.dto.bookshelf.response.BookshelfDeleteResponse;
 import com.ssafy.rit.back.dto.bookshelf.response.BookshelfListResponse;
 import com.ssafy.rit.back.dto.bookshelf.response.BookshelfUpdateResponse;
 import com.ssafy.rit.back.dto.bookshelf.response.BookshelfUploadResponse;
@@ -33,13 +34,19 @@ public class BookshelfController {
         return bookshelfService.updateBookshelf(dto);
     }
 
-    @GetMapping("/{memberId}")
+    @DeleteMapping("/{bookshelfId}")
+    @Operation( summary = "책장에서 책 삭제", description = "bookshelfId를 조회하여 삭제 합니다.")
+    public ResponseEntity<BookshelfDeleteResponse> deleteBookshelf(@PathVariable("bookshelfId") Integer bookshelfId) {
+        return bookshelfService.deleteBookshelf(bookshelfId);
+    }
+
+    @GetMapping("/{toMemberId}")
     @Operation(summary = "책장에 담은 책 리스트 조회", description = "유저가 책장")
-    public ResponseEntity<BookshelfListResponse> readBookshelfList(@PathVariable("memberId") Long memberId,
+    public ResponseEntity<BookshelfListResponse> readBookshelfList(@PathVariable("toMemberId") Long toMemberId,
                                                                    @RequestParam(value = "page", defaultValue = "0") int page,
                                                                    @RequestParam(value = "size", defaultValue = "10") int size,
                                                                    @RequestParam(value = "sort", defaultValue = "0") int sort,
                                                                    @RequestParam(value = "searchKeyword", required = false) String searchKeyword) {
-        return bookshelfService.readBookshelfList(memberId, page, size, sort, searchKeyword);
+        return bookshelfService.readBookshelfList(toMemberId, page, size, sort, searchKeyword);
     }
 }
