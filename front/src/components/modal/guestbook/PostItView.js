@@ -15,6 +15,8 @@ const PostItView = ({
   moveRight,
   memberId,
   isMemberPage,
+  refreshList
+
 }) => {
   const [fromMemberId, setFromMemberId] = useState("")
   const [nickname, setNickname] = useState("");
@@ -54,6 +56,7 @@ const PostItView = ({
     try {
       await GuestBookDelete(postId);
       console.log("포스트잇 띳다");
+      refreshList();
     } catch (error) {
       console.log("띠지마라", error);
     }

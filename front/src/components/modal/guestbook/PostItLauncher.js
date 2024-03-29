@@ -20,6 +20,25 @@ const PostItLauncher = ({ onClose, isMemberPage, memberId }) => {
   });
   const location = useLocation();
 
+
+  const refreshPostItList = async () => {
+    const list = await GuestBookListGet(isMemberPage); // 방명록 리스트 재조회
+    setPostItList(list); // 상태 업데이트
+  
+    if (list.length === 0) {
+      setModal({
+        showButtonsModal: true,
+        showPostIt: false,
+        showWriteForm: false,
+      });
+    } else if (list.length <= currentPostIt) {
+      // 리스트가 있지만 현재 선택된 항목이 범위를 벗어난 경우
+      setCurrentPostIt(Math.max(0, list.length - 1));
+    }
+  };
+  
+
+
   useEffect(() => {
     const getPostItList = async () => {
       try {
@@ -65,6 +84,11 @@ const PostItLauncher = ({ onClose, isMemberPage, memberId }) => {
   };
 
   const handleOpenPostIt = () => {
+    if (!postItList || postItList.length === 0) {
+      alert("방명록이 없습니다.");
+      // 여기서 함수 실행을 중지
+      return;
+    }
     setModal({
       showButtonsModal: false,
       showPostIt: true,
@@ -90,6 +114,7 @@ const PostItLauncher = ({ onClose, isMemberPage, memberId }) => {
     try {
       const responseData = await GuestBookForm(isMemberPage, postItContent);
       console.log("성공 했으면 true가 떠요:", responseData); // API 호출 결과 로깅
+      refreshPostItList(); // 방명록 목록 새로고침
     } catch (error) {
       console.error("API 호출 중 오류 발생:", error);
     }
@@ -138,6 +163,7 @@ const PostItLauncher = ({ onClose, isMemberPage, memberId }) => {
           setPostItContent={setPostItContent}
           handleSubmit={handleSubmit}
           handleCloseAll={handleCloseAll}
+          refreshList={refreshPostItList}
         />
       )}
 
@@ -154,6 +180,8 @@ const PostItLauncher = ({ onClose, isMemberPage, memberId }) => {
               moveRight={moveRight}
               memberId={memberId}
               isMemberPage={isMemberPage}
+              refreshList={refreshPostItList}
+      
             />
           ) : (
             <div>방명록이 없습니다.</div>
