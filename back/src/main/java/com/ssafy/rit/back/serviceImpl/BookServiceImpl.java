@@ -209,24 +209,20 @@ public class BookServiceImpl implements BookService {
         }
 
         // comment entity 에 저장되어있는 BookId는 사실 Book 전체 정보이다 (추후에 객체 이름 수정 필요)
-        Book currentBook = comment.getBookId();
+//        Book currentBook = comment.getBookId();
 
-        log.info("(1) ");
         // 삭제
         commentRepository.delete(comment);
 
-        log.info("(2) ");
-        bookRepository.save(currentBook);
+//        log.info("(3) {}", currentBook.getId());
+        this.updateBookRating(comment.getBookId().getId());
 
         CommentDeleteResponse response = CommentDeleteResponse.builder()
                 .message("코멘트 삭제 성공")
                 .data(true)
                 .build();
 
-        log.info("(3) {}", currentBook.getId());
-        this.updateBookRating(currentBook.getId());
 
-        log.info("(4) ");
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -234,6 +230,10 @@ public class BookServiceImpl implements BookService {
         Integer averageRating = bookRepository.findAverageRatingByBookId(bookId);
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new EntityNotFoundException("Book not found"));
         book.setRating(averageRating);
+
+        Integer countComment = bookRepository.findCountCommentByBookId(bookId);
+        book.setReviewerCnt(countComment);
+
         bookRepository.save(book);
     }
 
