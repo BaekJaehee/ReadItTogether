@@ -184,10 +184,10 @@ const Profile = () => {
                 {/* 도넛 그래프를 그릴 canvas 요소 */}
                 <DoughnutChart dataLabels={dataLabels} dataValues={dataValues} />
               </div>
-              {/* {profileInfo.genreNoList} */}
+              {/* {profileInfo.genreNoList}<br/> */}
               {/* {genreCountByName} */}
-              {/* {dataLabels} */}
-              {/* {dataValues} */}
+              {/* {dataLabels}<br/> */}
+              {/* {dataValues}<br/> */}
             </div>
             {/* 설정 톱니바퀴 */}
             <div className="relative right-0 cursor-pointer" onClick={ handleSettingsClick }>
