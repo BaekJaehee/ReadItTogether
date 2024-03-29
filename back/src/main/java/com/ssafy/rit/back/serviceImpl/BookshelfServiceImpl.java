@@ -158,7 +158,6 @@ public class BookshelfServiceImpl implements BookshelfService {
 
         Page<Bookshelf> bookshelfPage = bookshelfRepository.findAllByMemberIdAndSearchKeyword(currentMember, searchKeyword, pageable);
 
-
         List<BookshelfListResponseDto> bookshelfListResponseDtos = bookshelfPage.getContent().stream()
                 .map(bookshelf -> {
                     String genresStr = bookshelf.getBookId().getGenre(); // "action, mystery" 형식의 문자열을 가져옵니다.
