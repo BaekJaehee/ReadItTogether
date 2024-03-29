@@ -14,4 +14,16 @@ public class LibraryIntroResponseDto {
     private int isMine;
 
     private int isReceive;
+
+    private String nickname;
+
+    private String profileImage;
+
+    private int followingNum;
+
+    private int followerNum;
+
+    private int isFollowing;
+
+    private String email;
 }

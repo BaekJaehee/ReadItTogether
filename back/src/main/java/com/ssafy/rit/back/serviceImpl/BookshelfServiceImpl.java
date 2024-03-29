@@ -138,7 +138,7 @@ public class BookshelfServiceImpl implements BookshelfService {
 
     // 책장 조회 하기
     @Override
-    public ResponseEntity<BookshelfListResponse> readBookshelfList(Long memberId, int page, int size, int sort, String searchKeyword) {
+    public ResponseEntity<BookshelfListResponse> readBookshelfList(Long toMemberId, int page, int size, int sort, String searchKeyword) {
 
         Pageable pageable = PageRequest.of(page, size);
 
@@ -154,10 +154,9 @@ public class BookshelfServiceImpl implements BookshelfService {
                 break;
         }
 
-        Member currentMember = memberRepository.findById(memberId).orElseThrow();
+        Member currentMember = memberRepository.findById(toMemberId).orElseThrow();
 
         Page<Bookshelf> bookshelfPage = bookshelfRepository.findAllByMemberIdAndSearchKeyword(currentMember, searchKeyword, pageable);
-
 
         List<BookshelfListResponseDto> bookshelfListResponseDtos = bookshelfPage.getContent().stream()
                 .map(bookshelf -> {
