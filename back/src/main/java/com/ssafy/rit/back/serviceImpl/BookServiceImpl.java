@@ -150,40 +150,6 @@ public class BookServiceImpl implements BookService {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-
-    // 코멘트 조회
-//    @Override
-//    public ResponseEntity<CommentListResponse> readCommentList(int bookId, int page, int size) {
-//
-//        // 책이 있는지 확인
-//        Book currentBook = bookRepository.findById(bookId)
-//                .orElseThrow(BookNotFoundException::new);
-//
-//        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
-//        Page<Comment> commentPage = commentRepository.findByBookId(currentBook, pageable);
-//
-//
-//        List<CommentListResponseDto> commentListResponseDtos = commentPage.stream()
-//                .map(comment -> {
-//                    Member member = comment.getMemberId();
-//                    String nickname = member.getNickname();
-//
-//                    return CommentListResponseDto.builder()
-//                            .nickname(nickname)
-//                            .rating(comment.getRating())
-//                            .comment(comment.getComment())
-//                            .createAt(comment.getCreatedAt())
-//                            .build();
-//                }).toList();
-//
-//        CommentListResponse response = CommentListResponse.builder()
-//                .message("코멘트 조회 완료")
-//                .comments(commentListResponseDtos)
-//                .build();
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(response);
-//    }
-
     // 코멘트 수정
     @Override
     public ResponseEntity<CommentUpdateResponse> updateComment(CommentUpdateRequestDto dto) {
