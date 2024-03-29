@@ -37,6 +37,8 @@ public class LibraryServiceImpl implements LibraryService {
         LibraryIntroResponseDto detailDto = LibraryIntroResponseDto.builder()
                 .isMine(mine)
                 .isReceive(thisMember.getIsReceivable())
+                .nickname(thisMember.getNickname())
+                .profileImage(thisMember.getProfileImage())
                 .intro(thisMember.getIntro())
                 .build();
 
