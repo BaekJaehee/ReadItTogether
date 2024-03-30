@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import GetBookShelfList from "../../api/book/bookshelf/GetBookshelfList";
+
 import BookFilter from "../../components/books/BookFilter";
 import BookSort from "../../components/books/BookSort";
 import Read from "../../components/books/Read";
 import NotRead from "../../components/books/NotRead";
+
 import pointUp from "../../assets/pointUp.png";
 
 const Bookshelf = () => {
@@ -27,7 +29,8 @@ const Bookshelf = () => {
   // isRead 기준으로 책 컴포넌트 구분(토글) -> O
   // 검색(GetBookshelfList searchKeyword) -> O
   // 정렬(별점순 제거, 출간일 -> 등록순, 0: 최신등록순(default))
-  // 무한스크롤 -> O
+  // 무한스크롤 -> 상태변경 되니까 이게 또 이상한 것 같음
+  // 책 상태 변경 -> O
 
   // 기본 컴포넌트가 설정했는데 안나옴 -> 왜 되지
   // 무한스크롤 추가하고 컴포넌트 토글이 안됨 -> 왜 되지
@@ -39,7 +42,7 @@ const Bookshelf = () => {
     const whoMemberId = pathArray[pathArray.length - 1];
     setIsMemberPage(whoMemberId);
     setToMemberId(whoMemberId)
-  }, []);
+  }, [location.pathname]);
 
   const handleFilterChange = (newFilter) => {
     setFilter(newFilter);
@@ -124,7 +127,8 @@ const Bookshelf = () => {
     const fetchBookshelfList = async () => {
       try {
         const response = await GetBookShelfList(toMemberId);
-        setBookshelfInfo(response.data.data);
+        // setBookshelfInfo(response.data.data);
+        setBookshelfInfo([...response.data.data]); // 배열로 변환하여 설정
         console.log("책장목록: ", response.data.data);
       } catch (error) {
         console.log("책장 목록을 가져오는 데 실패했습니다: ", error);
@@ -168,6 +172,16 @@ const Bookshelf = () => {
       behavior: "smooth"
     });
   }
+
+  // bookshelfInfo를 업데이트
+  const updateBookshelfInfo = async () => {
+    try {
+      const updatedBookshelf = await GetBookShelfList(toMemberId);
+      setBookshelfInfo(updatedBookshelf.data.data);
+    } catch (error) {
+      console.error("책장 목록을 업데이트하는 데 실패했습니다:", error);
+    }
+  };
   
   return (
     <div className="bg-sky-100 absolute inset-0 m-20">
@@ -201,12 +215,14 @@ const Bookshelf = () => {
             bookshelfInfo={!isSearching && !isRead ? bookshelfInfo.filter((book) => book.isRead === 0) : bookshelfInfo.filter((book) => book.isRead === 0 && book.title.includes(searchKeyword))} 
             handleClickBook={handleClickBook} 
             handleScroll={handleScroll} 
+            updateBookshelfInfo={updateBookshelfInfo}
           />
         ) : (
           <Read 
             bookshelfInfo={!isSearching && isRead ? bookshelfInfo.filter((book) => book.isRead === 1) : bookshelfInfo.filter((book) => book.isRead === 1 && book.title.includes(searchKeyword))} 
             handleClickBook={handleClickBook} 
             handleScroll={handleScroll} 
+            updateBookshelfInfo={updateBookshelfInfo}
           />
         )}
       </div>
