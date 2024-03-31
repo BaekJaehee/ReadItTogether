@@ -36,7 +36,6 @@ const Bookshelf = () => {
   // 무한스크롤 추가하고 컴포넌트 토글이 안됨 -> 왜 되지
   // 무한스크롤 시 맨 위로 올라가는 버튼(화면 하단 붙박이) 필요 -> O
 
-
   useEffect(() => {
     const pathArray = location.pathname.split("/");
     const whoMemberId = pathArray[pathArray.length - 1];
@@ -44,10 +43,23 @@ const Bookshelf = () => {
     setToMemberId(whoMemberId)
   }, [location.pathname]);
 
+  // 장르 체크
   const handleFilterChange = (newFilter) => {
     setFilter(newFilter);
   };
 
+  // 정렬
+  const handleSort = async (sort) => {
+    try {
+      const response =  await GetBookShelfList(toMemberId, 0, 10, sort, searchKeyword);
+      setBookshelfInfo(response.data.data);
+      setSort(sort);
+    } catch (error) {
+      console.error('정렬실패: ', error);
+    }
+  }
+
+  // 검색
   const handleSearch = async () => {
     setIsSearching(true);
     try {
@@ -128,7 +140,7 @@ const Bookshelf = () => {
       try {
         const response = await GetBookShelfList(toMemberId);
         // setBookshelfInfo(response.data.data);
-        setBookshelfInfo([...response.data.data]); // 배열로 변환하여 설정
+        setBookshelfInfo([...response.data.data]); // 원래 객체인데 배열로 변환하여 설정
         console.log("책장목록: ", response.data.data);
       } catch (error) {
         console.log("책장 목록을 가져오는 데 실패했습니다: ", error);
@@ -137,6 +149,7 @@ const Bookshelf = () => {
     fetchBookshelfList();
   }, [toMemberId]);
 
+  // 무한스크롤
   const handleScroll = () => {
     const scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
     const scrollHeight = (document.documentElement && document.documentElement.scrollHeight) || document.body.scrollHeight;
@@ -166,6 +179,7 @@ const Bookshelf = () => {
     };
   }, []);
 
+  // 최상단으로
   const goToTop = () => {
     window.scrollTo({
       top: 0,
@@ -185,9 +199,11 @@ const Bookshelf = () => {
   
   return (
     <div className="bg-sky-100 absolute inset-0 m-20">
+      {/* 장르 체크 */}
       <div className="flex items-center justify-center my-2">
         <BookFilter onFilterChange={handleFilterChange} />
       </div>
+      {/* 검색 */}
       <div className="flex justify-center m-2">
         <input 
           type="text" 
@@ -201,7 +217,9 @@ const Bookshelf = () => {
         </button>
       </div>
       <div className="flex justify-end mx-5 my-3">
-        <BookSort onChange={(value) => setSort(value)} />
+        {/* 정렬 */}
+        {/* <BookSort onChange={(value) => setSort(value)} /> */}
+        <BookSort onChange={handleSort} />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <label className="inline-flex items-center cursor-pointer">
           <input type="checkbox" value="" className="sr-only peer" onChange={toggleRead}/>
@@ -209,6 +227,7 @@ const Bookshelf = () => {
           <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">{isRead ? '읽은 책 보기' : '읽을 책 보기'}</span>
         </label>
       </div>
+      {/* 책 표시 */}
       <div className="flex my-3">
         {currentComponent === 'NotRead' ? (
           <NotRead 
@@ -226,6 +245,7 @@ const Bookshelf = () => {
           />
         )}
       </div>
+      {/* 최상단으로 */}
       <div className="fixed bottom-5 right-5">
         <img src={pointUp} onClick={goToTop} className="cursor-pointer w-5 h-5" alt="Go to Top" />
       </div>
