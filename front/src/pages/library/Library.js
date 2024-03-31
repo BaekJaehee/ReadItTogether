@@ -9,6 +9,9 @@ import sample from "../../assets/profile/sample.PNG";
 
 import IntroGet from "../../api/llibrary/intro/IntroGet";
 import FollowButton from "../../components/button/FollowButton";
+import FollowModal from "../../components/modal/FollowModal";
+import FollowingGet from "../../api/follow/FollowingGet";
+import FollowerGet from "../../api/follow/FollowerGet";
 
 // 이미지
 import table from "../../assets/library/table.png";
@@ -30,6 +33,8 @@ const Library = () => {
   const [followerNum, setFollowerNum] = useState("");
   const [isFollowing, setIsFollowing] = useState(0);
   const [email, setEmail] = useState("");
+  const [followingList, setFollowingList] = useState([]);
+  const [followerList, setFollowerList] = useState([]);
 
   useEffect(() => {
     // URL에서 whoMemberId 추출
@@ -58,6 +63,28 @@ const Library = () => {
     fetchIntroText();
   }, [location.pathname]); // 의존성 배열에 location.pathname 추가
 
+  useEffect(() => {
+    const targetFollowingList = async () => {
+      try {
+        const response = await FollowingGet(email);
+        setFollowingList(response.data)
+      } catch (error) {
+        console.log("팔로잉 목록 가져오기 실패:", error)
+      }
+    }
+  })
+
+  useEffect(() => {
+    const targetFollowerList = async () => {
+      try {
+        const response = await FollowerGet(email);
+        setFollowerList(response.data)
+      } catch (error) {
+        console.log("팔로잉 목록 가져오기 실패:", error)
+      }
+    }
+  })
+
   // 방명록 상태
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
@@ -84,11 +111,16 @@ const Library = () => {
   const openMailBox = () => setIsMailBoxOpen(true);
   const closeMailBox = () => setIsMailBoxOpen(false);
 
+  //팔로우 목록 상태
+  const [followModalOpen, setFollowModalOpen] = useState(false);
+  const openFollowModal = () => setFollowModalOpen(true);
+  const closeFollowModal = () => setFollowModalOpen(false);
+
   return (
     <div className="min-h-screen min-w-full overflow-auto">
       {/* 배경 벽지 */}
       <div className="bg-sky-100 absolute inset-0 min-w-full min-h-full"></div>
-     
+
       {/* 이미지 */}
       <div className="relative min-w-full min-h-full">
         <img
@@ -148,7 +180,7 @@ const Library = () => {
               alt="서재 주인 정보"
             />
             <div className="absolute top-5 left-5">
-              <div className="flex items-center">
+              <div className="flex items-center" onClick={openFollowModal}>
                 <img
                   className="w-8 h-8 rounded-full mr-1"
                   src={profileImg}
@@ -166,6 +198,14 @@ const Library = () => {
               <FollowButton isFollowing={isFollowing} targetEmail={email} />
             </div>
           </div>
+          {followModalOpen && (
+            <FollowModal
+              isFollowing={isFollowing}
+              targetFollowingList={targetFollowingList}
+              targetFollowerList={targetFollowerList}
+              onClose={closeFollowModal}
+            />
+          )}
         </div>
 
         <div className="group flex items-center justify-center  overflow-hidden">
