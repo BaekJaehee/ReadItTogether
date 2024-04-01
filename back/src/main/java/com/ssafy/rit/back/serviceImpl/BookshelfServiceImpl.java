@@ -22,7 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.time.LocalDate;
@@ -44,6 +44,7 @@ public class BookshelfServiceImpl implements BookshelfService {
 
     // 책장에 책 등록하기
     @Override
+    @Transactional
     public ResponseEntity<BookshelfUploadResponse> uploadBookshelf(BookshelfUploadRequestDto dto) {
 
         // 책 id를 받으면 내 책장에 book 정보 저장해주기
