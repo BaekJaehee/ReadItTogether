@@ -12,6 +12,6 @@ public class BookDto {
     private String cover;
     private String title;
     private String author;
-    private Integer ratings;
+    private Integer rating;
     private String pubDate;
 }
