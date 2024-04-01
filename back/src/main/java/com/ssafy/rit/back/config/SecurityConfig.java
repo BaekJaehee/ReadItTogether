@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -62,6 +63,11 @@ public class SecurityConfig {
     }
 
     @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.csrf((auth) -> auth.disable());
@@ -70,7 +76,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/", "/members/signup", "/v3/api-docs/**", "/v3/swagger-ui/**", "/v3/swagger-resources/**").permitAll()
+                        .requestMatchers("/login", "/", "/members/signup", "/v3/api-docs/**", "/v3/swagger-ui/**", "/v3/swagger-resources/**", "/klogin", "/login/oauth2/code/kakao").permitAll()
                         .requestMatchers("/members/reissue", "/members/email", "/members/nickname", "/members/pass-certification", "/members/send-certification", "/members/verify-access", "/members/temporary-password").permitAll()
                         .anyRequest().authenticated());
 
