@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import DoughnutChart from "../../components/DoughnutChart.js";
 
 import fetchProfileInfo from "../../api/accounts/fetchProfileInfo";
@@ -9,7 +9,7 @@ import EditNicknameModal from "../../components/modal/EditNicknameModal";
 import EditImageModal from "../../components/modal/EditImageModal";
 
 import settings from "../../assets/profile/settings.png";
-import edit from "../../assets/profile/edit.png"
+import edit from "../../assets/profile/edit.png";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -27,11 +27,11 @@ const Profile = () => {
     evaluatedBookCnt: "",
     likedBookCnt: "",
     sendCardCnt: "",
-    genreNoList: []
-  })
-  
-  let followCount = profileInfo.followList.length
-  let follwerCount = profileInfo.followerList.length
+    genreNoList: [],
+  });
+
+  let followCount = profileInfo.followList.length;
+  let follwerCount = profileInfo.followerList.length;
 
   // 프로필 이미지가 없는 경우 기본 이미지로 대체
   // const profileImageSrc = profileInfo.profileImage ? profileInfo.profileImage : noImg;
@@ -53,28 +53,28 @@ const Profile = () => {
   }, []);
 
   // 데이터의 장르명 표시 바꾸기
-  const genreMapping ={
-    1: '액션',
-    2: '호러',
-    3: '미스터리',
-    4: '판타지',
-    5: '역사',
-    6: '로맨스',
-    7: 'SF',
-    8: '한국문학',
-    9: '한국단편',
-    10: '영미단편',
-    11: '영미문학',
-    12: '일본단편',
-    13: '일본문학',
-    14: '중국문학',
-    15: '스페인문학',
-    16: '북유럽문학',
-    17: '라틴문학',
-    18: '러시아문학',
-    19: '동유럽문학',
-    20: '독일문학',
-    21: '프랑스문학'
+  const genreMapping = {
+    1: "액션",
+    2: "호러",
+    3: "미스터리",
+    4: "판타지",
+    5: "역사",
+    6: "로맨스",
+    7: "SF",
+    8: "한국문학",
+    9: "한국단편",
+    10: "영미단편",
+    11: "영미문학",
+    12: "일본단편",
+    13: "일본문학",
+    14: "중국문학",
+    15: "스페인문학",
+    16: "북유럽문학",
+    17: "라틴문학",
+    18: "러시아문학",
+    19: "동유럽문학",
+    20: "독일문학",
+    21: "프랑스문학",
   };
 
   // {profileInfo.genreNoList}가 [0,1]이 아니라 01로 화면에 표시됨 -> 배열 형식으로 만들기
@@ -82,12 +82,12 @@ const Profile = () => {
   for (const index in genreMapping) {
     const genreName = genreMapping[index];
     const count = profileInfo.genreNoList[index];
-    genreCountByName.push({ genre: genreName, count: count });  // 장르명: 횟수 형식으로 추가
+    genreCountByName.push({ genre: genreName, count: count }); // 장르명: 횟수 형식으로 추가
   }
 
   const dataLabels = [];
   const dataValues = [];
-  genreCountByName.forEach(data => {
+  genreCountByName.forEach((data) => {
     dataLabels.push(data.genre);
     dataValues.push(data.count);
   });
@@ -108,7 +108,7 @@ const Profile = () => {
   const handleSettingsClick = () => {
     navigate(`/modify/${memberId}`);
   };
-  
+
   return (
     <div className="flex items-center justify-center pt-32">
       <div className="flex items-center justify-center bg-sky-100 w-[1000px] p-12">
@@ -129,21 +129,35 @@ const Profile = () => {
                   src={profileInfo.profileImage}
                   alt="프로필 이미지"
                 />
-                <button className="absolute bottom-1 right-56 cursor-pointer" onClick={() => setIsImageEditOpen(true)}>
-                  <img src={edit} alt="edit" className="w-5 h-5"/>
+                <button
+                  className="absolute bottom-1 right-56 cursor-pointer"
+                  onClick={() => setIsImageEditOpen(true)}
+                >
+                  <img src={edit} alt="edit" className="w-5 h-5" />
                 </button>
                 {isImageEditOpen && (
-                  <EditImageModal onClose={() => setIsImageEditOpen(false)} nickname={profileInfo.nickname}/>
+                  <EditImageModal
+                    onClose={() => setIsImageEditOpen(false)}
+                    nickname={profileInfo.nickname}
+                  />
                 )}
               </div>
               <div className="flex items-center">
                 {/* <span className="font-semibold text-xl mb-2"> 닉네임 </span> */}
-                <span className="font-semibold text-xl mb-2"> {profileInfo.nickname} </span>
-                <button className="cursor-pointer p-0 mx-1" onClick={() => setIsNicknameEditOpen(true)}>
-                  <img src={edit} alt="edit" className="w-4 h-4"/>
+                <span className="font-semibold text-xl mb-2">
+                  {" "}
+                  {profileInfo.nickname}{" "}
+                </span>
+                <button
+                  className="cursor-pointer p-0 mx-1"
+                  onClick={() => setIsNicknameEditOpen(true)}
+                >
+                  <img src={edit} alt="edit" className="w-4 h-4" />
                 </button>
                 {isNicknameEditOpen && (
-                  <EditNicknameModal onClose={() => setIsNicknameEditOpen(false)}/>
+                  <EditNicknameModal
+                    onClose={() => setIsNicknameEditOpen(false)}
+                  />
                 )}
               </div>
               <p className="underline text-gray-500 text-xs mb-2">
@@ -169,7 +183,7 @@ const Profile = () => {
               </button>
               {isModalOpen && (
                 <FollowModal
-                  isFollowers={true}
+                  isFollowing={false}
                   onClose={() => setIsModalOpen(false)}
                   followList={profileInfo.followList}
                   followerList={profileInfo.followerList}
@@ -182,7 +196,10 @@ const Profile = () => {
             <div className="flex-1">
               <div>
                 {/* 도넛 그래프를 그릴 canvas 요소 */}
-                <DoughnutChart dataLabels={dataLabels} dataValues={dataValues} />
+                <DoughnutChart
+                  dataLabels={dataLabels}
+                  dataValues={dataValues}
+                />
               </div>
               {/* {profileInfo.genreNoList}<br/> */}
               {/* {genreCountByName} */}
@@ -190,7 +207,10 @@ const Profile = () => {
               {/* {dataValues}<br/> */}
             </div>
             {/* 설정 톱니바퀴 */}
-            <div className="relative right-0 cursor-pointer" onClick={ handleSettingsClick }>
+            <div
+              className="relative right-0 cursor-pointer"
+              onClick={handleSettingsClick}
+            >
               <img className="w-5" src={settings} alt="" />
             </div>
           </div>
@@ -201,15 +221,21 @@ const Profile = () => {
             <div className="flex justify-between mt-4 mx-10 font-semibold text-sm">
               <div className="flex-col">
                 <p>평가 완료한 책</p>
-                <p className="flex items-center justify-center text-2xl">{profileInfo.evaluatedBookCnt}</p>
+                <p className="flex items-center justify-center text-2xl">
+                  {profileInfo.evaluatedBookCnt}
+                </p>
               </div>
               <div className="flex-col">
                 <p>관심 있는 책</p>
-                <p className="flex items-center justify-center text-2xl">{profileInfo.likedBookCnt}</p>
+                <p className="flex items-center justify-center text-2xl">
+                  {profileInfo.likedBookCnt}
+                </p>
               </div>
               <div className="flex-col">
                 <p>내가 쓴 카드</p>
-                <p className="flex items-center justify-center text-2xl">{profileInfo.sendCardCnt}</p>
+                <p className="flex items-center justify-center text-2xl">
+                  {profileInfo.sendCardCnt}
+                </p>
               </div>
             </div>
           </div>

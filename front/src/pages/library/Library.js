@@ -10,8 +10,6 @@ import sample from "../../assets/profile/sample.PNG";
 import IntroGet from "../../api/llibrary/intro/IntroGet";
 import FollowButton from "../../components/button/FollowButton";
 import FollowModal from "../../components/modal/FollowModal";
-import FollowingGet from "../../api/follow/FollowingGet";
-import FollowerGet from "../../api/follow/FollowerGet";
 
 // 이미지
 import table from "../../assets/library/table.png";
@@ -22,11 +20,11 @@ import whiteBoard from "../../assets/library/whiteBoard.png";
 import mailBox from "../../assets/library/mailBox.png";
 import list from "../../assets/list.png";
 
+const memberId = localStorage.getItem("memberId");
 const Library = () => {
   const location = useLocation();
   const [introText, setIntroText] = useState("");
   const [isMemberPage, setIsMemberPage] = useState(false);
-  const memberId = localStorage.getItem("memberId");
   const [profileImg, setProfileImg] = useState(`${sample}`);
   const [nickname, setNickname] = useState("");
   const [followingNum, setFollowingNum] = useState("");
@@ -48,13 +46,15 @@ const Library = () => {
     const fetchIntroText = async () => {
       try {
         const response = await IntroGet(whoMemberId);
-        setIntroText(response.text);
-        setProfileImg(response.profileImage);
+        setIntroText(response.intro);
+        setEmail(response.email);
         setNickname(response.nickname);
+        setProfileImg(response.profileImage);
+        setIsFollowing(response.isFollowing);
         setFollowingNum(response.followingNum);
         setFollowerNum(response.followerNum);
-        setEmail(response.email);
-        setIsFollowing(response.isFollowing);
+        setFollowingList(response.followingList);
+        setFollowerList(response.followerList);
       } catch (error) {
         console.error("소개글을 가져오는 데 실패했습니다:", error);
       }
@@ -62,28 +62,6 @@ const Library = () => {
 
     fetchIntroText();
   }, [location.pathname]); // 의존성 배열에 location.pathname 추가
-
-  useEffect(() => {
-    const targetFollowingList = async () => {
-      try {
-        const response = await FollowingGet(email);
-        setFollowingList(response.data)
-      } catch (error) {
-        console.log("팔로잉 목록 가져오기 실패:", error)
-      }
-    }
-  })
-
-  useEffect(() => {
-    const targetFollowerList = async () => {
-      try {
-        const response = await FollowerGet(email);
-        setFollowerList(response.data)
-      } catch (error) {
-        console.log("팔로잉 목록 가져오기 실패:", error)
-      }
-    }
-  })
 
   // 방명록 상태
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -180,7 +158,10 @@ const Library = () => {
               alt="서재 주인 정보"
             />
             <div className="absolute top-5 left-5">
-              <div className="flex items-center" onClick={openFollowModal}>
+              <div
+                className="flex items-center cursor-pointer"
+                onClick={openFollowModal}
+              >
                 <img
                   className="w-8 h-8 rounded-full mr-1"
                   src={profileImg}
@@ -190,20 +171,22 @@ const Library = () => {
               </div>
             </div>
             <div className="absolute top-14 left-12 text-sm font-mono">
-              <p className="flex">안녕! 나는 {followingNum}명을 팔로중이고</p>
+              <p className="flex">안녕! 나는 {followingNum}명을 팔로우중이고</p>
               <p>{followerNum}명이 나를 팔로우 중이지!</p>
               <p>나랑 친구할래?</p>
             </div>
-            <div className="absolute bottom-5 right-4">
-              <FollowButton isFollowing={isFollowing} targetEmail={email} />
-            </div>
+            {memberId !== isMemberPage && (
+              <div className="absolute bottom-5 right-4">
+                <FollowButton isFollowing={isFollowing} targetEmail={email} />
+              </div>
+            )}
           </div>
+
           {followModalOpen && (
             <FollowModal
-              isFollowing={isFollowing}
-              targetFollowingList={targetFollowingList}
-              targetFollowerList={targetFollowerList}
               onClose={closeFollowModal}
+              followList={followingList}
+              followerList={followerList}
             />
           )}
         </div>

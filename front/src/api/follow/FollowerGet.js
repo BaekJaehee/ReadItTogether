@@ -5,7 +5,7 @@ const accessToken = localStorage.getItem("accessToken");
 const FollowerGet = async (email) => {
   try {
     const response = await axios.get(
-      `${API_BASE_URL}/members/follower/${email}`, {},
+      `${API_BASE_URL}/members/follower/${email}`,
       {
         withCredentials: true,
         headers: {
@@ -14,7 +14,6 @@ const FollowerGet = async (email) => {
         },
       }
     );
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(error);
