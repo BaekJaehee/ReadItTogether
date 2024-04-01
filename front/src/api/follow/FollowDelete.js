@@ -18,7 +18,7 @@ const FollowDelete = async (targetEmail, requestId) => {
     console.log(response.data);
     return response.data;
   } catch (error) {
-    console.error(targetEmail, requestId);
+    return null;
   }
 };
 
