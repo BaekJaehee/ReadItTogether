@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import handleSentCard from '../../api/card/HandleSendCard';
-import img1 from "../../assets/book/img1.PNG"
 
 const CreateCard = ({ bookId, cover, title, author, publisher }) => {
   const [comment, setComment] = useState('');
