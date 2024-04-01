@@ -22,7 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.time.LocalDate;
@@ -44,6 +44,7 @@ public class BookshelfServiceImpl implements BookshelfService {
 
     // 책장에 책 등록하기
     @Override
+    @Transactional
     public ResponseEntity<BookshelfUploadResponse> uploadBookshelf(BookshelfUploadRequestDto dto) {
 
         // 책 id를 받으면 내 책장에 book 정보 저장해주기
@@ -157,6 +158,8 @@ public class BookshelfServiceImpl implements BookshelfService {
 
         Page<Bookshelf> bookshelfPage = bookshelfRepository.findAllByMemberIdAndSearchKeyword(currentMember, searchKeyword, pageable);
 
+        int totalPage = bookshelfPage.getTotalPages();
+        log.info("(totalPage) {}", totalPage);
         List<BookshelfListResponseDto> bookshelfListResponseDtos = bookshelfPage.getContent().stream()
                 .map(bookshelf -> {
                     String genresStr = bookshelf.getBookId().getGenre(); // "action, mystery" 형식의 문자열을 가져옵니다.
@@ -167,6 +170,7 @@ public class BookshelfServiceImpl implements BookshelfService {
                             .cover(bookshelf.getCover())
                             .isRead(bookshelf.getIsRead())
                             .genres(genresList)
+                            .maxPage(totalPage)
                             .build();
                 })
                 .toList();

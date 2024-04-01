@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -73,6 +74,17 @@ public class GroupRecommendListServiceImpl implements GroupRecommendListService 
         List<Member> allMember = memberRepository.findAll();
         for (Member member : allMember) {
             member.setIsReceivable(1);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void setTempBookCover() {
+        List<GroupRecommendBook> allBooks = groupRecommendBookRepository.findAll();
+        for (GroupRecommendBook book : allBooks) {
+            Book currentBook = book.getBookId();
+            String cover = currentBook.getCover();
+            book.setCover(cover);
         }
     }
 
