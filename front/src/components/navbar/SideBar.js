@@ -6,7 +6,7 @@ import FollowModal from "../modal/FollowModal";
 // 로고
 import logo from "../../assets/navbar/logo2.png";
 
-const SideBar = ({ profileInfo }) => {
+const SideBar = ({ profileInfo, FollowingList, FollowerList }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const memberId = localStorage.getItem('memberId')
 
@@ -56,8 +56,10 @@ const SideBar = ({ profileInfo }) => {
         </button>
         {isModalOpen && (
           <FollowModal
-            isFollowers={true}
             onClose={() => setIsModalOpen(false)}
+            followingList={FollowingList}
+            followerList={FollowerList}
+            
           />
         )}
 
