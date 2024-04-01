@@ -10,17 +10,17 @@ const RecommendBook = () => {
   const [loading, setLoading] = useState(true);
   const [indices, setIndices] = useState({});
   const [recommendList, setRecommendList] = useState({
-    ageAndGenderGroupRecommendBooks: [],
-    bestGroupRecommendBooks: [],
     memberRecommendBooks: [],
     contentBaseGroupRecommendBooks: [],
+    ageAndGenderGroupRecommendBooks: [],
+    bestGroupRecommendBooks: [],
   });
 
   const keys = [
-    "ageAndGenderGroupRecommendBooks",
-    "bestGroupRecommendBooks",
     "memberRecommendBooks",
     "contentBaseGroupRecommendBooks",
+    "ageAndGenderGroupRecommendBooks",
+    "bestGroupRecommendBooks",
   ];
   const header = [
     "개인별 추천 도서",
@@ -74,14 +74,16 @@ const RecommendBook = () => {
         <div>Loading...</div>
       ) : (
         <>
-          {keys.map((key, i) => (
+          {keys.map((key, i) => {
+        const list = recommendList[key];
+        return list.length > 0 ? (
             <div key={i}>
               <p className="mb-4 pl-4 text-2xl font-black">{header[i]}</p>
               <div className="flex items-center space-x-2 slider relative mb-8">
                 {indices[key] > 0 && (
                   <button
                     onClick={() => moveLeft(key)}
-                    className="slides border-2 rounded-full absolute left-6 transform -translate-x-1/2"
+                    className="slides border-2 rounded-full absolute left-6 transform -translate-x-1/2 z-10"
                     style={{ top: "50%", transform: "translate(-50%, -50%)" }}
                   >
                     <img className="w-10 rounded-full" src={left} alt="왼쪽" />
@@ -97,7 +99,7 @@ const RecommendBook = () => {
                           : ""
                       }`}
                     >
-                      <div className="relative">
+                      <div className="relative border-2">
                         <Link to={`/detail-book/${book.bookId}`}>
                           <img
                             src={book.cover}
@@ -132,9 +134,10 @@ const RecommendBook = () => {
                     />
                   </button>
                 )}
+                </div>
               </div>
-            </div>
-          ))}
+            ) : null;
+          })}
         </>
       )}
     </div>
