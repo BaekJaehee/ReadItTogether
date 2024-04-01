@@ -89,6 +89,7 @@ public class BookshelfServiceImpl implements BookshelfService {
 
 
     @Override
+    @Transactional
     public ResponseEntity<BookshelfUpdateResponse> updateBookshelf(BookshelfUpdateRequestDto dto) {
 
         Member currentMember = commonUtil.getMember();
@@ -145,6 +146,7 @@ public class BookshelfServiceImpl implements BookshelfService {
                             .isRead(bookshelf.getIsRead())
                             .genres(genresList)
                             .maxPage(totalPage)
+                            .bookshelfId(bookshelf.getId())
                             .build();
                 })
                 .toList();
@@ -155,6 +157,7 @@ public class BookshelfServiceImpl implements BookshelfService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<BookshelfDeleteResponse> deleteBookshelf(Integer bookshelfId) throws BookshelfException {
 
         Member currentMember = commonUtil.getMember();
