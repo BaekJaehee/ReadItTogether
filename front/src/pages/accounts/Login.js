@@ -4,6 +4,7 @@ import { AuthContext } from "../../authentication/AuthContext";
 
 import NormalLoginForm from "../../api/accounts/NormalLoginForm";
 import NaverLoginButton from "../../components/auth_login/NaverLoginButton";
+import KakaoLoginButton from "../../components/auth_login/KakaoLoginButton";
 
 // 이미지
 import mainImg from "../../assets/login/mainImg.png";
@@ -74,7 +75,7 @@ const Login = () => {
           <input
             type="text"
             value={email}
-            placeholder="아이디"
+            placeholder="이메일"
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-sky-500 bg-white text-gray-700"
             required
             onChange={(e) => setEmail(e.target.value)}
@@ -120,7 +121,7 @@ const Login = () => {
             <hr className="w-28 bg-white h-0.5 border-none" />
           </div>
           <div className="flex justify-center">
-            <NaverLoginButton />
+            <KakaoLoginButton />
           </div>
         </form>
       </div>

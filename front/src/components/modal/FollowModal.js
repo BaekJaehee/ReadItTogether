@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
+import { Link } from "react-router-dom";
 
 import logo from "../../assets/navbar/logo2.png";
 import deleteButton from "../../assets/profile/delete.png";
@@ -62,10 +63,16 @@ const FollowModal = ({ onClose, followingList, followerList }) => {
                   key={index}
                   className="flex justify-between bg-white rounded-md px-2 py-1 m-2"
                 >
-                  <div className="flex items-center">
-                    <img className="rounded-full w-7 h-7 mr-1" src={user.profileImage} alt="" />
-                    <p className="font-semibold text-sm">{user.nickname}</p>
-                  </div>
+                  <Link to={`/${user.memberId}`}>
+                    <div className="flex items-center">
+                      <img
+                        className="rounded-full w-7 h-7 mr-1"
+                        src={user.profileImage}
+                        alt=""
+                      />
+                      <p className="font-semibold text-sm">{user.nickname}</p>
+                    </div>
+                  </Link>
                   <button className="bg-white border w-[70px] border-gray-300 hover:bg-gray-300 hover:text-white rounded-lg text-gray-500 text-xs py-2 px-4 transition-colors duration-300">
                     팔로잉
                   </button>
@@ -80,10 +87,16 @@ const FollowModal = ({ onClose, followingList, followerList }) => {
                   key={index}
                   className="flex justify-between bg-white rounded-md px-2 py-1 m-2"
                 >
-                  <div className="flex items-center">
-                    <img className="rounded-full w-7 h-7 mr-1" src={user.profileImage} alt="" />
-                    <p className="font-semibold text-sm">{user.nickname}</p>
-                  </div>
+                  <Link to={`/${user.memberId}`}>
+                    <div className="flex items-center">
+                      <img
+                        className="rounded-full w-7 h-7 mr-1"
+                        src={user.profileImage}
+                        alt=""
+                      />
+                      <p className="font-semibold text-sm">{user.nickname}</p>
+                    </div>
+                  </Link>
                   <button className="bg-white border w-[70px] border-gray-300 hover:bg-gray-300 hover:text-white rounded-lg text-gray-500 text-xs py-2 px-4 transition-colors duration-300">
                     삭제
                   </button>
