@@ -30,6 +30,13 @@ const Profile = () => {
     genreNoList: [],
   });
 
+
+  useEffect(() => {
+    console.log(profileInfo.followList)
+    console.log(profileInfo.followerList)
+  }, [profileInfo])
+
+
   let followCount = profileInfo.followList.length;
   let follwerCount = profileInfo.followerList.length;
 
@@ -183,11 +190,9 @@ const Profile = () => {
               </button>
               {isModalOpen && (
                 <FollowModal
-                  isFollowing={false}
                   onClose={() => setIsModalOpen(false)}
-                  followList={profileInfo.followList}
+                  followingList={profileInfo.followList}
                   followerList={profileInfo.followerList}
-                  // 팔로우/팔로워 목록 전달
                 />
               )}
             </div>
