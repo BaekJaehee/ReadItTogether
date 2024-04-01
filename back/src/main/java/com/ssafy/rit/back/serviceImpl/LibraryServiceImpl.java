@@ -58,7 +58,7 @@ public class LibraryServiceImpl implements LibraryService {
         List<Follow> byFollowerMember = followRepository.findByFollowerMember(thisMember);
         List<FollowerDto> followerDtos = byFollowerMember.stream()
                 .map(follow -> {
-                    Member following = follow.getFollowerMember();
+                    Member following = follow.getFollowingMember();
                     FollowerDto dto = new FollowerDto();
                     dto.setMemberId(following.getId());
                     dto.setNickname(following.getNickname());
