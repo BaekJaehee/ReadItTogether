@@ -11,7 +11,7 @@ const SearchPage = () => {
 
   useEffect(() => {
     // 새로운 쿼리가 시작되면 bookInfo 초기화 및 페이지를 1로 재설정
-    if (page === 1) setBookInfo([]);
+    if (page === 1) setBookInfo([]) && setBookInfo([]);
 
     const fetchData = async () => {
       setLoading(true);
@@ -49,39 +49,62 @@ const SearchPage = () => {
   return (
     <div className="pt-16">
       <div className="flex pl-20 mb-8 w-full bg-sky-100 font-semibold text-lg py-1">
-        "{query}"의 검색결과 {loading && <div className="text-md ml-2">Loading...</div>}
+        "{query}"의 검색결과{" "}
+        {loading && <div className="text-md ml-2">Loading...</div>}
       </div>
       <div className="px-40 flex">
         <div className="w-1/2">
           {bookInfo.length > 0 ? (
-            bookInfo.filter((_, index) => index % 2 === 0).map((result, index) => (
-              <Link to={`/detail-book/${result.bookId}`} key={index} className="flex items-center mb-4">
-                <img className="w-[100px] h-[150px] mr-2" src={result.cover} alt="책 표지" />
-                <div>
-                  <h3 className="font-bold text-xl">{result.title}</h3>
-                  <p className="text-sm font-semibold text-gray-500">
-                    {result.pubDate.split("년")[0]} · {result.author}
-                  </p>
-                </div>
-              </Link>
-            ))
+            bookInfo
+              .filter((_, index) => index % 2 === 0)
+              .map((result, index) => (
+                <Link
+                  to={`/detail-book/${result.bookId}`}
+                  key={index}
+                  className="flex items-center mb-4"
+                >
+                  <img
+                    className="w-[100px] h-[150px] mr-2"
+                    src={result.cover}
+                    alt="책 표지"
+                  />
+                  <div>
+                    <h3 className="font-bold text-xl">{result.title}</h3>
+                    <p className="text-sm font-semibold text-gray-500">
+                      {result.pubDate.split("년")[0]} · {result.author}
+                    </p>
+                  </div>
+                </Link>
+              ))
           ) : (
-            <div className="pl-20 w-full">"{query}"의 검색 결과가 없습니다.</div>
+            <div className="pl-20 w-full">
+              "{query}"의 검색 결과가 없습니다.
+            </div>
           )}
         </div>
         <div className="w-1/2">
           {bookInfo.length > 0 &&
-            bookInfo.filter((_, index) => index % 2 !== 0).map((result, index) => (
-              <Link to={`/detail-book/${result.bookId}`} key={`right-${index}`} className="flex items-center mb-4">
-                <img className="w-[100px] h-[150px] mr-2" src={result.cover} alt="책 표지" />
-                <div>
-                  <h3 className="font-bold text-xl">{result.title}</h3>
-                  <p className="text-sm font-semibold text-gray-500">
-                    {result.pubDate.split("년")[0]} · {result.author}
-                  </p>
-                </div>
-              </Link>
-            ))}
+            bookInfo
+              .filter((_, index) => index % 2 !== 0)
+              .map((result, index) => (
+                <Link
+                  to={`/detail-book/${result.bookId}`}
+                  key={`right-${index}`}
+                  className="flex items-center mb-4"
+                >
+                  <img
+                    className="w-[100px] h-[150px] mr-2"
+                    src={result.cover}
+                    alt="책 표지"
+                  />
+                  <div>
+                    <h3 className="font-bold text-xl">{result.title}</h3>
+                    <p className="text-sm font-semibold text-gray-500">
+                      {result.pubDate.split("년")[0]} · {result.author}
+                    </p>
+                  </div>
+                </Link>
+              ))}
         </div>
       </div>
     </div>
