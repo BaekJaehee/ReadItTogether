@@ -18,9 +18,6 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     @Query("SELECT b from Book b WHERE b.id IN :bookIds")
     List<Book> findAllByBookIds(@Param("bookIds") List<Integer> bookIds);
 
-//    @Query("SELECT AVG(c.rating) FROM Comment c WHERE c.bookId.id = :bookId")
-//    Integer findAverageRatingByBookId(@Param("bookId") Integer bookId);
-
     @Query("SELECT COALESCE(AVG(c.rating), 0) FROM Comment c WHERE c.bookId.id = :bookId")
     Integer findAverageRatingByBookId(@Param("bookId") Integer bookId);
 
