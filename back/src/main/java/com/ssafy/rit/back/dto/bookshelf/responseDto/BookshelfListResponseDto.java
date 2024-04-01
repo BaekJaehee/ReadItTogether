@@ -29,4 +29,6 @@ public class BookshelfListResponseDto {
 
     private int maxPage;
 
+    private int bookshelfId;
+
 }
