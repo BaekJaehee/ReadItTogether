@@ -5,4 +5,5 @@ public interface GroupRecommendListService {
 
     void changeIsReceivable();
 
+    void setTempBookCover();
 }

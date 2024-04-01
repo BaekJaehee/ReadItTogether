@@ -30,8 +30,8 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public ResponseEntity<SearchResponse> performSearch(String query, int page) {
         int pageSize = 10;
-        Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by("title").ascending());
-        Page<Book> books = bookRepository.findAll(BookSpecifications.titleOrAuthorContainsIgnoreCase(query), pageable);
+        Pageable pageable = PageRequest.of(page - 1, pageSize);
+        Page<Book> books = bookRepository.findByQueryAndSortByPubDate(query, pageable);
 
         List<BookDto> booksDto = books.getContent().stream()
                 .map(book -> modelMapper.map(book, BookDto.class))
