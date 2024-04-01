@@ -20,4 +20,10 @@ public class GroupRecommendListScheduler {
     public void changeIsReceivable() {
         groupRecommendListService.changeIsReceivable();
     }
+
+    // 초기 책 데이터 삽입용 임시 메서드
+    // @Scheduled(cron = "20 23 8 * * *")
+    public void setTempBookCover() {
+        groupRecommendListService.setTempBookCover();
+    }
 }
