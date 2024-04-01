@@ -44,7 +44,7 @@ public class BookshelfController {
     @Operation(summary = "책장에 담은 책 리스트 조회", description = "유저가 책장")
     public ResponseEntity<BookshelfListResponse> readBookshelfList(@PathVariable("toMemberId") Long toMemberId,
                                                                    @RequestParam(value = "page", defaultValue = "0") int page,
-                                                                   @RequestParam(value = "size", defaultValue = "10") int size,
+                                                                   @RequestParam(value = "size", defaultValue = "10000") int size,
                                                                    @RequestParam(value = "sort", defaultValue = "0") int sort,
                                                                    @RequestParam(value = "searchKeyword", required = false) String searchKeyword) {
         return bookshelfService.readBookshelfList(toMemberId, page, size, sort, searchKeyword);
