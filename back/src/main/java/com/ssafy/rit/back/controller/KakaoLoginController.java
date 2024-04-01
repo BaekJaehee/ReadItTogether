@@ -37,18 +37,18 @@ public class KakaoLoginController {
     }
 
     @GetMapping("/login/oauth2/code/kakao")
-    public ResponseEntity<SignInResponseDto> handleCallback(@RequestParam("code")String code, HttpServletResponse response) throws LoginException, IOException {
+    public void handleCallback(@RequestParam("code")String code, HttpServletResponse response) throws LoginException, IOException {
         // 카카오로부터 받은 인가 코드 처리
         DataDto datadto = kakaoLoginService.processAuthorizationCode(code, response);
         SignInResponseDto responseDto = new SignInResponseDto("Login Success", datadto);
         Long memberId = datadto.getMemberId();
 
-        try {
-            response.sendRedirect(backUrl + "/" + memberId);
-        } catch (IOException e) {
-            throw new LoginException("로그인 실패");
-        }
+        response.sendRedirect(backUrl + "/ktest");
 
-        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/ktest")
+    public String handleGetRequest() {
+        return "";
     }
 }
