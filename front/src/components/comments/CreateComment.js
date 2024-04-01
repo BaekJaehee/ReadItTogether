@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import CommentForm from "../../api/book/comment/CommentForm";
 
-const CreateComment = ({ bookId }) => {
+const CreateComment = ({ bookId,refreshComments }) => {
   const [commentInput, setCommentInput] = useState("");
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
@@ -18,6 +18,7 @@ const CreateComment = ({ bookId }) => {
     try {
       // CommentForm API 호출 함수를 사용하여 서버로 데이터 전송
       CommentForm(bookId, commentInput, rating * 2);
+      refreshComments();
     } catch (error) {
       console.error("댓글 생성 중 오류 발생:", error);
     }
