@@ -11,4 +11,5 @@ public class MemberRecommendBookDto {
 
     private String cover;
     private String title;
+    private int bookId;
 }
