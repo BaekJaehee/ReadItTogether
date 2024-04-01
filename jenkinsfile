@@ -26,6 +26,12 @@ pipeline {
         AWS_SECRET_KEY="${env.AWS_SECRET_KEY}"
         AWS_ACCESS_KEY="${env.AWS_ACCESS_KEY}"
 
+        //4.1일추가
+
+        KAKAO_AUTH_REQ_URL="${env.KAKAO_AUTH_REQ_URL}"
+        KAKAO_CLIENTOID="${env.KAKAO_CLIENTOID}"
+        KAKAO_REDIRECT_URI="${env.KAKAO_REDIRECT_URI}"
+
 
             
     }
@@ -102,6 +108,9 @@ pipeline {
                                 "--build-arg AWS_SECRET_KEY='${env.AWS_SECRET_KEY}' " +
                                 "--build-arg BASIC_PROFILE_IMAGE='${env.BASIC_PROFILE_IMAGE}' " +
                                 "--build-arg AWS_ACCESS_KEY='${env.AWS_ACCESS_KEY}' " +
+                                "--build-arg KAKAO_REDIRECT_URI='${env.KAKAO_REDIRECT_URI}' " +
+                                "--build-arg KAKAO_CLIENTOID='${env.KAKAO_CLIENTOID}' " +
+                                "--build-arg KAKAO_AUTH_REQ_URL='${env.KAKAO_AUTH_REQ_URL}' " +
                                 "--build-arg DATABASE_PASSWORD='${env.DATABASE_PASSWORD}' .")
 
 
