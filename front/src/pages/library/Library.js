@@ -9,6 +9,7 @@ import sample from "../../assets/profile/sample.PNG";
 
 import IntroGet from "../../api/llibrary/intro/IntroGet";
 import FollowButton from "../../components/button/FollowButton";
+import FollowModal from "../../components/modal/FollowModal";
 
 // 이미지
 import table from "../../assets/library/table.png";
@@ -19,17 +20,19 @@ import whiteBoard from "../../assets/library/whiteBoard.png";
 import mailBox from "../../assets/library/mailBox.png";
 import list from "../../assets/list.png";
 
+const memberId = localStorage.getItem("memberId");
 const Library = () => {
   const location = useLocation();
   const [introText, setIntroText] = useState("");
   const [isMemberPage, setIsMemberPage] = useState(false);
-  const memberId = localStorage.getItem("memberId");
   const [profileImg, setProfileImg] = useState(`${sample}`);
   const [nickname, setNickname] = useState("");
   const [followingNum, setFollowingNum] = useState("");
   const [followerNum, setFollowerNum] = useState("");
   const [isFollowing, setIsFollowing] = useState(0);
   const [email, setEmail] = useState("");
+  const [followingList, setFollowingList] = useState([]);
+  const [followerList, setFollowerList] = useState([]);
 
   useEffect(() => {
     // URL에서 whoMemberId 추출
@@ -43,13 +46,15 @@ const Library = () => {
     const fetchIntroText = async () => {
       try {
         const response = await IntroGet(whoMemberId);
-        setIntroText(response.text);
-        setProfileImg(response.profileImage);
+        setIntroText(response.intro);
+        setEmail(response.email);
         setNickname(response.nickname);
+        setProfileImg(response.profileImage);
+        setIsFollowing(response.isFollowing);
         setFollowingNum(response.followingNum);
         setFollowerNum(response.followerNum);
-        setEmail(response.email);
-        setIsFollowing(response.isFollowing);
+        setFollowingList(response.followingList);
+        setFollowerList(response.followerList);
       } catch (error) {
         console.error("소개글을 가져오는 데 실패했습니다:", error);
       }
@@ -84,11 +89,16 @@ const Library = () => {
   const openMailBox = () => setIsMailBoxOpen(true);
   const closeMailBox = () => setIsMailBoxOpen(false);
 
+  //팔로우 목록 상태
+  const [followModalOpen, setFollowModalOpen] = useState(false);
+  const openFollowModal = () => setFollowModalOpen(true);
+  const closeFollowModal = () => setFollowModalOpen(false);
+
   return (
     <div className="min-h-screen min-w-full overflow-auto">
       {/* 배경 벽지 */}
       <div className="bg-sky-100 absolute inset-0 min-w-full min-h-full"></div>
-     
+
       {/* 이미지 */}
       <div className="relative min-w-full min-h-full">
         <img
@@ -148,7 +158,10 @@ const Library = () => {
               alt="서재 주인 정보"
             />
             <div className="absolute top-5 left-5">
-              <div className="flex items-center">
+              <div
+                className="flex items-center cursor-pointer"
+                onClick={openFollowModal}
+              >
                 <img
                   className="w-8 h-8 rounded-full mr-1"
                   src={profileImg}
@@ -158,14 +171,24 @@ const Library = () => {
               </div>
             </div>
             <div className="absolute top-14 left-12 text-sm font-mono">
-              <p className="flex">안녕! 나는 {followingNum}명을 팔로중이고</p>
+              <p className="flex">안녕! 나는 {followingNum}명을 팔로우중이고</p>
               <p>{followerNum}명이 나를 팔로우 중이지!</p>
               <p>나랑 친구할래?</p>
             </div>
-            <div className="absolute bottom-5 right-4">
-              <FollowButton isFollowing={isFollowing} targetEmail={email} />
-            </div>
+            {memberId !== isMemberPage && (
+              <div className="absolute bottom-5 right-4">
+                <FollowButton isFollowing={isFollowing} targetEmail={email} />
+              </div>
+            )}
           </div>
+
+          {followModalOpen && (
+            <FollowModal
+              onClose={closeFollowModal}
+              followList={followingList}
+              followerList={followerList}
+            />
+          )}
         </div>
 
         <div className="group flex items-center justify-center  overflow-hidden">
