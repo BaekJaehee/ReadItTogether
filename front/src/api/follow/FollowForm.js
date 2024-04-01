@@ -18,7 +18,7 @@ const FollowForm = async (targetEmail, requestId) => {
     console.log(response.data);
     return response.data;
   } catch (error) {
-    console.error(error);
+    null
   }
 };
 
