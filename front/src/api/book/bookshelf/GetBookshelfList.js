@@ -13,7 +13,9 @@ const GetBookShelfList = async (toMemberId, page = 0, size = 10, sort = 0, searc
         withCredentials: true,
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`
+          "Authorization": `Bearer ${accessToken}`,
+          // 캐시를 비활성화하기 위해 Cache-Control 헤더 추가(무한로딩 방지)
+          "Cache-Control": "no-cache"
         },
         params: {
           page: page,
