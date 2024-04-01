@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Received from "./Received";
 import Sent from "./Sent";
 
-
 // 카드 등록일 기준으로 정렬
 
 const Diary = ({ onClose }) => {
@@ -66,10 +65,12 @@ const Diary = ({ onClose }) => {
           </div>
         )}
         <div>
+          {/* {currentComponent} */}
+          {/* 삼항연산자 */}
           {currentComponent === 'received' ? (
-            <Received cards={receivedCards} />
+            <Received cards={receivedCards} onCardOpen={handleCardOpen} onCardClose={handleCardClose} />
           ) : (
-            <Sent cards={sentCards} />
+            <Sent cards={sentCards} onCardOpen={handleCardOpen} onCardClose={handleCardClose} />
           )}
         </div>
       </div>
