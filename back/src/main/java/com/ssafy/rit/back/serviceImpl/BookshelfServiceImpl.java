@@ -78,7 +78,35 @@ public class BookshelfServiceImpl implements BookshelfService {
 
         bookshelfRepository.save(bookshelf);
 
-        this.updateGroup(currentMember);
+        // 유저의 책 성향 업데이트 shelfGroup
+        List<Bookshelf> bookshelfList = bookshelfRepository.findAllByMemberId(currentMember);
+
+        List<Integer> bookIds = bookshelfList.stream()
+                .filter(b -> b.getIsRead() == 1)
+                .map(b -> b.getBookId().getId())
+                .toList();
+
+        List<Book> books = bookRepository.findAllByBookIds(bookIds);
+
+        List<Integer> groupList = books.stream()
+                .map(Book::getBookGroup)
+                .toList();
+
+        HashMap<Integer, Integer> frequencyMap = new HashMap<>();
+        int max_v = 0;
+        int max_key = currentMember.getShelfGroup();
+
+        for (Integer group : groupList) {
+            frequencyMap.put(group, frequencyMap.getOrDefault(group, 0) + 1);
+
+            int value = frequencyMap.get(group);
+            if (value >= max_v) {
+                max_v = value;
+                max_key = group;
+            }
+        }
+
+        currentMember.setShelfGroup(max_key);
 
         BookshelfUploadResponse response = new BookshelfUploadResponse("책 저장에 성공했습니다.", true);
 
@@ -89,7 +117,6 @@ public class BookshelfServiceImpl implements BookshelfService {
 
 
     @Override
-    @Transactional
     public ResponseEntity<BookshelfUpdateResponse> updateBookshelf(BookshelfUpdateRequestDto dto) {
 
         Member currentMember = commonUtil.getMember();
@@ -102,8 +129,6 @@ public class BookshelfServiceImpl implements BookshelfService {
         currentBookshelf.setIsRead(newIsRead);
 
         bookshelfRepository.save(currentBookshelf);
-
-        this.updateGroup(currentMember);
 
         BookshelfUpdateResponse response = new BookshelfUpdateResponse("읽은 책, 읽을 책 으로 이동 성공", true);
 
@@ -134,7 +159,7 @@ public class BookshelfServiceImpl implements BookshelfService {
         Page<Bookshelf> bookshelfPage = bookshelfRepository.findAllByMemberIdAndSearchKeyword(currentMember, searchKeyword, pageable);
 
         int totalPage = bookshelfPage.getTotalPages();
-
+        log.info("(totalPage) {}", totalPage);
         List<BookshelfListResponseDto> bookshelfListResponseDtos = bookshelfPage.getContent().stream()
                 .map(bookshelf -> {
                     String genresStr = bookshelf.getBookId().getGenre(); // "action, mystery" 형식의 문자열을 가져옵니다.
@@ -146,7 +171,6 @@ public class BookshelfServiceImpl implements BookshelfService {
                             .isRead(bookshelf.getIsRead())
                             .genres(genresList)
                             .maxPage(totalPage)
-                            .bookshelfId(bookshelf.getId())
                             .build();
                 })
                 .toList();
@@ -157,7 +181,6 @@ public class BookshelfServiceImpl implements BookshelfService {
     }
 
     @Override
-    @Transactional
     public ResponseEntity<BookshelfDeleteResponse> deleteBookshelf(Integer bookshelfId) throws BookshelfException {
 
         Member currentMember = commonUtil.getMember();
@@ -171,43 +194,8 @@ public class BookshelfServiceImpl implements BookshelfService {
             throw BookshelfException.notMemberException();
         }
 
-        this.updateGroup(currentMember);
-
         BookshelfDeleteResponse response = new BookshelfDeleteResponse("책장에서 책 삭제 성공", true);
 
         return ResponseEntity.ok(response);
-    }
-
-
-    public void updateGroup(Member currentMember) {
-        // 유저의 책 성향 업데이트 shelfGroup
-        List<Bookshelf> bookshelfList = bookshelfRepository.findAllByMemberId(currentMember);
-
-        List<Integer> bookIds = bookshelfList.stream()
-                .filter(b -> b.getIsRead() == 1)
-                .map(b -> b.getBookId().getId())
-                .toList();
-
-        List<Book> books = bookRepository.findAllByBookIds(bookIds);
-
-        List<Integer> groupList = books.stream()
-                .map(Book::getBookGroup)
-                .toList();
-
-        HashMap<Integer, Integer> frequencyMap = new HashMap<>();
-        int max_v = 0;
-        int max_key = currentMember.getShelfGroup();
-
-        for (Integer group : groupList) {
-            frequencyMap.put(group, frequencyMap.getOrDefault(group, 0) + 1);
-
-            int value = frequencyMap.get(group);
-            if (value >= max_v) {
-                max_v = value;
-                max_key = group;
-            }
-        }
-
-        currentMember.setShelfGroup(max_key);
     }
 }
