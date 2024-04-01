@@ -18,9 +18,17 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     @Query("SELECT b from Book b WHERE b.id IN :bookIds")
     List<Book> findAllByBookIds(@Param("bookIds") List<Integer> bookIds);
 
-    @Query("SELECT AVG(c.rating) FROM Comment c WHERE c.bookId.id = :bookId")
+//    @Query("SELECT AVG(c.rating) FROM Comment c WHERE c.bookId.id = :bookId")
+//    Integer findAverageRatingByBookId(@Param("bookId") Integer bookId);
+
+    @Query("SELECT COALESCE(AVG(c.rating), 0) FROM Comment c WHERE c.bookId.id = :bookId")
     Integer findAverageRatingByBookId(@Param("bookId") Integer bookId);
+
 
     @Query("select count(*) from Comment c where c.bookId.id = :bookId")
     Integer findCountCommentByBookId(@Param("bookId") Integer bookId);
+
+    @Query(value = "SELECT * FROM book WHERE title LIKE %:query% OR author LIKE %:query% ORDER BY STR_TO_DATE(pub_date, '%Y년 %m월 %d일') DESC", nativeQuery = true)
+    Page<Book> findByQueryAndSortByPubDate(@Param("query") String query, Pageable pageable);
+
 }
