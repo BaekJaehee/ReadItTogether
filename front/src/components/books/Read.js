@@ -23,7 +23,7 @@ const Read = ({ bookshelfInfo, handleClickBook, handleScroll, updateBookshelfInf
               <img src={book.cover} alt={book.title} className="w-48 h-72" />
               <p className="m-1 font-bold">{book.title}</p>
             </div>
-            <button className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded-full" onClick={() => switchBook(book.bookId)}>읽을 책으로</button>
+            <button className="bg-green-500 hover:bg-green-700 text-white py-2 px-4 rounded-full" onClick={() => { switchBook(book.bookId); handleScroll(); }}>읽을 책으로</button>
           </div>
         ))}
       </div>

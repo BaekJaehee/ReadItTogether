@@ -23,7 +23,7 @@ const NotRead = ({ bookshelfInfo, handleClickBook, handleScroll, updateBookshelf
               <img src={book.cover} alt={book.title} className="w-48 h-72" />
               <p className="m-1 font-bold">{book.title}</p>
             </div>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-full" onClick={() => switchBook(book.bookId)}>읽은 책으로</button>
+            <button className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-full" onClick={() => { switchBook(book.bookId); handleScroll(); }}>읽은 책으로</button>
           </div>
         ))}
       </div>
