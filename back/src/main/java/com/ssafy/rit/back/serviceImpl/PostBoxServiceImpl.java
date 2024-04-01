@@ -56,9 +56,10 @@ public class PostBoxServiceImpl implements PostBoxService {
         List<Postbox> weeklyPostboxes = postBoxRepository.findAllByMemberIdAndCreationDateBetween(currentMember, startOfWeek, endOfWeek);
 
         if (weeklyPostboxes.isEmpty()) {
-            List<Card> cards = cardRepository.findRandomCards();
+            List<Card> cards = cardRepository.findRandomCardsExcludingMember(currentMember.getId());
             List<Member> allByShelfGroup = memberRepository.findAllByShelfGroup(currentMember.getShelfGroup());
             List<Card> byFromMemberIdIn = cardRepository.findByFromMemberIdInAndToMemberIdNot(allByShelfGroup, currentMember);
+
             if (!byFromMemberIdIn.isEmpty()) {
                 Collections.shuffle(byFromMemberIdIn);
                 Card randomCardFromThisWeek = byFromMemberIdIn.get(0);
