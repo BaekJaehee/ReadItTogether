@@ -11,5 +11,5 @@ public class GroupRecommendBookDto {
 
     private String cover;
     private String title;
-
+    private int bookId;
 }

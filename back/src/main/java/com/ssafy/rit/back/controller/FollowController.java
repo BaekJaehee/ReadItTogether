@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/memberss")
+@RequestMapping("/members")
 @CrossOrigin("*")
 @Log4j2
 public class FollowController {
