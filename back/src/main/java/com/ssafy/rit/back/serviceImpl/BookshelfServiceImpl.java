@@ -157,6 +157,8 @@ public class BookshelfServiceImpl implements BookshelfService {
 
         Page<Bookshelf> bookshelfPage = bookshelfRepository.findAllByMemberIdAndSearchKeyword(currentMember, searchKeyword, pageable);
 
+        int totalPage = bookshelfPage.getTotalPages();
+        log.info("(totalPage) {}", totalPage);
         List<BookshelfListResponseDto> bookshelfListResponseDtos = bookshelfPage.getContent().stream()
                 .map(bookshelf -> {
                     String genresStr = bookshelf.getBookId().getGenre(); // "action, mystery" 형식의 문자열을 가져옵니다.
@@ -167,6 +169,7 @@ public class BookshelfServiceImpl implements BookshelfService {
                             .cover(bookshelf.getCover())
                             .isRead(bookshelf.getIsRead())
                             .genres(genresList)
+                            .maxPage(totalPage)
                             .build();
                 })
                 .toList();
