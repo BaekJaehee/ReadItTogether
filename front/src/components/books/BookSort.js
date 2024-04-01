@@ -50,13 +50,8 @@ const BookSort = ({ onChange }) => {
         <option value="asc">오름차순</option>
         <option value="desc">내림차순</option>
       </select> */}
-      {/* <ul>
-        {books.map((book) => (
-          <li key={book.id}>{book.name} - 별점: {book.rating}, 출간일: {book.publishDate}</li>
-        ))}
-      </ul> */}
     </div>
-      );
-    };
+    );
+  };
 
 export default BookSort;
