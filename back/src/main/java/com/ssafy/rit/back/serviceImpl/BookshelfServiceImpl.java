@@ -160,6 +160,7 @@ public class BookshelfServiceImpl implements BookshelfService {
     @Transactional
     public ResponseEntity<BookshelfDeleteResponse> deleteBookshelf(Integer bookshelfId) throws BookshelfException {
 
+
         Member currentMember = commonUtil.getMember();
 
         Bookshelf currentBookshelf = bookshelfRepository.findById(bookshelfId)
