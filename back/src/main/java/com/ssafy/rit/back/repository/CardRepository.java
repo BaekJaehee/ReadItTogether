@@ -15,8 +15,9 @@ public interface CardRepository extends JpaRepository<Card,Long> {
     //생성
 
     // 우편함에서 카드 3개 가져와야 하는데, 아직 추천시스템 완성 안돼서 랜덤으로 가져오는거 넣어두겠습니다.
-    @Query(value = "SELECT * FROM card ORDER BY RAND() LIMIT 3", nativeQuery = true)
-    List<Card> findRandomCards();
+    @Query(value = "SELECT * FROM card WHERE to_member_id != :excludedMember ORDER BY RAND() LIMIT 3", nativeQuery = true)
+    List<Card> findRandomCardsExcludingMember(@Param("excludedMember") Long excludedMemberId);
+
 
     @Query("SELECT COUNT(c) FROM Card c WHERE c.fromMemberId.id = :fromMemberId")
     int getSendCardCnt(@Param("fromMemberId")Long fromMemberId);
