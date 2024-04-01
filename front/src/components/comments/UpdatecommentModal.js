@@ -8,6 +8,7 @@ const UpdateCommentModal = ({
   commentId,
   initialComment,
   initialRating,
+  refreshComments
 }) => {
   const [comment, setComment] = useState(initialComment);
   const [rating, setRating] = useState(initialRating / 2);
@@ -21,6 +22,7 @@ const UpdateCommentModal = ({
       await UpdateComentForm(bookId, commentId, comment, rating * 2);
       alert("댓글이 수정되었습니다.");
       onClose(); // 모달 닫기
+      refreshComments();
     } catch (error) {
       console.error("댓글 수정 에러:", error);
       alert("댓글 수정에 실패했습니다.");
