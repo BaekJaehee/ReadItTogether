@@ -66,7 +66,7 @@ const Received = ({ onCardOpen, onCardClose, cards }) => {
         <>
           <div className="grid grid-cols-2 gap-4">
             {currentPageDataReceived.map((item, index) => (
-              <div key={index} className="text-center cursor-pointer" onClick={() => openCard(item)}>
+              <div key={index} className="text-center cursor-pointer w-[35%] h-[60%]" onClick={() => openCard(item)}>
                 <img src={item.cover} alt={item.title} className="mx-auto"/>
               </div>
             ))}

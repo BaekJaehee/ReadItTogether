@@ -82,11 +82,26 @@ const Bookshelf = () => {
     navigate(`/detail-book/${bookId}`);
   };
 
+  // const switchBook = async (bookId) => {
+  //   try {
+  //     await UpdateBook(bookId);
+  //     // fetchData(); // 책 이동 시 fetchData 호출
+  //     await GetBookShelfList();
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
   const switchBook = async (bookId) => {
     try {
       await UpdateBook(bookId);
-      // fetchData(); // 책 이동 시 fetchData 호출
-      await GetBookShelfList();
+      // 책 이동 시 해당 책 정보만 업데이트하여 화면에 반영
+      const updatedBookshelfInfo = bookshelfInfo.map(book => {
+        if (book.bookId === bookId) {
+          return { ...book, isRead: book.isRead === 0 ? 1 : 0 }; // 읽은 상태를 변경
+        }
+        return book;
+      });
+      setBookshelfInfo(updatedBookshelfInfo);
     } catch (error) {
       console.error(error);
     }

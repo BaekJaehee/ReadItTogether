@@ -2,33 +2,28 @@ import axios from "axios";
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-const handleSavePost = async (cardId) => {
+const sendCode = async (email) => {
   const requestBody = {
-    cardId: cardId
+    email: email
   }
-
-  const accessToken = localStorage.getItem("accessToken");
 
   try {
     const response = await axios.post(
-      `${API_BASE_URL}/postbox/save`,
+      `${API_BASE_URL}/members/send-certification`,
       requestBody,
       {
         withCredentials: true,
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`
-        }
+        },
       }
     );
     console.log(response);
-    // alert('카드를 저장했습니다.')
+    alert('받은 편지함을 확인해주세요');
     return response;
   } catch (error) {
     console.error(error);
-    // alert('카드 저장에 실패했습니다.')
-    throw error;
   }
 }
 
-export default handleSavePost;
+export default sendCode;

@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { handleSignUp } from "../../api/accounts/SignUp";
 import { checkEmailDuplicate } from "../../api/accounts/MailDuplicate";
 import { checkNicknameDuplicate } from "../../api/accounts/NicknameDuplicate";
+import SendCode from "../../api/accounts/SendCode";
+import CheckCode from "../../api/accounts/CheckCode";
 
 // 이메일 형식 검사만 하는 게 아니라 실제 존재하는 이메일인지 확인 -> API 사용 필요
 
@@ -10,6 +12,7 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
+  const [emailCode, setEmailCode] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [nickname, setNickname] = useState('');
@@ -32,6 +35,8 @@ const SignUp = () => {
   // 중복 확인을 안하면 가입하기 버튼 활성화 안됨
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isNicknameValid, setIsNicknameValid] = useState(false);
+  // 이메일 코드 확인
+  const [isCodeValid, setIsCodeValid] = useState(false);
 
   // 중복 확인 버튼
   const [isCorrectEmail, setIsCorrectEmail] = useState(false);
@@ -143,13 +148,55 @@ const SignUp = () => {
     };
   };
 
-  const handleCheckEmail = async () => {
+  // const handleCheckEmailAndSendCode = async () => {
+  //   try {
+  //     const isEmailDuplicate = await checkEmailDuplicate(email);
+  //     setIsEmailValid(!isEmailDuplicate);
+  //     setEmailStatusMessage(!isEmailDuplicate ? '중복된 이메일입니다.' : '사용 가능한 이메일입니다.');
+  //     setEmailStatusMessageClassName(!isEmailDuplicate ? 'text-sm text-red-500' : 'text-sm text-blue-500');
+  
+  //     // 이메일 중복 여부와 인증코드 전송 가능 여부를 모두 검사하여 코드 전송 버튼을 활성화 또는 비활성화
+  //     setIsCorrectEmail(!isEmailDuplicate && isEmailValid);
+  
+  //     // 이메일이 중복되지 않고 이메일이 유효할 경우에만 코드 전송
+  //     if (!isEmailDuplicate && isEmailValid) {
+  //       await SendCode(email);
+  //       alert('인증 코드가 이메일로 전송되었습니다.'); // 코드가 보내졌다는 알림
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+  
+  // const handleCheckEmail = async () => {
+  //   try {
+  //     const isEmailDuplicate = await checkEmailDuplicate(email);
+  //     setIsEmailValid(isEmailDuplicate);
+  //     setEmailStatusMessage(!isEmailDuplicate ? '중복된 이메일입니다.' : '사용 가능한 이메일입니다.');
+  //     setEmailStatusMessageClassName(!isEmailDuplicate ? 'text-sm text-red-500' : 'text-sm text-blue-500');
+      
+  //     setIsCorrectEmail(!isEmailDuplicate && isEmailValid);
+  //   } catch (error) {
+  //     console.error(error);
+  //   };
+  // };
+
+  const handleSendEmailCode = async () => {
     try {
-      const isEmailDuplicate = await checkEmailDuplicate(email);
-      setIsEmailValid(isEmailDuplicate);
-      setEmailStatusMessage(!isEmailDuplicate ? '중복된 이메일입니다.' : '사용 가능한 이메일입니다.');
-      setEmailStatusMessageClassName(!isEmailDuplicate ? 'text-sm text-red-500' : 'text-sm text-blue-500');
+      if (isCorrectEmail) {
+        await SendCode(email);
+      }
     } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const handleCheckEmailCode = async () => {
+    try {
+      await CheckCode(email, emailCode);
+      alert('인증되었습니다');
+    } catch (error) {
+      alert('인증에 실패했습니다');
       console.error(error);
     };
   };
@@ -183,7 +230,16 @@ const SignUp = () => {
           </div>
           <div className="flex items-center">
             <input type="text" id="email" name="email" value={email} onChange={onChangeEmail} className="border border-gray-300 px-2 py-1 flex-grow mr-3" />
-            <button type="button" onClick={handleCheckEmail} className={`bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded ml-2 ${!isCorrectEmail && 'opacity-50 cursor-not-allowed'}`} disabled={!isCorrectEmail}>중복 확인</button>
+            <button type="button" onClick={handleSendEmailCode} className={`bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded ml-2 ${!isCorrectEmail && 'opacity-50 cursor-not-allowed'}`} disabled={!isCorrectEmail}>인증코드 전송</button>
+          </div>
+        </div>
+        <div className="mb-4">
+          <div className="flex justify-between">
+            <label htmlFor="email" className="block mb-1">인증코드 확인</label>
+          </div>
+          <div className="flex items-center">
+            <input type="text" id="emailCertificate" name="emailCode" value={emailCode} className="border border-gray-300 px-2 py-1 flex-grow mr-3" />
+            <button type="button" onClick={handleCheckEmailCode} className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded ml-2">인증코드 확인</button>
           </div>
         </div>
         <div className="mb-4">
