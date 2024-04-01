@@ -22,7 +22,8 @@ public class RecommendListResponseDto {
                 .map(book -> {
                     String cover = book.getBookId().getCover();
                     String title = book.getBookId().getTitle();
-                    return new MemberRecommendBookDto(cover, title);
+                    int bookId = book.getBookId().getId();
+                    return new MemberRecommendBookDto(cover, title, bookId);
                 })
                 .collect(Collectors.toList());
     }
@@ -32,7 +33,8 @@ public class RecommendListResponseDto {
                 .map(book -> {
                     String cover = book.getCover();
                     String title = book.getBookId().getTitle();
-                    return new GroupRecommendBookDto(cover, title);
+                    int bookId = book.getBookId().getId();
+                    return new GroupRecommendBookDto(cover, title, bookId);
                 })
                 .collect(Collectors.toList());
     }
