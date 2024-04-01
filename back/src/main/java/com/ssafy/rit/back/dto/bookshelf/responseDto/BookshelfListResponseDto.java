@@ -27,4 +27,6 @@ public class BookshelfListResponseDto {
 
     private List<String> genres;
 
+    private int maxPage;
+
 }
