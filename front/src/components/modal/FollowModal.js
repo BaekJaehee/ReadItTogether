@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import logo from "../../assets/navbar/logo2.png";
 import deleteButton from "../../assets/profile/delete.png";
 
-const FollowModal = ({ isFollowers, onClose, followList, followerList }) => {
+const FollowModal = ({ isFollowing, onClose, followList, followerList }) => {
   const [isFollowingActive, setIsFollowingActive] = useState(false);
   // const [isFollowingActive, setIsFollowingActive] = useState(!isFollowers);
 
