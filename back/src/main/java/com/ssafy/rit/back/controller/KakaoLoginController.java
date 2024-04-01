@@ -4,6 +4,7 @@ import com.ssafy.rit.back.dto.member.responseDto.DataDto;
 import com.ssafy.rit.back.dto.member.responseDto.SignInResponseDto;
 import com.ssafy.rit.back.serviceImpl.KakaoLoginServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,6 +18,9 @@ import java.io.IOException;
 @RestController
 @CrossOrigin("*")
 public class KakaoLoginController {
+
+    @Value("${cors.allowed-origins}")
+    private String backUrl;
 
     private KakaoLoginServiceImpl kakaoLoginService;
 
@@ -40,7 +44,7 @@ public class KakaoLoginController {
         Long memberId = datadto.getMemberId();
 
         try {
-            response.sendRedirect("http://localhost:3000/" + memberId);
+            response.sendRedirect(backUrl + "/" + memberId);
         } catch (IOException e) {
             throw new LoginException("로그인 실패");
         }
