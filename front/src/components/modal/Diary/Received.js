@@ -77,13 +77,13 @@ const Received = ({ onCardOpen, onCardClose, onCloseFirst }) => {
                 item.from_Member !== memberId && ( // 받은 카드인지 확인
                   <div
                     key={index}
-                    className="text-center cursor-pointer w-[35%] h-[60%]"
+                    className="text-center cursor-pointer"
                     onClick={() => openCard(item)}
                   >
                     <img
                       src={item.cover}
                       alt={item.title}
-                      className="mx-auto"
+                      className="mx-auto mb-5 w-[300px] h-[400px]"
                     />
                   </div>
                 )

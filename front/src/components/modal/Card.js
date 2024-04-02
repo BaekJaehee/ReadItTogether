@@ -8,20 +8,14 @@ import deleteButton from "../../assets/library/deleteButton.png";
 
 const Card = ({ item, onClose, onDelete, onCloseFirst, deleteEnable }) => {
   const [cardDetail, setCardDetail] = useState(""); // 형식 제발 null로 하지말고
-  const memberId = localStorage.getItem("memberId");
-  const navigate = useNavigate();
-  // const { from_m_id, comment } = cardData;  // card 테이블에만 있는 정보
-  // item은 card와 book에서 조인해서 받아온 정보
 
-  const handleDelete = async (e) => {
+  const handleDelete = (e) => {
     e.preventDefault(e);
     try {
-      // const response = await handleCardDelete(item.cardId);
-      await handleCardDelete(item.cardId);
+      handleCardDelete(item.cardId);
       alert("카드가 삭제되었습니다.");
       onClose();
       onDelete(item.cardId);
-      // return response;
     } catch (error) {
       console.error(error);
     }
@@ -31,7 +25,6 @@ const Card = ({ item, onClose, onDelete, onCloseFirst, deleteEnable }) => {
     const fetchCardDetail = async () => {
       try {
         const response = await handleCardDetail(item.cardId);
-        // console.log("respnose: ", response);
         setCardDetail(response);
       } catch (error) {
         console.error(error);
