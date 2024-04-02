@@ -43,12 +43,7 @@ public class KakaoLoginController {
         SignInResponseDto responseDto = new SignInResponseDto("Login Success", datadto);
         Long memberId = datadto.getMemberId();
 
-        try {
-            response.sendRedirect(backUrl + "/" + memberId);
-        } catch (IOException e) {
-            throw new LoginException("로그인 실패");
-        }
-
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
+
     }
 }
