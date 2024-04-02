@@ -90,13 +90,13 @@ public class CardServiceImpl implements CardService {
         // 보낸 카드 목록 조회: 삭제되지 않은 카드만 필터링
         Page<Card> sentCardsPage = cardRepository.findByFromMemberIdAndDeletedBySenderIsFalse(currentMember, pageable);
         List<CardListResponseDto> sentCardDtos = sentCardsPage.getContent().stream()
-                .map(card -> new CardListResponseDto(card.getId(), card.getBookId().getCover(), 0))
+                .map(card -> new CardListResponseDto(card.getId(), card.getBookId().getCover(), 0,card.getFromMemberId().getId(),card.getToMemberId().getId()))
                 .collect(Collectors.toList());
 
         // 받은 카드 목록 조회: 삭제되지 않은 카드만 필터링
         Page<Card> receivedCardsPage = cardRepository.findByToMemberIdAndDeletedByRecipientIsFalse(currentMember, pageable);
         List<CardListResponseDto> receivedCardDtos = receivedCardsPage.getContent().stream()
-                .map(card -> new CardListResponseDto(card.getId(), card.getBookId().getCover(), 1))
+                .map(card -> new CardListResponseDto(card.getId(), card.getBookId().getCover(), 1,card.getFromMemberId().getId(),card.getFromMemberId().getId()))
                 .collect(Collectors.toList());
 
         // 응답 객체에 페이징 정보를 포함시켜 반환
