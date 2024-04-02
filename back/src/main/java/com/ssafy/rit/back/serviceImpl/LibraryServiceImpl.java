@@ -15,13 +15,11 @@ import com.ssafy.rit.back.service.LibraryService;
 import com.ssafy.rit.back.util.CommonUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,21 +41,17 @@ public class LibraryServiceImpl implements LibraryService {
         int isMine = currentMember.equals(thisMember) ? 1 : 0;
         int isFollowing = followRepository.findFollow(currentMember, thisMember).isPresent() ? 1 : 0;
 
-        List<Long> followingIds = followRepository.findFollowingMemberIdsByFollower(currentMember);
+        List<Long> followerIds = followRepository.findFollowingMemberIdsByFollower(currentMember);
 
         List<Follow> byFollowingMember = followRepository.findByFollowingMember(thisMember);
         List<FollowingDto> followingDtos = byFollowingMember.stream()
                 .map(follow -> {
                     Member follower = follow.getFollowerMember();
                     FollowingDto dto = new FollowingDto();
-                    int temp = 0;
-                    if (followingIds.contains(follower.getId())) {
-                        temp = 1;
-                    }
                     dto.setMemberId(follower.getId());
                     dto.setNickname(follower.getNickname());
                     dto.setProfileImage(follower.getProfileImage());
-                    dto.setIsFollowing(temp);
+                    dto.setIsFollowing(followerIds.contains(follower.getId()) ? 1 : 0);
                     return dto;
                 })
                 .toList();
@@ -68,13 +62,13 @@ public class LibraryServiceImpl implements LibraryService {
                     Member following = follow.getFollowingMember();
                     FollowerDto dto = new FollowerDto();
                     int temp = 0;
-                    if (followingIds.contains(following.getId())) {
+                    if (followerIds.contains(following.getId())) {
                         temp = 1;
                     }
                     dto.setMemberId(following.getId());
                     dto.setNickname(following.getNickname());
                     dto.setProfileImage(following.getProfileImage());
-                    dto.setIsFollowing(temp);
+                    dto.setIsFollowing(followerIds.contains(following.getId()) ? 1 : 0);
                     return dto;
                 })
                 .toList();
