@@ -21,11 +21,26 @@ const Bookshelf = () => {
   const memberId = location.pathname.split("/").pop();
   const [selectedGenres, setSelectedGenres] = useState([]);
 
+  const [sortOption, setSortOption] = useState(0); 
+
+
+
+  const handleSortChange = (option) => {
+    const sortOptionInt = parseInt(option, 10);
+    setSortOption(sortOptionInt);
+    setPage(0);
+    setBookshelfInfo([]);
+    setHasMore(true);
+  };
+
+
   const fetchBookshelfData = async () => {
+    console.log("잘되나0?;");
     if (isLoading || !hasMore) return;
     setIsLoading(true);
     try {
-      const response = await GetBookShelfList(memberId, page);
+      console.log("잘되나?");
+      const response = await GetBookShelfList(memberId, page, 10000, sortOption);
       const newData = response.data.data;
       console.log("잘 패치됨");
       const nonDuplicateData = newData.filter(
@@ -45,13 +60,14 @@ const Bookshelf = () => {
 
   useEffect(() => {
     fetchBookshelfData();
-  }, [memberId, page, isLoading, hasMore]);
+  }, [memberId, page, isLoading, hasMore,sortOption]);
+
+
 
 
   const handleDeleteBookshelf = async (bookshelfId) => {
     try {
       await deleteBookshelf(bookshelfId);
-      // 삭제된 책장 항목을 필터링
       const updatedBookshelf = bookshelfInfo.filter(book => book.bookshelfId !== bookshelfId);
       setBookshelfInfo(updatedBookshelf);
       console.log("삭제요카.");
@@ -106,6 +122,10 @@ const filteredBooks = bookshelfInfo.filter(book =>
     setIsRead(!isRead);
   };
 
+
+
+
+  
   const readOrNotText = isRead ? "읽은 책 목록 보기" : "읽을 책 목록 보기";
 
   return (
@@ -114,7 +134,9 @@ const filteredBooks = bookshelfInfo.filter(book =>
         <BookFilter onFilterChange={handleFilterChange} />
       </div>
       <div className="flex justify-end mx-5 my-3">
-        <BookSort />
+        <BookSort 
+        onChange={handleSortChange}
+        />
         <div className="ml-4">
           <label className="flex items-center cursor-pointer">
             <div className="relative">
