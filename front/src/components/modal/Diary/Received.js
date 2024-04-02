@@ -66,6 +66,7 @@ const Received = ({ onCardOpen, onCardClose, onCloseFirst }) => {
           onClose={closeCard}
           onDelete={handleDeleteAndUpdate}
           onCloseFirst={onCloseFirst}
+          deleteEnable={true}
         />
       ) : (
         <>
