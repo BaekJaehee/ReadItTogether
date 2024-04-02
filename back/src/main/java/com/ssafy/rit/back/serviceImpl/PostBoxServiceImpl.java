@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,27 +64,31 @@ public class PostBoxServiceImpl implements PostBoxService {
             if (!byFromMemberIdIn.isEmpty()) {
                 Collections.shuffle(byFromMemberIdIn);
                 Card randomCardFromThisWeek = byFromMemberIdIn.get(0);
-                cards.set(0, randomCardFromThisWeek);
+                if (randomCardFromThisWeek != null) {
+                    cards.set(0, randomCardFromThisWeek);
+                }
             }
 
             List<Card> thisWeekCards = cardRepository.findCardsBetweenDates(startOfWeek, endOfWeek, currentMember);
             if (!thisWeekCards.isEmpty()) {
                 Collections.shuffle(thisWeekCards);
                 Card randomCardFromThisWeek = thisWeekCards.get(0);
-                cards.set(1, randomCardFromThisWeek);
+                if (randomCardFromThisWeek != null) {
+                    cards.set(1, randomCardFromThisWeek);
+                }
             }
 
             List<MemberRecommendBook> recBooks = memberRecommendBookRepository.findAllByMemberId(currentMember);
-
             List<Book> currentBooks = recBooks.stream()
                     .map(MemberRecommendBook::getBookId)
                     .toList();
-
             List<Card> byBooksAndExcludedMember = cardRepository.findByBooksAndExcludedMember(currentBooks, currentMember);
             if (!byBooksAndExcludedMember.isEmpty()) {
                 Collections.shuffle(byBooksAndExcludedMember);
                 Card randomCardFromSvd = thisWeekCards.get(0);
-                cards.set(2, randomCardFromSvd);
+                if (randomCardFromSvd != null) {
+                    cards.set(2, randomCardFromSvd);
+                }
             }
 
             List<ReceiveCardsDto> cardsDto = convertCardsToDto(cards);
@@ -156,5 +161,18 @@ public class PostBoxServiceImpl implements PostBoxService {
                             .build();
                     postBoxRepository.save(newPostbox);
                 });
+    }
+
+    private Card getRandomUniqueCard(List<Card> sourceCards, List<Card> existingCards, int maxAttempts) {
+        Random random = new Random();
+        Card selectedCard = null;
+        for (int attempt = 0; attempt < maxAttempts; attempt++) {
+            Card potentialCard = sourceCards.get(random.nextInt(sourceCards.size()));
+            if (!existingCards.contains(potentialCard)) {
+                selectedCard = potentialCard;
+                break;
+            }
+        }
+        return selectedCard;
     }
 }
