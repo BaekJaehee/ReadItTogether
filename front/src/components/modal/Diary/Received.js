@@ -11,6 +11,9 @@ const Received = ({ onCardOpen, onCardClose, cards }) => {
   const [currentPageDataReceived, setCurrentPageDataReceived] = useState([]); // 현재 페이지에 표시될 데이터 구분
   const [selectedItem, setSelectedItem] = useState(null); // 개별 카드 선택
   const [showPagination, setShowPagination] = useState(true); // 페이지 보이기/숨기기
+  // const memberId = localStorage.getItem("memberId");
+  // console.log(typeof(memberId)) string이라서 !== 가 안먹힘
+  const memberId = parseInt(localStorage.getItem("memberId"), 10);  // 자료형 변경
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,25 +68,14 @@ const Received = ({ onCardOpen, onCardClose, cards }) => {
       ) : (
         <>
           <div className="grid grid-cols-2 gap-4">
-          {/* {currentPageDataReceived.map((item, index) => (
-            item.fromMemberId !== item.toMemberId && ( // 받은 카드인지 확인
-              <div key={index} className="text-center cursor-pointer w-[35%] h-[60%]" onClick={() => openCard(item)}>
-                <img src={item.cover} alt={item.title} className="mx-auto"/>
-              </div>
-            )
-          ))} */}
             {currentPageDataReceived.map((item, index) => (
-              <div key={index} className="text-center cursor-pointer w-[35%] h-[60%]" onClick={() => openCard(item)}>
-                <img src={item.cover} alt={item.title} className="mx-auto"/>
-              </div>
-            ))}
-            {/* {currentPageDataReceived.map((item, index) => (
-              item.fromMemberId !== item.toMemberId ? (
+              // item.from_Member !== item.to_Member && ( // 받은 카드인지 확인
+              item.from_Member !== memberId && ( // 받은 카드인지 확인
                 <div key={index} className="text-center cursor-pointer w-[35%] h-[60%]" onClick={() => openCard(item)}>
                   <img src={item.cover} alt={item.title} className="mx-auto"/>
                 </div>
-              ) : null
-            ))} */}
+              )
+            ))}
           </div>
           {showPagination && (
             <div className="flex justify-center items-center mt-4">
