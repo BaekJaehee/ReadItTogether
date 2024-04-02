@@ -70,8 +70,10 @@ public class CardServiceImpl implements CardService {
                 .title(book.getTitle()) // 책 제목
                 .cover(book.getCover()) // 책 커버 이미지
                 .author(book.getAuthor()) // 책 저자
-                .fromId(sender.getId()) // 보낸 사람 ID
-                .nickname(sender.getNickname()) // 보낸 사람 닉네임
+                .fromId(sender.getId()) // 보낸 사람 I
+                .nickname(sender.getNickname()) // 보낸 사람 닉네임.
+                .Profile(sender.getProfileImage())
+                .BookId(book.getId())
                 .build();
 
         // 최종 응답 객체 생성 및 반환
