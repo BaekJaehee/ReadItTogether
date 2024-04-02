@@ -63,8 +63,8 @@ const MailBox = ({ onClose, onCardOpen, onCardClose }) => {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {data.map((item) => (
-                  <div key={item.cardId} className="text-center cursor-pointer" onClick={() => openCard(item)}>
-                    <img src={item.cover} alt={`Card ${item.cardId}`} className="mx-auto w-32 h-52 object-cover rounded-lg" />
+                  <div key={item.cardId} className="text-center cursor-pointer">
+                    <img src={item.cover} alt={`Card ${item.cardId}`} className="mx-auto w-32 h-52 object-cover rounded-lg"  onClick={() => openCard(item)} />
                     <button className="bg-sky-500 text-white mt-2 px-2 py-1 rounded-md" onClick={() => savePost(item.cardId)}>저장</button>
                   </div>
                 ))}
