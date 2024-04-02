@@ -17,17 +17,8 @@ const Diary = ({ onClose }) => {
   }
 
   // Cannot access 'handleCardOpen' before initialization
-  // const [currentComponent, setCurrentComponent] = useState(<Received onCardOpen={handleCardOpen} onCardClose={handleCardClose}/>);  // 열었을 시 기본은 받은 카드
   const [currentComponent, setCurrentComponent] = useState('received');  // 열었을 시 기본은 받은 카드
   const [showButtons, setShowButtons] = useState(true);
-
-  // const handleReceivedClick = () => {
-  //   setCurrentComponent(<Received onCardOpen={handleCardOpen} onCardClose={handleCardClose}/>);
-  // };
-
-  // const handleSentClick = () => {
-  //   setCurrentComponent(<Sent onCardOpen={handleCardOpen} onCardClose={handleCardClose}/>);
-  // };
 
   const handleReceivedClick = () => {
     setCurrentComponent('received');
@@ -47,7 +38,7 @@ const Diary = ({ onClose }) => {
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto h-full w-full z-50"
       onClick={onClose}
     >
-      <div className="bg-white rounded-lg p-8 w-[45%] h-[70%] overflow-y-auto" onClick={handleButtonClick}>            
+      <div className="bg-white rounded-lg p-8 w-[55%] h-[85%] overflow-y-auto" onClick={handleButtonClick}>            
         {showButtons && (
           <div className="flex justify-around">
             <button 

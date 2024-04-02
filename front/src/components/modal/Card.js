@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import handleCardDetail from "../../api/card/HandleCardDetail";
 import handleCardDelete from "../../api/card/HandleCardDelete";
 
@@ -8,6 +9,7 @@ import deleteButton from "../../assets/library/deleteButton.png";
 const Card = ({ item, onClose, onDelete }) => {
   const [cardDetail, setCardDetail] = useState(""); // 형식 제발 null로 하지말고
   const memberId = localStorage.getItem("memberId")
+  const navigate = useNavigate();
   // const { from_m_id, comment } = cardData;  // card 테이블에만 있는 정보
   // item은 card와 book에서 조인해서 받아온 정보
 
@@ -23,6 +25,10 @@ const Card = ({ item, onClose, onDelete }) => {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  const goToDetail = (bookId) => {
+    navigate(`/detail-book/${bookId}`);
   }
 
   useEffect(() => {
@@ -51,7 +57,8 @@ const Card = ({ item, onClose, onDelete }) => {
         <img
           src={item.cover}
           alt={item.title}
-          className="col-span-1"
+          className="col-span-1 cursor-pointer"
+          // onClick={goToDetail(cardDetail.bookId)}
           />
         {/* 책 정보 */}
         <div className="col-span-2">

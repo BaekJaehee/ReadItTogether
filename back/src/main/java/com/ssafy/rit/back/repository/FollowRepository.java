@@ -1,5 +1,6 @@
 package com.ssafy.rit.back.repository;
 
+import com.ssafy.rit.back.dto.library.responseDto.FollowerDto;
 import com.ssafy.rit.back.entity.Follow;
 import com.ssafy.rit.back.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;

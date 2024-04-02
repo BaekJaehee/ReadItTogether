@@ -179,8 +179,8 @@ public class BookshelfServiceImpl implements BookshelfService {
     }
 
 
+    // 책 그룹 업데이트
     public void updateGroup(Member currentMember) {
-        // 유저의 책 성향 업데이트 shelfGroup
         List<Bookshelf> bookshelfList = bookshelfRepository.findAllByMemberId(currentMember);
 
         List<Integer> bookIds = bookshelfList.stream()
