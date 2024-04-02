@@ -144,13 +144,13 @@ const PostItLauncher = ({ onClose, isMemberPage, memberId }) => {
                 className="flex items-center"
               >
                 <img className=" w-20 mb-2 mr-4" src={pen} alt="작성" />
-                <div className="font-semibold">방명록 작성하기</div>
+                <div className="customFont text-2xl">방명록 작성하기</div>
               </button>
             </div>
             <div className="mt-6">
               <button onClick={handleOpenPostIt} className="flex items-center">
                 <img className="w-20 mb-2 mr-4" src={postIt} alt="보기" />
-                <div className="font-semibold">방명록 보러가기</div>
+                <div className="customFont text-2xl">방명록 보러가기</div>
               </button>
             </div>
           </div>
