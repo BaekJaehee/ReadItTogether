@@ -9,7 +9,7 @@ const BookSort = ({ onChange }) => {
   };
   return (
     <div>
-      <select value={selectedSortOption} onChange={handleSortChange} className="mr-2">
+      <select value={selectedSortOption} onChange={handleSortChange} className="p-1 font-bold rounded-lg">
       <option value="0">등록순</option>
         <option value="1">평점순</option>
         <option value="2">제목순</option>
