@@ -88,12 +88,6 @@ spring:
           debug: true
 ---
 
-kakao:
-  auth:
-    url: ${KAKAO_AUTH_REQ_URL}
-  client-id: ${KAKAO_CLIENTOID}
-  redirect-uri: ${KAKAO_REDIRECT_URI}
-
 
 spring:
   data:
