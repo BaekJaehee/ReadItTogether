@@ -35,11 +35,11 @@ const CommentCard = ({ bookId, comment ,refreshComments}) => {
                 src={comment.profileImage}
                 alt="프로필"
               />
-              <span className="text-sm font-semibold">{comment.nickname}</span>
+              <span className="text-sm customFont">{comment.nickname}</span>
             </div>
           </Link>
         </div>
-        <div className="p-2 m-2 font-bold text-xs bg-white h-full rounded-lg overflow-y-auto">
+        <div className="p-2 m-2 customFont bg-white h-full rounded-lg overflow-y-auto">
           {comment.comment}
         </div>
         <div className="flex justify-between items-end w-full">

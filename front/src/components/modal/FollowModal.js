@@ -81,7 +81,7 @@ const FollowModal = ({ onClose, followingList, followerList, whoFollowList }) =>
                         src={user.profileImage}
                         alt=""
                       />
-                      <p className="font-semibold text-sm">{user.nickname}</p>
+                      <p className="font-semibold text-sm customFont">{user.nickname}</p>
                     </div>
                   </Link>
                 </div>
@@ -102,7 +102,7 @@ const FollowModal = ({ onClose, followingList, followerList, whoFollowList }) =>
                         src={user.profileImage}
                         alt=""
                       />
-                      <p className="font-semibold text-sm">{user.nickname}</p>
+                      <p className="font-semibold text-sm customFont">{user.nickname}</p>
                     </div>
                   </Link>
                 </div>
