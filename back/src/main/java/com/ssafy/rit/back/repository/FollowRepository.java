@@ -29,4 +29,9 @@ public interface FollowRepository extends JpaRepository<Follow, Integer> {
 
     @Query("SELECT f.followerMember.id FROM Follow f WHERE f.followingMember = :member")
     List<Long> findFollowingMemberIdsByFollower(@Param("member") Member member);
+
+    @Query("SELECT CASE WHEN COUNT(f) > 0 THEN TRUE ELSE FALSE END " +
+            "FROM Follow f " +
+            "WHERE f.followingMember = :following AND f.followerMember = :follower")
+    Boolean isFollowing(@Param("following") Member following, @Param("follower") Member follower);
 }

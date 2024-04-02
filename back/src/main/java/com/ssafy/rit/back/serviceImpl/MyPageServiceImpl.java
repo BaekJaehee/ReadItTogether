@@ -114,12 +114,18 @@ public class MyPageServiceImpl implements MyPageService {
     private List<FollowMemberResponseDto> makeFollowListResponseDto(List<Member> followList) {
 
         List<FollowMemberResponseDto> list = new ArrayList<>();
+        Member currentMember = commonUtil.getMember();
 
         for (Member f : followList) {
+            int isFollowing = 0;
+            if (followService.isFollowing(currentMember, f)) {
+                isFollowing = 1;
+            }
             FollowMemberResponseDto dto = FollowMemberResponseDto.builder()
                     .memberId(f.getId())
                     .profileImage(f.getProfileImage())
                     .nickname(f.getNickname())
+                    .isFollowing(isFollowing)
                     .build();
 
             list.add(dto);
