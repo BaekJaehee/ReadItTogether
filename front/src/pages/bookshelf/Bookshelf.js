@@ -17,6 +17,7 @@ const Bookshelf = () => {
   const [hasMore, setHasMore] = useState(true);
   const [isRead, setIsRead] = useState(false);
   const memberId = location.pathname.split("/").pop();
+  const [selectedGenres, setSelectedGenres] = useState([]);
 
   const fetchBookshelfData = async () => {
     if (isLoading || !hasMore) return;
@@ -33,7 +34,6 @@ const Bookshelf = () => {
       }
       setBookshelfInfo((prev) => [...prev, ...nonDuplicateData]);
       setPage((prevPage) => prevPage + 1);
-  
     } catch (error) {
       console.error("Failed to fetch bookshelf data:", error);
     } finally {
@@ -48,22 +48,26 @@ const Bookshelf = () => {
   const handleUpdateBookshelf = async (bookId) => {
     try {
       await updateBookshelf(bookId);
-      console.log("잘변경됫나?");
-      console.log(bookshelfInfo);
-      fetchBookshelfData(); // 이제 정의된 함수를 여기서 호출할 수 있습니다.
-      console.log("잘변겨오딤");
+      console.log("잘 변경됐나?");
+      fetchBookshelfData();
     } catch (error) {
       console.error("Failed to update bookshelf:", error);
     }
   };
 
+  const handleFilterChange = (selectedKeys) => {
+    setSelectedGenres(selectedKeys);
+  };
+
+const filteredBooks = bookshelfInfo.filter(book =>
+  selectedGenres.length === 0 || book.genres.some(genre => selectedGenres.includes(genre))
+);
+
+
 
   useEffect(() => {
     const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop + 1 >=
-        document.documentElement.scrollHeight
-      ) {
+      if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
         setIsLoading(true);
       }
     };
@@ -81,12 +85,8 @@ const Bookshelf = () => {
   return (
     <div className="bg-sky-100 absolute inset-0 m-20">
       <div className="flex items-center justify-center my-2">
-        <BookFilter />
+        <BookFilter onFilterChange={handleFilterChange} />
       </div>
-      {/* <div className="flex justify-center m-2">
-        <input type="text" className="border-2 w-96" placeholder="Search by title..." />
-        <button className="rounded bg-blue-500 hover:bg-blue-700 text-white px-3 py-1">Search</button>
-      </div> */}
       <div className="flex justify-end mx-5 my-3">
         <BookSort />
         <div className="ml-4">
@@ -99,21 +99,18 @@ const Bookshelf = () => {
             <div className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">{readOrNotText}</div>
           </label>
         </div>
-        
       </div>
       <div className="flex my-3">
         {isRead ? (
-          <Read bookshelfInfo={bookshelfInfo.filter((book) => book.isRead)} 
-          handleClickBook={(bookId) => navigate(`/detail-book/${bookId}`)}
-          handleUpdateBookshelf={handleUpdateBookshelf}
-          handleDeleteBookshelf={deleteBookshelf}
-           />
+          <Read books={filteredBooks.filter(book => book.isRead)}
+                handleClickBook={(bookId) => navigate(`/detail-book/${bookId}`)}
+                handleUpdateBookshelf={handleUpdateBookshelf}
+                handleDeleteBookshelf={deleteBookshelf} />
         ) : (
-          <NotRead bookshelfInfo={bookshelfInfo.filter((book) => !book.isRead)} 
-          handleClickBook={(bookId) => navigate(`/detail-book/${bookId}`)}
-          handleUpdateBookshelf={handleUpdateBookshelf} 
-          handleDeleteBookshelf={deleteBookshelf}
-          />
+          <NotRead books={filteredBooks.filter(book => !book.isRead)}
+                   handleClickBook={(bookId) => navigate(`/detail-book/${bookId}`)}
+                   handleUpdateBookshelf={handleUpdateBookshelf}
+                   handleDeleteBookshelf={deleteBookshelf} />
         )}
       </div>
     </div>

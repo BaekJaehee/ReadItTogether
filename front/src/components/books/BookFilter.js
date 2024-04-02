@@ -1,53 +1,57 @@
 import React, { useState } from "react";
 
 const genres = [
-  "액션", "호러", "미스터리", "판타지", "로맨스", "SF", 
-  "한국문학", "한국단편", "영미문학", "영미단편", "일본문학", "일본단편", 
-  "중국문학", "스페인문학", "북유럽문학", "라틴문학", "러시아문학", "동유럽문학", 
-  "독일문학", "프랑스문학"
+  { key: "action", label: "액션" },
+  { key: "horror", label: "호러" },
+  { key: "mystery", label: "미스터리" },
+  { key: "fantasy", label: "판타지" },
+  { key: "history", label: "역사" },
+  { key: "romantic", label: "로맨스" },
+  { key: "sf", label: "SF" },
+  { key: "kr_long", label: "한국문학" },
+  { key: "kr_short", label: "한국단편" },
+  { key: "en_long", label: "영미문학" },
+  { key: "en_short", label: "영미단편" },
+  { key: "jp_long", label: "일본문학" },
+  { key: "jp_short", label: "일본단편" },
+  { key: "china", label: "중국문학" },
+  { key: "spain", label: "스페인문학" },
+  { key: "north", label: "북유럽문학" },
+  { key: "latin", label: "라틴문학" },
+  { key: "russia", label: "러시아문학" },
+  { key: "east", label: "동유럽문학" },
+  { key: "german", label: "독일문학" },
+  { key: "france", label: "프랑스문학" }
 ];
 
 const BookFilter = ({ onFilterChange }) => {
   const [selectedGenres, setSelectedGenres] = useState([]);
 
   const handleGenreChange = (event) => {
-    // 이벤트에서 value와 checked 상태를 가져옵니다.
     const { value, checked } = event.target;
-
-    // 체크된 경우, 선택된 장르에 추가합니다.
-    // 체크 해제된 경우, 해당 장르를 선택된 장르에서 제거합니다.
-    const newSelectedGenres = checked
+    const updatedGenres = checked
       ? [...selectedGenres, value]
-      : selectedGenres.filter((genre) => genre !== value);
-
-    // 업데이트된 장르 목록으로 상태를 업데이트합니다.
-    setSelectedGenres(newSelectedGenres);
-    onFilterChange({ genres: newSelectedGenres });
+      : selectedGenres.filter(genre => genre !== value);
+    
+    console.log(updatedGenres);
+    setSelectedGenres(updatedGenres);
+    onFilterChange(updatedGenres);
   };
 
   return (
-    <div className="p-4 bg-white w-1/3">
-      {/* <div className="flex flex-wrap gap-2"> */}
-      <div className="grid grid-cols-3 gap-2">
-        {genres.map((genre) => (
-          <div key={genre} className="flex items-center">
-            <input
-              id={genre}
-              type="checkbox"
-              value={genre}
-              checked={selectedGenres.includes(genre)}
-              onChange={handleGenreChange}
-              className="w-4 h-4"
-            />
-            <label
-              htmlFor={genre}
-              className="ml-2 text-sm font-medium text-gray-900"
-            >
-              {genre}
-            </label>
-          </div>
-        ))}
-      </div>
+    <div className="grid grid-cols-3 gap-4 p-4 bg-white">
+      {genres.map((genre) => (
+        <label key={genre.key} className="flex items-center space-x-2 cursor-pointer">
+          <input
+            type="checkbox"
+            value={genre.key}
+            onChange={handleGenreChange}
+            checked={selectedGenres.includes(genre.key)}
+            className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+          />
+          <span>{genre.label}</span>
+        </label>
+      ))}
     </div>
   );
 };

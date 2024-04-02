@@ -13,5 +13,7 @@ public class CardListResponseDto {
     private long cardId;
     private String cover;
     private int isWrite;
+    private long from_Member;
+    private long to_Member;
 }
 
