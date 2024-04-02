@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import GetBookShelfList from "../../api/book/bookshelf/GetBookshelfList";
-import UpdateBook from "../../api/book/bookshelf/UpdateBook";
 
 import BookFilter from "../../components/books/BookFilter";
 import BookSort from "../../components/books/BookSort";
@@ -20,10 +19,7 @@ const Bookshelf = () => {
   const [isRead, setIsRead] = useState(false);
   const memberId = location.pathname.split("/").pop();
   const [selectedGenres, setSelectedGenres] = useState([]);
-
-  const [sortOption, setSortOption] = useState(0); 
-
-
+  const [sortOption, setSortOption] = useState(0);
 
   const handleSortChange = (option) => {
     const sortOptionInt = parseInt(option, 10);
@@ -33,18 +29,23 @@ const Bookshelf = () => {
     setHasMore(true);
   };
 
-
   const fetchBookshelfData = async () => {
     console.log("잘되나0?;");
     if (isLoading || !hasMore) return;
     setIsLoading(true);
     try {
       console.log("잘되나?");
-      const response = await GetBookShelfList(memberId, page, 10000, sortOption);
+      const response = await GetBookShelfList(
+        memberId,
+        page,
+        10000,
+        sortOption
+      );
       const newData = response.data.data;
       console.log("잘 패치됨");
       const nonDuplicateData = newData.filter(
-        (newItem) => !bookshelfInfo.some((item) => item.bookId === newItem.bookId)
+        (newItem) =>
+          !bookshelfInfo.some((item) => item.bookId === newItem.bookId)
       );
       if (nonDuplicateData.length === 0) {
         setHasMore(false);
@@ -60,15 +61,14 @@ const Bookshelf = () => {
 
   useEffect(() => {
     fetchBookshelfData();
-  }, [memberId, page, isLoading, hasMore,sortOption]);
-
-
-
+  }, [memberId, page, isLoading, hasMore, sortOption]);
 
   const handleDeleteBookshelf = async (bookshelfId) => {
     try {
       await deleteBookshelf(bookshelfId);
-      const updatedBookshelf = bookshelfInfo.filter(book => book.bookshelfId !== bookshelfId);
+      const updatedBookshelf = bookshelfInfo.filter(
+        (book) => book.bookshelfId !== bookshelfId
+      );
       setBookshelfInfo(updatedBookshelf);
       console.log("삭제요카.");
     } catch (error) {
@@ -92,24 +92,23 @@ const Bookshelf = () => {
       console.error("Error updating bookshelf entry:", error);
     }
   };
-  
-  
-  
-  
 
   const handleFilterChange = (selectedKeys) => {
     setSelectedGenres(selectedKeys);
   };
 
-const filteredBooks = bookshelfInfo.filter(book =>
-  selectedGenres.length === 0 || book.genres.some(genre => selectedGenres.includes(genre))
-);
-
-
+  const filteredBooks = bookshelfInfo.filter(
+    (book) =>
+      selectedGenres.length === 0 ||
+      book.genres.some((genre) => selectedGenres.includes(genre))
+  );
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
+      if (
+        window.innerHeight + document.documentElement.scrollTop + 1 >=
+        document.documentElement.scrollHeight
+      ) {
         setIsLoading(true);
       }
     };
@@ -122,44 +121,59 @@ const filteredBooks = bookshelfInfo.filter(book =>
     setIsRead(!isRead);
   };
 
-
-
-
-  
-  const readOrNotText = isRead ? "읽은 책 목록 보기" : "읽을 책 목록 보기";
+  const readOrNotText = isRead ? "읽은 책 목록" : "읽을 책 목록";
 
   return (
-    <div className="bg-sky-100 absolute inset-0 m-20">
-      <div className="flex items-center justify-center my-2">
-        <BookFilter onFilterChange={handleFilterChange} />
-      </div>
-      <div className="flex justify-end mx-5 my-3">
-        <BookSort 
-        onChange={handleSortChange}
-        />
-        <div className="ml-4">
-          <label className="flex items-center cursor-pointer">
-            <div className="relative">
-              <input type="checkbox" className="sr-only" checked={isRead} onChange={toggleRead} />
-              <div className="block w-14 h-8 rounded-full" style={{ backgroundColor: isRead ? '#4ade80' : '#60a5fa' }}></div>
-              <div className="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-300 ease-in-out" style={{ transform: isRead ? 'translateX(100%)' : 'translateX(0)' }}></div>
-            </div>
-            <div className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">{readOrNotText}</div>
-          </label>
+    <div className="p-20">
+      <div className="bg-rose-50 px-4 pb-10">
+        <div className="flex items-center justify-center my-2">
+          <BookFilter onFilterChange={handleFilterChange} />
         </div>
-      </div>
-      <div className="flex my-3">
-        {isRead ? (
-          <Read books={filteredBooks.filter(book => book.isRead)}
-                handleClickBook={(bookId) => navigate(`/detail-book/${bookId}`)}
-                handleUpdateBookshelf={handleUpdateBookshelf}
-                handleDeleteBookshelf={handleDeleteBookshelf} />
-        ) : (
-          <NotRead books={filteredBooks.filter(book => !book.isRead)}
-                   handleClickBook={(bookId) => navigate(`/detail-book/${bookId}`)}
-                   handleUpdateBookshelf={handleUpdateBookshelf}
-                   handleDeleteBookshelf={handleDeleteBookshelf} />
-        )}
+        <div className="flex justify-end mx-5 my-3">
+          <BookSort onChange={handleSortChange} />
+          <div className="ml-4">
+            <label className="flex items-center cursor-pointer">
+              <div className="relative">
+                <input
+                  type="checkbox"
+                  className="sr-only"
+                  checked={isRead}
+                  onChange={toggleRead}
+                />
+                <div
+                  className="block w-14 h-8 rounded-full"
+                  style={{ backgroundColor: isRead ? "#4ade80" : "#60a5fa" }}
+                ></div>
+                <div
+                  className="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform duration-300 ease-in-out"
+                  style={{
+                    transform: isRead ? "translateX(100%)" : "translateX(0)",
+                  }}
+                ></div>
+              </div>
+              <div className="bg-white ml-4 mr-7 p-2 rounded-lg text-xs font-bold text-gray-900 ">
+                {readOrNotText}
+              </div>
+            </label>
+          </div>
+        </div>
+        <div className="flex my-3">
+          {isRead ? (
+            <Read
+              books={filteredBooks.filter((book) => book.isRead)}
+              handleClickBook={(bookId) => navigate(`/detail-book/${bookId}`)}
+              handleUpdateBookshelf={handleUpdateBookshelf}
+              handleDeleteBookshelf={handleDeleteBookshelf}
+            />
+          ) : (
+            <NotRead
+              books={filteredBooks.filter((book) => !book.isRead)}
+              handleClickBook={(bookId) => navigate(`/detail-book/${bookId}`)}
+              handleUpdateBookshelf={handleUpdateBookshelf}
+              handleDeleteBookshelf={handleDeleteBookshelf}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

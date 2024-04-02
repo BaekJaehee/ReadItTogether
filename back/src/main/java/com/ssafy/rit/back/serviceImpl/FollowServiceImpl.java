@@ -90,4 +90,11 @@ public class FollowServiceImpl implements FollowService {
         return followerList;
     }
 
+    @Override
+    public Boolean isFollowing(Member currentMember, Member targetMember) {
+        return followRepository.isFollowing(currentMember, targetMember);
+    }
+
+
+
 }

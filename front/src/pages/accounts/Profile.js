@@ -122,7 +122,7 @@ const Profile = () => {
           {/* 유저 정보와 그래프 */}
           <div className="flex">
             {/* 유저 정보 */}
-            <div className="flex-1">
+            <div className="flex-1 ml-4">
               <div className="relative">
                 {/* <img
                   className="w-52 h-52 rounded-full mb-2"
@@ -150,9 +150,8 @@ const Profile = () => {
               </div>
               <div className="flex items-center">
                 {/* <span className="font-semibold text-xl mb-2"> 닉네임 </span> */}
-                <span className="font-semibold text-xl mb-2">
-                  {" "}
-                  {profileInfo.nickname}{" "}
+                <span className="customFont text-xl mb-2">
+                  {profileInfo.nickname}
                 </span>
                 <button
                   className="cursor-pointer p-0 mx-1"
