@@ -12,4 +12,5 @@ public interface FollowService {
 
     List<Member> getFollowingList(Member followingOwner);
     List<Member> getFollowerList(Member followerOwner);
+    Boolean isFollowing(Member currentMember, Member memberToCheck);
 }
