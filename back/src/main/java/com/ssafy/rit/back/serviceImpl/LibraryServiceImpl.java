@@ -43,14 +43,21 @@ public class LibraryServiceImpl implements LibraryService {
         int isMine = currentMember.equals(thisMember) ? 1 : 0;
         int isFollowing = followRepository.findFollow(currentMember, thisMember).isPresent() ? 1 : 0;
 
+        List<Long> followingIds = followRepository.findFollowingMemberIdsByFollower(currentMember);
+
         List<Follow> byFollowingMember = followRepository.findByFollowingMember(thisMember);
         List<FollowingDto> followingDtos = byFollowingMember.stream()
                 .map(follow -> {
-                    Member following = follow.getFollowerMember();
+                    Member follower = follow.getFollowerMember();
                     FollowingDto dto = new FollowingDto();
-                    dto.setMemberId(following.getId());
-                    dto.setNickname(following.getNickname());
-                    dto.setProfileImage(following.getProfileImage());
+                    int temp = 0;
+                    if (followingIds.contains(follower.getId())) {
+                        temp = 1;
+                    }
+                    dto.setMemberId(follower.getId());
+                    dto.setNickname(follower.getNickname());
+                    dto.setProfileImage(follower.getProfileImage());
+                    dto.setIsFollowing(temp);
                     return dto;
                 })
                 .toList();
@@ -60,9 +67,14 @@ public class LibraryServiceImpl implements LibraryService {
                 .map(follow -> {
                     Member following = follow.getFollowingMember();
                     FollowerDto dto = new FollowerDto();
+                    int temp = 0;
+                    if (followingIds.contains(following.getId())) {
+                        temp = 1;
+                    }
                     dto.setMemberId(following.getId());
                     dto.setNickname(following.getNickname());
                     dto.setProfileImage(following.getProfileImage());
+                    dto.setIsFollowing(temp);
                     return dto;
                 })
                 .toList();

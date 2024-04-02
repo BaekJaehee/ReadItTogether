@@ -53,7 +53,7 @@ public class Member {
 
     @Builder.Default
     @Column(name = "is_receivable", nullable = false)
-    private int isReceivable = 0;
+    private int isReceivable = 1;
 
     @Builder.Default
     @Column(name = "intro")
