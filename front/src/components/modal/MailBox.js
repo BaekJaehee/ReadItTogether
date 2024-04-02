@@ -52,14 +52,14 @@ const MailBox = ({ onClose, onCardOpen, onCardClose }) => {
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto h-full w-full z-50"
       onClick={onClose}
     >
-      <div className="bg-white rounded-lg px-8 w-[850px] h-[550px] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-white rounded-lg px-8 w-[850px] h-[555px] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         <h1 className="text-xl font-bold leading-6 text-gray-900 text-center my-8">금주의 추천 카드</h1>
         {selectedItem ? (
           <Card item={selectedItem} onClose={closeCard} />
         ) : (
-          <>
+          <div className="flex justify-center items-center h-[430px]">
             {data.length === 0 ? (
-              <p className="text-center text-gray-500 mt-32">우편함이 비어있습니다</p>
+              <p className="text-center text-gray-500 pb-12">우편함이 비어있습니다</p>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {data.map((item) => (
@@ -72,7 +72,7 @@ const MailBox = ({ onClose, onCardOpen, onCardClose }) => {
                 ))}
               </div>
             )}
-          </>
+          </div>
         )}
       </div>
     </div>
