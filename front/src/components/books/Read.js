@@ -1,11 +1,9 @@
-import deleteButton from "../../assets/profile/delete.png"
+import deleteButton from "../../assets/profile/delete.png";
 
-// In Read component
-// In Read component
-const Read = ({ bookshelfInfo, handleClickBook, handleUpdateBookshelf, handleDeleteBookshelf }) => {
+const Read = ({ books, handleClickBook, handleUpdateBookshelf, handleDeleteBookshelf }) => {
   return (
     <div className="grid grid-cols-5 gap-5">
-      {bookshelfInfo.map((book) => (
+      {books && books.map((book) => (
         <div key={book.bookId} className="text-center relative group">
           <div className="absolute right-2 top-2 p-2 cursor-pointer opacity-0 group-hover:opacity-100" 
                onClick={() => handleDeleteBookshelf(book.bookshelfId)}>
@@ -28,4 +26,3 @@ const Read = ({ bookshelfInfo, handleClickBook, handleUpdateBookshelf, handleDel
 };
 
 export default Read;
-
