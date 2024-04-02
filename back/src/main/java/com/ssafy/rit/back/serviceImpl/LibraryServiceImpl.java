@@ -48,14 +48,10 @@ public class LibraryServiceImpl implements LibraryService {
                 .map(follow -> {
                     Member follower = follow.getFollowerMember();
                     FollowingDto dto = new FollowingDto();
-                    int temp = 0;
-                    if (followerIds.contains(follower.getId())) {
-                        temp = 1;
-                    }
                     dto.setMemberId(follower.getId());
                     dto.setNickname(follower.getNickname());
                     dto.setProfileImage(follower.getProfileImage());
-                    dto.setIsFollowing(temp);
+                    dto.setIsFollowing(followerIds.contains(follower.getId()) ? 1 : 0);
                     return dto;
                 })
                 .toList();
@@ -72,7 +68,7 @@ public class LibraryServiceImpl implements LibraryService {
                     dto.setMemberId(following.getId());
                     dto.setNickname(following.getNickname());
                     dto.setProfileImage(following.getProfileImage());
-                    dto.setIsFollowing(temp);
+                    dto.setIsFollowing(followerIds.contains(following.getId()) ? 1 : 0);
                     return dto;
                 })
                 .toList();
