@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// import BookSortForm from '../../api/book/BookSortForm';
-import getSortedBooks from '../../api/book/BookSortForm';
 
 const BookSort = ({ onChange }) => {
   // const [books, setBooks] = useState([]);
@@ -15,9 +13,9 @@ const BookSort = ({ onChange }) => {
     // setBooks(sortedBooks);
   };
 
-  useEffect(() => {
-    onChange(0);  // 초기에는 "등록순"이 선택되어 있도록 설정
-  }, [onChange]);
+  // useEffect(() => {
+  //   onChange(0);  // 초기에는 "등록순"이 선택되어 있도록 설정
+  // }, [onChange]);
 
   // const handleOrder = async (e) => {
   //   const orderOption = e.target.value;

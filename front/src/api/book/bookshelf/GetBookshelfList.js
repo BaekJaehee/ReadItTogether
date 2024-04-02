@@ -29,6 +29,7 @@ const GetBookShelfList = async (toMemberId, page = 0, size = 10000, sort = 0, se
     return response;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 }
 
