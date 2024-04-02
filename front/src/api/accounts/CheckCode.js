@@ -8,8 +8,6 @@ const checkCode = async (email, code) => {
     code: code
   }
 
-  const accessToken = localStorage.getItem("accessToken");
-
   try {
     const response = await axios.post(
       `${API_BASE_URL}/members/pass-certification`,
@@ -18,14 +16,14 @@ const checkCode = async (email, code) => {
         withCredentials: true,
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`
         },
       }
     );
     console.log(response);
-    return response;
+    return response.data;
   } catch (error) {
-    console.error(error);
+    console.error(error.response.data);
+    throw error;
   }
 }
 
