@@ -8,7 +8,7 @@ const Read = ({ bookshelfInfo, handleClickBook, handleUpdateBookshelf, handleDel
       {bookshelfInfo.map((book) => (
         <div key={book.bookId} className="text-center relative group">
           <div className="absolute right-2 top-2 p-2 cursor-pointer opacity-0 group-hover:opacity-100" 
-               onClick={() => handleDeleteBookshelf(book.book)}>
+               onClick={() => handleDeleteBookshelf(book.bookshelfId)}>
             <img className="w-4 h-4" src={deleteButton} alt="삭제버튼" />
           </div>
           <div className="m-3 cursor-pointer" onClick={() => handleClickBook(book.bookId)}>
