@@ -17,6 +17,7 @@ const Profile = () => {
   const [isNicknameEditOpen, setIsNicknameEditOpen] = useState(false);
   const [isImageEditOpen, setIsImageEditOpen] = useState(false);
   const [memberId, setMemberId] = useState(null);
+  const whoFollowList = true;
   // 받아오는 프로필 정보
   const [profileInfo, setProfileInfo] = useState({
     profileImage: "",
@@ -30,12 +31,10 @@ const Profile = () => {
     genreNoList: [],
   });
 
-
   useEffect(() => {
-    console.log(profileInfo.followList)
-    console.log(profileInfo.followerList)
-  }, [profileInfo])
-
+    console.log(profileInfo.followList);
+    console.log(profileInfo.followerList);
+  }, [profileInfo]);
 
   let followCount = profileInfo.followList.length;
   let follwerCount = profileInfo.followerList.length;
@@ -193,6 +192,7 @@ const Profile = () => {
                   onClose={() => setIsModalOpen(false)}
                   followingList={profileInfo.followList}
                   followerList={profileInfo.followerList}
+                  whoFollowList={whoFollowList}
                 />
               )}
             </div>

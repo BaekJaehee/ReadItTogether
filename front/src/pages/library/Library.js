@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { AuthContext } from "../../authentication/AuthContext";
 
 import PostItLauncher from "../../components/modal/guestbook/PostItLauncher";
 import Diary from "../../components/modal/Diary/Diary";
@@ -22,7 +23,9 @@ import list from "../../assets/list.png";
 
 const memberId = localStorage.getItem("memberId");
 const Library = () => {
+  const { userState } = useContext(AuthContext);
   const location = useLocation();
+
   const [introText, setIntroText] = useState("");
   const [isMemberPage, setIsMemberPage] = useState(false);
   const [profileImg, setProfileImg] = useState(`${sample}`);
@@ -33,8 +36,12 @@ const Library = () => {
   const [email, setEmail] = useState("");
   const [followingList, setFollowingList] = useState([]);
   const [followerList, setFollowerList] = useState([]);
+  const [whoFollowList, setWhoFollowList] = useState(false);
 
   useEffect(() => {
+    if (userState.status !== "loggedIn") {
+      return;
+    }
     // URL에서 whoMemberId 추출
     const pathArray = location.pathname.split("/");
     const whoMemberId = pathArray[pathArray.length - 1];
@@ -61,7 +68,13 @@ const Library = () => {
     };
 
     fetchIntroText();
-  }, [location.pathname]); // 의존성 배열에 location.pathname 추가
+  }, [location.pathname, userState]); // 의존성 배열에 location.pathname 추가
+
+  useEffect(() => {
+    if (memberId === isMemberPage) {
+      setWhoFollowList(true);
+    }
+  }, [location.pathname, isMemberPage]);
 
   // 방명록 상태
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -187,6 +200,7 @@ const Library = () => {
               onClose={closeFollowModal}
               followingList={followingList}
               followerList={followerList}
+              whoFollowList={whoFollowList}
             />
           )}
         </div>

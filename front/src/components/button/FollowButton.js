@@ -1,22 +1,37 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import FollowForm from "../../api/follow/FollowForm";
 import FollowDelete from "../../api/follow/FollowDelete";
 
-const requestId = localStorage.getItem("memberId");
-
 const FollowButton = ({ isFollowing, targetEmail }) => {
-  const handleFollow = () => {
-    FollowForm(targetEmail, requestId);
+  const [isFollowingState, setIsFollowingState] = useState(isFollowing);
+  const requestId = localStorage.getItem("memberId");
+
+  useEffect(() => {
+    setIsFollowingState(isFollowing);
+  }, [isFollowing]);
+
+  const handleFollow = async () => {
+    try {
+      await FollowForm(targetEmail, requestId);
+      setIsFollowingState(1); // 팔로우 성공 후 상태 업데이트
+    } catch (error) {
+      return null;
+    }
   };
 
-  const handleUnfollow = () => {
-    FollowDelete(targetEmail, requestId);
+  const handleUnfollow = async () => {
+    try {
+      await FollowDelete(targetEmail, requestId);
+      setIsFollowingState(0); // 언팔로우 성공 후 상태 업데이트
+    } catch (error) {
+      return null;
+    }
   };
 
   return (
     <div>
-      {isFollowing === 1 ? (
+      {isFollowingState === 1 ? (
         <button
           className="bg-pink-100 text-sm font-bold px-2 py-1 rounded-md"
           onClick={handleUnfollow}

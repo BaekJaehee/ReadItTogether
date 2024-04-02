@@ -39,6 +39,7 @@ const Login = () => {
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("nickname", nickname);
       localStorage.setItem("profileImage", profileImage);
+      localStorage.setItem("myEmail", email);
 
       if (saveEmail) {
         localStorage.setItem("savedEmail", email);
