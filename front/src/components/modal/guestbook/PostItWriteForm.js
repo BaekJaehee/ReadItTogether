@@ -20,7 +20,8 @@ const WriteFormModal = ({
           <textarea
             value={postItContent}
             onChange={(e) => setPostItContent(e.target.value)}
-            className="w-full font-semibold text-sm flex-1 p-2 bg-yellow-200 resize-none border-none outline-none"
+            className="w-full customFont text-xl flex-1 p-2 bg-yellow-200 resize-none border-none outline-none"
+            maxLength={200}
           />
           <button
             type="submit"
