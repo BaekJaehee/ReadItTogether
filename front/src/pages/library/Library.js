@@ -177,7 +177,7 @@ const Library = () => {
                 onClick={openFollowModal}
               >
                 <img
-                  className="w-8 h-8 rounded-full mr-1"
+                  className="w-8 h-8 rounded-full ml-5 mr-1"
                   src={profileImg}
                   alt="프로필 사진"
                 />
