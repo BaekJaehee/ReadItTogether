@@ -1,5 +1,6 @@
 package com.ssafy.rit.back.repository;
 
+import com.ssafy.rit.back.dto.library.responseDto.FollowerDto;
 import com.ssafy.rit.back.entity.Follow;
 import com.ssafy.rit.back.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,4 +26,7 @@ public interface FollowRepository extends JpaRepository<Follow, Integer> {
     // 팔로워 수 카운트
     @Query("select count(f) from Follow f where f.followerMember = :member")
     int countByFollowerMember(@Param("member") Member member);
+
+    @Query("SELECT f.followingMember.id FROM Follow f WHERE f.followerMember = :follower")
+    List<Long> findFollowingMemberIdsByFollower(@Param("follower") Member follower);
 }
