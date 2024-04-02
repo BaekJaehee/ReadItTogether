@@ -6,16 +6,17 @@ const deleteBookShelf = async (bookshelfId) => {
     const accessToken = localStorage.getItem("accessToken");
   
     try {
-      const response = await axios.patch(`${API_BASE_URL}/bookshelf/${bookshelfId}`, {
+      const response = await axios.delete(`${API_BASE_URL}/bookshelf/${bookshelfId}`, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${accessToken}`
-        }
+        },
+        withCredentials: true
       });
-      console.log("Update response:", response);
+      console.log("Delete response:", response);
       return response;
     } catch (error) {
-      console.error("Error updating bookshelf entry:", error);
+      console.error("Error deleting bookshelf entry:", error);
     }
 };
 
