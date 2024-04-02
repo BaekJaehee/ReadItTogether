@@ -24,6 +24,7 @@ const Bookshelf = () => {
     try {
       const response = await GetBookShelfList(memberId, page);
       const newData = response.data.data;
+      console.log("잘 패치됨");
       const nonDuplicateData = newData.filter(
         (newItem) => !bookshelfInfo.some((item) => item.bookId === newItem.bookId)
       );
@@ -32,6 +33,7 @@ const Bookshelf = () => {
       }
       setBookshelfInfo((prev) => [...prev, ...nonDuplicateData]);
       setPage((prevPage) => prevPage + 1);
+  
     } catch (error) {
       console.error("Failed to fetch bookshelf data:", error);
     } finally {
@@ -47,7 +49,9 @@ const Bookshelf = () => {
     try {
       await updateBookshelf(bookId);
       console.log("잘변경됫나?");
+      console.log(bookshelfInfo);
       fetchBookshelfData(); // 이제 정의된 함수를 여기서 호출할 수 있습니다.
+      console.log("잘변겨오딤");
     } catch (error) {
       console.error("Failed to update bookshelf:", error);
     }
