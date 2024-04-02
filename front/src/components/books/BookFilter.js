@@ -39,7 +39,7 @@ const BookFilter = ({ onFilterChange }) => {
   };
 
   return (
-    <div className="grid grid-cols-3 gap-4 p-4 bg-white">
+    <div className="grid grid-cols-7 gap-4 p-4 bg-white">
       {genres.map((genre) => (
         <label key={genre.key} className="flex items-center space-x-2 cursor-pointer">
           <input
