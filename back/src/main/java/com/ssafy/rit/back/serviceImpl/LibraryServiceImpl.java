@@ -43,7 +43,8 @@ public class LibraryServiceImpl implements LibraryService {
         int isMine = currentMember.equals(thisMember) ? 1 : 0;
         int isFollowing = followRepository.findFollow(currentMember, thisMember).isPresent() ? 1 : 0;
 
-        List<Long> followingIds = followRepository.findFollowingMemberIdsByFollower(currentMember);
+        // 여기는
+        List<Long> followerIds = followRepository.findFollowingMemberIdsByFollower(currentMember);
 
         List<Follow> byFollowingMember = followRepository.findByFollowingMember(thisMember);
         List<FollowingDto> followingDtos = byFollowingMember.stream()
@@ -51,7 +52,7 @@ public class LibraryServiceImpl implements LibraryService {
                     Member follower = follow.getFollowerMember();
                     FollowingDto dto = new FollowingDto();
                     int temp = 0;
-                    if (followingIds.contains(follower.getId())) {
+                    if (followerIds.contains(follower.getId())) {
                         temp = 1;
                     }
                     dto.setMemberId(follower.getId());
@@ -68,7 +69,7 @@ public class LibraryServiceImpl implements LibraryService {
                     Member following = follow.getFollowingMember();
                     FollowerDto dto = new FollowerDto();
                     int temp = 0;
-                    if (followingIds.contains(following.getId())) {
+                    if (followerIds.contains(following.getId())) {
                         temp = 1;
                     }
                     dto.setMemberId(following.getId());
