@@ -41,7 +41,7 @@ const SideBar = ({ profileInfo, FollowingList, FollowerList }) => {
               alt="프로필 사진"
             />
             {/* 닉네임 */}
-            <p className="text-sm font-semibold customFont">{profileInfo.nickname}</p>
+            <p className="text-lg font-semibold customFont">{profileInfo.nickname}</p>
           </div>
         </Link>
         <Link to="/logout">

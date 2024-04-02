@@ -68,7 +68,7 @@ const Sent = ({ onCardOpen, onCardClose, onCloseFirst }) => {
                 <img
                   src={item.cover}
                   alt={item.title}
-                  className="mx-auto mb-5 w-[300px] h-[400px]"
+                  className="mx-auto mb-5 w-[300px] h-[435px]"
                 />
               </div>
             ))}
