@@ -15,13 +15,11 @@ import com.ssafy.rit.back.service.LibraryService;
 import com.ssafy.rit.back.util.CommonUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +41,6 @@ public class LibraryServiceImpl implements LibraryService {
         int isMine = currentMember.equals(thisMember) ? 1 : 0;
         int isFollowing = followRepository.findFollow(currentMember, thisMember).isPresent() ? 1 : 0;
 
-        // 여기는
         List<Long> followerIds = followRepository.findFollowingMemberIdsByFollower(currentMember);
 
         List<Follow> byFollowingMember = followRepository.findByFollowingMember(thisMember);
@@ -58,7 +55,7 @@ public class LibraryServiceImpl implements LibraryService {
                     dto.setMemberId(follower.getId());
                     dto.setNickname(follower.getNickname());
                     dto.setProfileImage(follower.getProfileImage());
-                    dto.setIsFollowing(temp);
+                    dto.setIsFollowing(followerIds.contains(follower.getId()) ? 1 : 0);
                     return dto;
                 })
                 .toList();
@@ -75,7 +72,7 @@ public class LibraryServiceImpl implements LibraryService {
                     dto.setMemberId(following.getId());
                     dto.setNickname(following.getNickname());
                     dto.setProfileImage(following.getProfileImage());
-                    dto.setIsFollowing(temp);
+                    dto.setIsFollowing(followerIds.contains(following.getId()) ? 1 : 0);
                     return dto;
                 })
                 .toList();
