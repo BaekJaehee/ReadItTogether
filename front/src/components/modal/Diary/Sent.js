@@ -58,7 +58,7 @@ const Sent = ({ onCardOpen, onCardClose, onCloseFirst }) => {
         보낸 카드
       </h1>
       {selectedItem ? (
-        <Card item={selectedItem} onClose={closeCard} onCloseFirst={onCloseFirst} />
+        <Card item={selectedItem} onClose={closeCard} onCloseFirst={onCloseFirst} deleteEnable={true} />
       ) : (
         <>
           <div className="grid grid-cols-2 gap-4">

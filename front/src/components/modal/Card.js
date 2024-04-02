@@ -6,7 +6,7 @@ import handleCardDelete from "../../api/card/HandleCardDelete";
 import diaryButton from "../../assets/library/diaryButton.png";
 import deleteButton from "../../assets/library/deleteButton.png";
 
-const Card = ({ item, onClose, onDelete, onCloseFirst }) => {
+const Card = ({ item, onClose, onDelete, onCloseFirst, deleteEnable }) => {
   const [cardDetail, setCardDetail] = useState(""); // 형식 제발 null로 하지말고
   const memberId = localStorage.getItem("memberId");
   const navigate = useNavigate();
@@ -80,13 +80,14 @@ const Card = ({ item, onClose, onDelete, onCloseFirst }) => {
       </div>
       {/* 뒤로가기 버튼(실제로는 컴포넌트 닫기) */}
       <div className="flex justify-center mt-4">
-        <button onClick={onClose}>
+        <button onClick={onClose} className="mx-3">
           <img className="w-7 h-7" src={diaryButton} alt="뒤로가기" />
         </button>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <button onClick={handleDelete}>
-          <img className="w-7 h-7" src={deleteButton} alt="삭제하기" />
-        </button>
+        {deleteEnable && (
+          <button onClick={handleDelete} className="mx-3">
+            <img className="w-7 h-7" src={deleteButton} alt="삭제하기" />
+          </button>
+        )}
       </div>
     </div>
   );

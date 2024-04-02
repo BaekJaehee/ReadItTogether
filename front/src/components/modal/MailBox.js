@@ -55,7 +55,7 @@ const MailBox = ({ onClose, onCardOpen, onCardClose }) => {
       <div className="bg-white rounded-lg px-8 w-[850px] h-[555px] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         <h1 className="text-xl font-bold leading-6 text-gray-900 text-center my-8">금주의 추천 카드</h1>
         {selectedItem ? (
-          <Card item={selectedItem} onClose={closeCard} />
+          <Card item={selectedItem} onClose={closeCard} deleteEnable={false} />
         ) : (
           <div className="flex justify-center items-center h-[430px]">
             {data.length === 0 ? (
