@@ -39,9 +39,6 @@ const MailBox = ({ onClose, onCardOpen, onCardClose }) => {
       await handleSavePost(cardId);
       alert("카드 저장이 완료되었습니다.");
       onClose();
-      // const updatedData = await handleGetPost(); // 저장 후 데이터 다시 불러오기
-      // setData(updatedData.data.cards); // 모달에 반영
-      // console.log("카드 저장이 완료되었습니다.");
     } catch (error) {
       console.error("카드 저장 중 오류가 발생했습니다:", error);
     }
@@ -65,7 +62,7 @@ const MailBox = ({ onClose, onCardOpen, onCardClose }) => {
                 {data.map((item) => (
                   <div key={item.cardId} className="text-center cursor-pointer">
                     <img onClick={() => openCard(item)} src={item.cover} alt={`Card ${item.cardId}`} className="mx-auto w-[280px] h-[380px] object-cover rounded-lg" />
-                    <button onClick={() => savePost(item.cardId)} className="bg-white mt-6 border border-gray-300 hover:bg-gray-300 hover:text-white rounded-lg text-gray-500 text-xs py-2 px-4 mt-2 transition-colors duration-300">
+                    <button onClick={() => savePost(item.cardId)} className="bg-white mt-6 border border-sky-300 hover:bg-sky-300 hover:text-white rounded-lg text-gray-500 text-xs py-2 px-4 transition-colors duration-300">
                       저장
                     </button>
                   </div>

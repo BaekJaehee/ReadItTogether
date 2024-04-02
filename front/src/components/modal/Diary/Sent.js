@@ -35,10 +35,7 @@ const Sent = ({ onCardOpen, onCardClose, onCloseFirst }) => {
   const openCard = async (item) => {
     setSelectedItem(item);
     setShowPagination(false);
-
-    // 상세정보
-    const response = await handleCardDetail(item.cardId);
-
+    
     if (typeof onCardOpen === "function") {
       onCardOpen(); // onCardOpen 함수가 존재하고 함수일 때만 호출
     }
@@ -58,7 +55,11 @@ const Sent = ({ onCardOpen, onCardClose, onCloseFirst }) => {
         보낸 카드
       </h1>
       {selectedItem ? (
-        <Card item={selectedItem} onClose={closeCard} onCloseFirst={onCloseFirst} />
+        <Card
+          item={selectedItem}
+          onClose={closeCard}
+          onCloseFirst={onCloseFirst}
+        />
       ) : (
         <>
           <div className="grid grid-cols-2 gap-4">
@@ -68,7 +69,11 @@ const Sent = ({ onCardOpen, onCardClose, onCloseFirst }) => {
                 className="text-center cursor-pointer"
                 onClick={() => openCard(item)}
               >
-                <img src={item.cover} alt={item.title} className="mx-auto" />
+                <img
+                  src={item.cover}
+                  alt={item.title}
+                  className="mx-auto mb-5 w-[300px] h-[400px]"
+                />
               </div>
             ))}
           </div>
