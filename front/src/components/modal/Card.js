@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import handleCardDetail from "../../api/card/HandleCardDetail";
 import handleCardDelete from "../../api/card/HandleCardDelete";
 
@@ -31,6 +31,10 @@ const Card = ({ item, onClose, onDelete }) => {
     navigate(`/detail-book/${bookId}`);
   }
 
+  const goToUser = (userId) => {
+    navigate(`/${userId}`);
+  }
+
   useEffect(() => {
     const fetchCardDetail = async () => {
       try {
@@ -52,24 +56,37 @@ const Card = ({ item, onClose, onDelete }) => {
 
   return (
     <div>
-      <div className="grid grid-cols-3 gap-1 text-center">
+      <div className="grid grid-cols-2 gap-1">
         {/* 표지 이미지 */}
-        <img
-          src={item.cover}
-          alt={item.title}
-          className="col-span-1 cursor-pointer"
-          // onClick={goToDetail(cardDetail.bookId)}
-          />
+        {cardDetail.cover && (
+          <img
+            src={cardDetail.cover}
+            alt=""
+            className="col-span-1 cursor-pointer mx-auto w-[280px] h-[380px] object-cover rounded-lg"
+            // onClick={goToDetail(cardDetail.bookId)}
+            />
+        )}
         {/* 책 정보 */}
-        <div className="col-span-2">
-          <p className="text-xl font-semibold">{cardDetail.title}</p>
-          <p>{cardDetail.author}</p>
+        <div className="col-span-1">
+          <p className="text-xl font-semibold mb-1">{cardDetail.title}</p>
+          <p className="mb-1">{cardDetail.author}</p>
+          <div className="h-[200px] overflow-auto rounded-md border-solid border-[1px] border-black-300">
+            {cardDetail?.content?.split('<br/>').map((line, index) => (
+              <React.Fragment key={index}>
+                {line}
+                <br />
+              </React.Fragment>
+            ))}
+          </div>
           <br/>
-          {/* 카드 보낸사람 !== 카드 받은사람 -> 유저가 받은 카드일 경우 보낸사람 닉네임 표시 -> 삼항연산자 안먹히네.. */}
-          <p>보낸이 {cardDetail.fromId !== memberId && cardDetail.nickname}</p>
-          <br/>
-          <div className="bg-blue-100 py-3">
-            <p>{cardDetail.comment}</p>
+          <Link to=`/${cardDetail.fromId}`>
+          <div className="flex my-1">
+            <img className="w-8 h-8 mr-2 rounded-full" src={cardDetail.profile} alt="프로필 이미지" />
+            <span className="cursor-pointer">{cardDetail.nickname}</span>
+          </div>
+          </Link>
+          <div className="bg-blue-100 py-3 rounded-lg">
+            <p className="mx-3">{cardDetail.comment}</p>
           </div>
         </div>
       </div>
