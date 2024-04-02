@@ -45,15 +45,39 @@ const Bookshelf = () => {
     fetchBookshelfData();
   }, [memberId, page, isLoading, hasMore]);
 
-  const handleUpdateBookshelf = async (bookId) => {
+
+  const handleDeleteBookshelf = async (bookshelfId) => {
     try {
-      await updateBookshelf(bookId);
-      console.log("잘 변경됐나?");
-      fetchBookshelfData();
+      await deleteBookshelf(bookshelfId);
+      // 삭제된 책장 항목을 필터링
+      const updatedBookshelf = bookshelfInfo.filter(book => book.bookshelfId !== bookshelfId);
+      setBookshelfInfo(updatedBookshelf);
+      console.log("삭제요카.");
     } catch (error) {
-      console.error("Failed to update bookshelf:", error);
+      console.error(error);
     }
   };
+
+  const handleUpdateBookshelf = async (bookId) => {
+    try {
+      const response = await updateBookshelf(bookId);
+      console.log(response.data.data);
+      if (response.data.data) {
+        setBookshelfInfo((prevBooks) =>
+          prevBooks.map((book) =>
+            book.bookId === bookId ? { ...book, isRead: !book.isRead } : book
+          )
+        );
+        console.log(response.data.message); // 응답 메시지 로깅
+      }
+    } catch (error) {
+      console.error("Error updating bookshelf entry:", error);
+    }
+  };
+  
+  
+  
+  
 
   const handleFilterChange = (selectedKeys) => {
     setSelectedGenres(selectedKeys);
@@ -105,12 +129,12 @@ const filteredBooks = bookshelfInfo.filter(book =>
           <Read books={filteredBooks.filter(book => book.isRead)}
                 handleClickBook={(bookId) => navigate(`/detail-book/${bookId}`)}
                 handleUpdateBookshelf={handleUpdateBookshelf}
-                handleDeleteBookshelf={deleteBookshelf} />
+                handleDeleteBookshelf={handleDeleteBookshelf} />
         ) : (
           <NotRead books={filteredBooks.filter(book => !book.isRead)}
                    handleClickBook={(bookId) => navigate(`/detail-book/${bookId}`)}
                    handleUpdateBookshelf={handleUpdateBookshelf}
-                   handleDeleteBookshelf={deleteBookshelf} />
+                   handleDeleteBookshelf={handleDeleteBookshelf} />
         )}
       </div>
     </div>
