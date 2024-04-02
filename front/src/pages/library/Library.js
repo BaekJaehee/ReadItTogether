@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../../authentication/AuthContext";
+import "../../App.css";
 
 import PostItLauncher from "../../components/modal/guestbook/PostItLauncher";
 import Diary from "../../components/modal/Diary/Diary";
@@ -17,8 +18,8 @@ import table from "../../assets/library/table.png";
 import bookshelf from "../../assets/library/bookshelf.png";
 import post from "../../assets/library/post.png";
 import diary from "../../assets/library/diary.png";
-import whiteBoard from "../../assets/library/bg.png";
-import mailBox from "../../assets/library/mailBox.png";
+import whiteBoard from "../../assets/library/whiteBoard.png";
+import mailBox from "../../assets/library/mailBox1.png";
 import list from "../../assets/list.png";
 
 const memberId = localStorage.getItem("memberId");
@@ -122,7 +123,7 @@ const Library = () => {
         <div className="group absolute left-52 bottom-40 overflow-hidden">
           <Link to={`/bookshelf/${isMemberPage}`}>
             <img
-              className="w-[400px] transform transition-transform duration-500 ease-in-out group-hover:scale-110"
+              className="w-[350px] transform transition-transform duration-500 ease-in-out group-hover:scale-110"
               src={bookshelf}
               alt="책장"
             />
@@ -132,7 +133,7 @@ const Library = () => {
         <div className="group absolute right-64 bottom-44 overflow-hidden">
           <button onClick={openDiaryModal}>
             <img
-              className="w-[200px] transform transition-transform duration-500 ease-in-out group-hover:scale-110"
+              className="w-[180px] transform transition-transform duration-500 ease-in-out group-hover:scale-110"
               src={diary}
               alt="다이어리"
             />
@@ -144,13 +145,13 @@ const Library = () => {
           <button onClick={openIntro}>
             <div className="relative">
               <img
-                className="w-[485px] transform transition-transform duration-500 ease-in-out"
+                className="w-[448px] transform transition-transform duration-500 ease-in-out"
                 src={whiteBoard}
                 alt="소개글"
               />
-              <div className="w-[300px] absolute top-0 left-24 right-0 bottom-0 flex items-center justify-center">
+              <div className="w-[300px] absolute top-0 bottom-3 left-24 flex items-center justify-center">
                 {introText && (
-                  <p className="font-semibold text-xl">{introText}</p>
+                  <p className="customFont text-xl">{introText}</p>
                 )}
               </div>
             </div>
@@ -163,7 +164,7 @@ const Library = () => {
             />
           )}
         </div>
-        <div className=" absolute left-52 top-24 overflow-hidden">
+        <div className=" absolute left-40 top-20 overflow-hidden">
           <div className="relative">
             <img
               className="w-[300px] transform transition-transform duration-500 ease-in-out group-hover:scale-110"
@@ -180,10 +181,10 @@ const Library = () => {
                   src={profileImg}
                   alt="프로필 사진"
                 />
-                <p className="font-bold text-lg">{nickname}</p>
+                <p className="font-bold text-lg customFont">{nickname}</p>
               </div>
             </div>
-            <div className="absolute top-[70px] left-12 text-sm font-mono">
+            <div className="absolute top-[60px] left-12 text-lg customFont">
               <p className="flex">안녕! 나는 {followingNum}명을 팔로우중이고</p>
               <p>{followerNum}명이 나를 팔로우 중이지!</p>
               <p>나랑 친구할래?</p>
@@ -208,7 +209,7 @@ const Library = () => {
         <div className="group flex items-center justify-center  overflow-hidden">
           <button onClick={openMailBox}>
             <img
-              className="w-[278px] transform transition-transform duration-500 ease-in-out group-hover:scale-110"
+              className="w-[283px] transform transition-transform duration-500 ease-in-out group-hover:scale-110"
               src={mailBox}
               alt="우편함"
             />
@@ -216,10 +217,10 @@ const Library = () => {
           {isMailBoxOpen && <MailBox onClose={closeMailBox} />}
         </div>
 
-        <div className="group absolute right-40 top-20 overflow-hidden">
+        <div className="group absolute right-40 top-12 overflow-hidden">
           <button onClick={openModal}>
             <img
-              className="w-[250px] transform transition-transform duration-500 ease-in-out group-hover:scale-110"
+              className="w-[280px] transform transition-transform duration-500 ease-in-out group-hover:scale-110"
               src={post}
               alt="포스트잇"
             />

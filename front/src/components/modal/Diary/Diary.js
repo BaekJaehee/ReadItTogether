@@ -38,21 +38,23 @@ const Diary = ({ onClose }) => {
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto h-full w-full z-50"
       onClick={onClose}
     >
-      <div className="bg-white rounded-lg p-8 w-[55%] h-[85%] overflow-y-auto" onClick={handleButtonClick}>            
+      <div className="bg-white rounded-lg p-8 w-[850px] h-[550px] overflow-y-auto" onClick={handleButtonClick}>            
         {showButtons && (
-          <div className="flex justify-around">
+          <div className="absolute right-[270px]">
+            <div className="flex flex-col">
             <button 
-              className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" 
+              className="bg-blue-500 m-2 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" 
               onClick={handleReceivedClick}
             >
               받은 카드
             </button>
             <button 
-              className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" 
+              className="bg-blue-500 m-2 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" 
               onClick={handleSentClick}
             >
               보낸 카드
             </button>
+            </div>
           </div>
         )}
         <div>
