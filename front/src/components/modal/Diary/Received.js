@@ -65,11 +65,25 @@ const Received = ({ onCardOpen, onCardClose, cards }) => {
       ) : (
         <>
           <div className="grid grid-cols-2 gap-4">
+          {/* {currentPageDataReceived.map((item, index) => (
+            item.fromMemberId !== item.toMemberId && ( // 받은 카드인지 확인
+              <div key={index} className="text-center cursor-pointer w-[35%] h-[60%]" onClick={() => openCard(item)}>
+                <img src={item.cover} alt={item.title} className="mx-auto"/>
+              </div>
+            )
+          ))} */}
             {currentPageDataReceived.map((item, index) => (
               <div key={index} className="text-center cursor-pointer w-[35%] h-[60%]" onClick={() => openCard(item)}>
                 <img src={item.cover} alt={item.title} className="mx-auto"/>
               </div>
             ))}
+            {/* {currentPageDataReceived.map((item, index) => (
+              item.fromMemberId !== item.toMemberId ? (
+                <div key={index} className="text-center cursor-pointer w-[35%] h-[60%]" onClick={() => openCard(item)}>
+                  <img src={item.cover} alt={item.title} className="mx-auto"/>
+                </div>
+              ) : null
+            ))} */}
           </div>
           {showPagination && (
             <div className="flex justify-center items-center mt-4">

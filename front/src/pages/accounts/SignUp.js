@@ -261,7 +261,7 @@ const SignUp = () => {
             <button type="button" onClick={handleCheckEmailCode} className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded ml-2">인증코드 확인</button>
           </div>
           {codeVerification && (
-          <p className={codeVerificationClassName}>{codeVerification}</p>
+            <p className={codeVerificationClassName}>{codeVerification}</p>
           )}
         </div>
         <div className="mb-4">
