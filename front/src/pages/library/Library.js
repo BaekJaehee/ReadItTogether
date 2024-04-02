@@ -17,7 +17,7 @@ import table from "../../assets/library/table.png";
 import bookshelf from "../../assets/library/bookshelf.png";
 import post from "../../assets/library/post.png";
 import diary from "../../assets/library/diary.png";
-import whiteBoard from "../../assets/library/whiteBoard.png";
+import whiteBoard from "../../assets/library/bg.png";
 import mailBox from "../../assets/library/mailBox.png";
 import list from "../../assets/list.png";
 
@@ -144,7 +144,7 @@ const Library = () => {
           <button onClick={openIntro}>
             <div className="relative">
               <img
-                className="w-[500px] transform transition-transform duration-500 ease-in-out"
+                className="w-[485px] transform transition-transform duration-500 ease-in-out"
                 src={whiteBoard}
                 alt="소개글"
               />
