@@ -68,7 +68,7 @@ const CreateComment = ({ bookId,refreshComments }) => {
         </div>
         <hr className="border-t-2 border-sky-400" />
         <textarea
-          className="min-h-[100px] resize-none border rounded-md p-2 border-sky-400"
+          className="customFont min-h-[100px] resize-none border rounded-md p-2 border-sky-400"
           placeholder="내용을 입력하세요..."
           value={commentInput}
           onChange={handleInput}

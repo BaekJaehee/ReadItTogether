@@ -61,7 +61,7 @@ const Intro = ({ onClose, onUpdate, introText }) => {
           </div>
           <div className="bg-gray-200 rounded-lg p-2">
             <textarea
-              className="w-full h-[200px] p-2 border rounded resize-none text-xs text-gray-600"
+              className="w-full h-[200px] p-2 border rounded resize-none text-xs customFont text-gray-600"
               value={text}
               onChange={(e) => setText(e.target.value)}
               maxLength={120}

@@ -10,8 +10,7 @@ const SearchPage = () => {
   const [bookInfo, setBookInfo] = useState([]);
 
   useEffect(() => {
-    // 새로운 쿼리가 시작되면 bookInfo 초기화 및 페이지를 1로 재설정
-    if (page === 1) setBookInfo([]) && setBookInfo([]);
+    if (page === 1) setBookInfo([]);
 
     const fetchData = async () => {
       setLoading(true);
@@ -30,6 +29,11 @@ const SearchPage = () => {
 
     if (query) fetchData();
   }, [query, page]);
+
+  useEffect(() => {
+    // 새로운 쿼리가 시작되면 bookInfo 초기화 및 페이지를 1로 재설정
+    setBookInfo([]);
+  }, [query]);
 
   useEffect(() => {
     const handleScroll = () => {

@@ -94,7 +94,7 @@ const UpdateCommentModal = ({
           </div>
           <div className="bg-sky-200 rounded-lg p-2">
             <textarea
-              className="w-full h-[200px] p-2 border rounded resize-none text-xs text-gray-600"
+              className="customFont w-full h-[200px] p-2 border rounded resize-none text-xs text-gray-600"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               maxLength={120}

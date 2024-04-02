@@ -79,7 +79,7 @@ const PostItView = ({
                 src={profileImg}
                 alt="프로필사진"
               />
-              <h3 className="text-sm font-bold leading-6 text-gray-900">
+              <h3 className="customFont leading-6 text-gray-900">
                 {nickname}
               </h3>
             </div>
@@ -89,7 +89,7 @@ const PostItView = ({
               </div>
             )}
           </div>
-          <p className="text-sm font-medium">{content}</p>
+          <p className="text-xl customFont">{content}</p>
           <div className="flex justify-between pb-2"></div>
         </div>
         <button onClick={moveLeft}>
