@@ -8,4 +8,5 @@ public class FollowingDto {
     private Long memberId;
     private String nickname;
     private String profileImage;
+    private int isFollowing;
 }
