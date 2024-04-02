@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { Link } from "react-router-dom";
 
+import FollowForm from "../../api/follow/FollowForm";
+
 import logo from "../../assets/navbar/logo2.png";
 import deleteButton from "../../assets/profile/delete.png";
 
-const FollowModal = ({ onClose, followingList, followerList }) => {
+const FollowModal = ({ onClose, followingList, followerList, whoFollowList }) => {
+  const requestId = localStorage.getItem("memberId");
   const [isFollowingActive, setIsFollowingActive] = useState(true);
   const handleFollowerClick = () => {
     setIsFollowingActive(false);
@@ -14,6 +17,14 @@ const FollowModal = ({ onClose, followingList, followerList }) => {
   const handleFollowingClick = () => {
     setIsFollowingActive(true);
   };
+
+  // const handleFollow = () => {
+  //   FollowForm(targetEmail, requestId);
+  // };
+
+  // const handleUnfollow = () => {
+  //   FollowDelete(targetEmail, requestId);
+  // };
 
   return ReactDOM.createPortal(
     <div
@@ -73,9 +84,6 @@ const FollowModal = ({ onClose, followingList, followerList }) => {
                       <p className="font-semibold text-sm">{user.nickname}</p>
                     </div>
                   </Link>
-                  <button className="bg-white border w-[70px] border-gray-300 hover:bg-gray-300 hover:text-white rounded-lg text-gray-500 text-xs py-2 px-4 transition-colors duration-300">
-                    팔로잉
-                  </button>
                 </div>
               ))}
             </div>
@@ -97,9 +105,6 @@ const FollowModal = ({ onClose, followingList, followerList }) => {
                       <p className="font-semibold text-sm">{user.nickname}</p>
                     </div>
                   </Link>
-                  <button className="bg-white border w-[70px] border-gray-300 hover:bg-gray-300 hover:text-white rounded-lg text-gray-500 text-xs py-2 px-4 transition-colors duration-300">
-                    삭제
-                  </button>
                 </div>
               ))}
             </div>

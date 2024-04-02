@@ -25,7 +25,7 @@ const NavBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const memberId = localStorage.getItem("memberId");
-  const email = localStorage.getItem("savedEmail")
+  const email = localStorage.getItem("myEmail")
   const [FollowingList, setFollowingList] = useState([]);
   const [FollowerList, setFollowerList] = useState([]);
 
@@ -153,3 +153,4 @@ const NavBar = () => {
 };
 
 export default NavBar;
+

@@ -5,12 +5,11 @@ import com.ssafy.rit.back.dto.postBox.response.PostBoxToCardCreationResponse;
 import com.ssafy.rit.back.dto.postBox.response.PostBoxListResponse;
 import com.ssafy.rit.back.dto.postBox.responseDto.PostBoxListResponseDto;
 import com.ssafy.rit.back.dto.postBox.responseDto.ReceiveCardsDto;
-import com.ssafy.rit.back.entity.Card;
-import com.ssafy.rit.back.entity.Member;
-import com.ssafy.rit.back.entity.Postbox;
+import com.ssafy.rit.back.entity.*;
 import com.ssafy.rit.back.exception.card.CardNotFoundException;
 import com.ssafy.rit.back.exception.postBox.PostBoxCantOpenException;
 import com.ssafy.rit.back.repository.CardRepository;
+import com.ssafy.rit.back.repository.MemberRecommendBookRepository;
 import com.ssafy.rit.back.repository.MemberRepository;
 import com.ssafy.rit.back.repository.PostBoxRepository;
 import com.ssafy.rit.back.service.PostBoxService;
@@ -38,6 +37,7 @@ public class PostBoxServiceImpl implements PostBoxService {
     private final CommonUtil commonUtil;
     private final PostBoxRepository postBoxRepository;
     private final MemberRepository memberRepository;
+    private final MemberRecommendBookRepository memberRecommendBookRepository;
 
     // 우편함 조회 로직
     @Override
@@ -73,14 +73,26 @@ public class PostBoxServiceImpl implements PostBoxService {
                 cards.set(1, randomCardFromThisWeek);
             }
 
+            List<MemberRecommendBook> recBooks = memberRecommendBookRepository.findAllByMemberId(currentMember);
+
+            List<Book> currentBooks = recBooks.stream()
+                    .map(MemberRecommendBook::getBookId)
+                    .toList();
+
+            List<Card> byBooksAndExcludedMember = cardRepository.findByBooksAndExcludedMember(currentBooks, currentMember);
+            if (!byBooksAndExcludedMember.isEmpty()) {
+                Collections.shuffle(byBooksAndExcludedMember);
+                Card randomCardFromSvd = thisWeekCards.get(0);
+                cards.set(2, randomCardFromSvd);
+            }
+
             List<ReceiveCardsDto> cardsDto = convertCardsToDto(cards);
             createPostboxesForCurrentMember(cards, currentMember);
 
             PostBoxListResponse response = new PostBoxListResponse("카드 조회 성공", new PostBoxListResponseDto(cardsDto));
 
             return ResponseEntity.status(HttpStatus.OK).body(response);
-        }
-        else {
+        } else {
             List<ReceiveCardsDto> cardsDto = weeklyPostboxes.stream()
                     .map(this::convertPostboxToDto)
                     .collect(Collectors.toList());

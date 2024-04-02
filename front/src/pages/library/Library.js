@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { AuthContext } from "../../authentication/AuthContext";
 
 import PostItLauncher from "../../components/modal/guestbook/PostItLauncher";
 import Diary from "../../components/modal/Diary/Diary";
@@ -16,13 +17,15 @@ import table from "../../assets/library/table.png";
 import bookshelf from "../../assets/library/bookshelf.png";
 import post from "../../assets/library/post.png";
 import diary from "../../assets/library/diary.png";
-import whiteBoard from "../../assets/library/whiteBoard.png";
+import whiteBoard from "../../assets/library/bg.png";
 import mailBox from "../../assets/library/mailBox.png";
 import list from "../../assets/list.png";
 
 const memberId = localStorage.getItem("memberId");
 const Library = () => {
+  const { userState } = useContext(AuthContext);
   const location = useLocation();
+
   const [introText, setIntroText] = useState("");
   const [isMemberPage, setIsMemberPage] = useState(false);
   const [profileImg, setProfileImg] = useState(`${sample}`);
@@ -33,8 +36,12 @@ const Library = () => {
   const [email, setEmail] = useState("");
   const [followingList, setFollowingList] = useState([]);
   const [followerList, setFollowerList] = useState([]);
+  const [whoFollowList, setWhoFollowList] = useState(false);
 
   useEffect(() => {
+    if (userState.status !== "loggedIn") {
+      return;
+    }
     // URL에서 whoMemberId 추출
     const pathArray = location.pathname.split("/");
     const whoMemberId = pathArray[pathArray.length - 1];
@@ -61,7 +68,13 @@ const Library = () => {
     };
 
     fetchIntroText();
-  }, [location.pathname]); // 의존성 배열에 location.pathname 추가
+  }, [location.pathname, userState]); // 의존성 배열에 location.pathname 추가
+
+  useEffect(() => {
+    if (memberId === isMemberPage) {
+      setWhoFollowList(true);
+    }
+  }, [location.pathname, isMemberPage]);
 
   // 방명록 상태
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -131,7 +144,7 @@ const Library = () => {
           <button onClick={openIntro}>
             <div className="relative">
               <img
-                className="w-[500px] transform transition-transform duration-500 ease-in-out"
+                className="w-[485px] transform transition-transform duration-500 ease-in-out"
                 src={whiteBoard}
                 alt="소개글"
               />
@@ -170,7 +183,7 @@ const Library = () => {
                 <p className="font-bold text-lg">{nickname}</p>
               </div>
             </div>
-            <div className="absolute top-14 left-12 text-sm font-mono">
+            <div className="absolute top-[70px] left-12 text-sm font-mono">
               <p className="flex">안녕! 나는 {followingNum}명을 팔로우중이고</p>
               <p>{followerNum}명이 나를 팔로우 중이지!</p>
               <p>나랑 친구할래?</p>
@@ -187,6 +200,7 @@ const Library = () => {
               onClose={closeFollowModal}
               followingList={followingList}
               followerList={followerList}
+              whoFollowList={whoFollowList}
             />
           )}
         </div>
