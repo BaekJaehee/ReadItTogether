@@ -63,7 +63,7 @@ const FollowModal = ({ onClose, followingList, followerList }) => {
                   key={index}
                   className="flex justify-between bg-white rounded-md px-2 py-1 m-2"
                 >
-                  <Link to={`/${user.memberId}`}>
+                  <Link onClick={onClose} to={`/${user.memberId}`}>
                     <div className="flex items-center">
                       <img
                         className="rounded-full w-7 h-7 mr-1"
@@ -87,7 +87,7 @@ const FollowModal = ({ onClose, followingList, followerList }) => {
                   key={index}
                   className="flex justify-between bg-white rounded-md px-2 py-1 m-2"
                 >
-                  <Link to={`/${user.memberId}`}>
+                  <Link onClick={onClose} to={`/${user.memberId}`}>
                     <div className="flex items-center">
                       <img
                         className="rounded-full w-7 h-7 mr-1"
