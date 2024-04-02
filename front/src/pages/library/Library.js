@@ -185,7 +185,7 @@ const Library = () => {
           {followModalOpen && (
             <FollowModal
               onClose={closeFollowModal}
-              followList={followingList}
+              followingList={followingList}
               followerList={followerList}
             />
           )}
