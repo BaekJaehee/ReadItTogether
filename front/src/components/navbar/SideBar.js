@@ -8,7 +8,8 @@ import logo from "../../assets/navbar/logo2.png";
 
 const SideBar = ({ profileInfo, FollowingList, FollowerList }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const memberId = localStorage.getItem('memberId')
+  const memberId = localStorage.getItem("memberId");
+  const whoFollowList = true;
 
   return (
     <nav className="flex flex-col h-full">
@@ -59,7 +60,7 @@ const SideBar = ({ profileInfo, FollowingList, FollowerList }) => {
             onClose={() => setIsModalOpen(false)}
             followingList={FollowingList}
             followerList={FollowerList}
-            
+            whoFollowList={whoFollowList}
           />
         )}
 
