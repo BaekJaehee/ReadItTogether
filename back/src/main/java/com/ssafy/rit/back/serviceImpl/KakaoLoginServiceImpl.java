@@ -93,10 +93,12 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
 
 
         Member member = memberRepository.findByEmail(kakaoEmail).orElse(null);
+        String nickname = null;
 
         String randomNickname = generateRandomNickname();
         // 기존 회원인 경우
         if (member != null) {
+            nickname = member.getNickname();
             Authentication authentication = new UsernamePasswordAuthenticationToken(member, null, null);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             processLogin(accessToken, refreshToken, response);
@@ -110,6 +112,8 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
             newMember.setProfileImage(kakaoProfileImage);
             // 신규 회원 등록
             memberRepository.save(newMember);
+
+            nickname = randomNickname;
             // 회원 등록 후 로그인 처리 및 토큰 전달
             processLogin(accessToken, refreshToken, response);
         }
@@ -136,7 +140,7 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
 
          */
 
-        return new DataDto(accessToken, refreshToken, memberId, kakaoProfileImage, randomNickname);
+        return new DataDto(accessToken, refreshToken, memberId, kakaoProfileImage, nickname);
 
     }
 
