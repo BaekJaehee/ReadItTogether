@@ -6,8 +6,6 @@ import { checkNicknameDuplicate } from "../../api/accounts/NicknameDuplicate";
 import SendCode from "../../api/accounts/SendCode";
 import CheckCode from "../../api/accounts/CheckCode";
 
-// 이메일 형식 검사만 하는 게 아니라 실제 존재하는 이메일인지 확인 -> API 사용 필요
-
 const SignUp = () => {
   const navigate = useNavigate();
 
@@ -151,26 +149,6 @@ const SignUp = () => {
     };
   };
 
-  // const handleCheckEmailAndSendCode = async () => {
-  //   try {
-  //     const isEmailDuplicate = await checkEmailDuplicate(email);
-  //     setIsEmailValid(!isEmailDuplicate);
-  //     setEmailStatusMessage(!isEmailDuplicate ? '중복된 이메일입니다.' : '사용 가능한 이메일입니다.');
-  //     setEmailStatusMessageClassName(!isEmailDuplicate ? 'text-sm text-red-500' : 'text-sm text-blue-500');
-  
-  //     // 이메일 중복 여부와 인증코드 전송 가능 여부를 모두 검사하여 코드 전송 버튼을 활성화 또는 비활성화
-  //     setIsCorrectEmail(!isEmailDuplicate && isEmailValid);
-  
-  //     // 이메일이 중복되지 않고 이메일이 유효할 경우에만 코드 전송
-  //     if (!isEmailDuplicate && isEmailValid) {
-  //       await SendCode(email);
-  //       alert('인증 코드가 이메일로 전송되었습니다.'); // 코드가 보내졌다는 알림
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-  
   const handleCheckEmail = async () => {
     try {
       const isEmailDuplicate = await checkEmailDuplicate(email);
@@ -179,6 +157,10 @@ const SignUp = () => {
       setEmailStatusMessageClassName(!isEmailDuplicate ? 'text-sm text-red-500' : 'text-sm text-blue-500');
       
       setIsCorrectEmail(!isEmailDuplicate && isEmailValid);
+      // setIsCorrectEmail(!isEmailDuplicate);
+      // console.log(isCorrectEmail);  // true
+      console.log(isCorrectEmail);  // 이게 왜 뭔짓을 해도 true로 나오는지 모르겠음
+      console.log(isEmailValid) // false
     } catch (error) {
       console.error(error);
     };
@@ -187,38 +169,29 @@ const SignUp = () => {
   const handleSendEmailCode = async () => {
     try {
       await handleCheckEmail(); // 이메일 중복 확인
-      if (isCorrectEmail) {
+      // if (isCorrectEmail === true) {
+      if (isEmailValid === true) {
         await SendCode(email); // 인증 코드 전송
-        // alert('인증 코드가 이메일로 전송되었습니다.');
+      } else {
+        alert('중복된 이메일입니다');
       }
     } catch (error) {
       console.error(error);
     }
   }
-  
-  // const handleSendEmailCode = async () => {
-  //   try {
-  //     if (isCorrectEmail) {
-  //       await SendCode(email);
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
 
   const handleCheckEmailCode = async () => {
     try {
       const result = await CheckCode(email, emailCode);
-      setCodeVerification(result ? '인증되었습니다' : '인증에 실패했습니다');
       setCodeVerificationClassName(result ? 'text-sm text-blue-500' : 'text-sm text-red-500');
+      setCodeVerification(result ? '인증되었습니다' : '인증에 실패했습니다');
       setVerified(true);
     } catch (error) {
-      setCodeVerification('인증에 실패했습니다')
+      setCodeVerificationClassName('text-sm text-red-500');
+      setCodeVerification('인증에 실패했습니다');
       console.error(error);
     };
   };
-
-  
 
   const handleCheckNickname = async () => {
     try {
@@ -260,9 +233,10 @@ const SignUp = () => {
             <input type="text" id="emailCertificate" name="emailCode" value={emailCode} onChange={(e) => setEmailCode(e.target.value)} className="border border-gray-300 px-2 py-1 flex-grow mr-3" />
             <button type="button" onClick={handleCheckEmailCode} className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded ml-2">인증코드 확인</button>
           </div>
-          {codeVerification && (
-            <p className={codeVerificationClassName}>{codeVerification}</p>
-          )}
+          <p className={codeVerificationClassName}>{codeVerification}</p>
+          {/* {codeVerification && (
+          <p className={codeVerificationClassName}>{codeVerification}</p>
+          )} */}
         </div>
         <div className="mb-4">
           <div className="flex justify-between">
