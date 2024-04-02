@@ -20,5 +20,8 @@ public class CardDetailResponseDto {
     private long fromId;
     private String nickname;
 
+    private long BookId;
+    private String Profile;
+
 
 }
