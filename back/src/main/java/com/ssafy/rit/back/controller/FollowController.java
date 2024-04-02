@@ -16,6 +16,7 @@ import com.ssafy.rit.back.exception.follow.FollowSelfException;
 import com.ssafy.rit.back.exception.member.MemberNotFoundException;
 import com.ssafy.rit.back.repository.MemberRepository;
 import com.ssafy.rit.back.serviceImpl.FollowServiceImpl;
+import com.ssafy.rit.back.util.CommonUtil;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,12 +36,14 @@ public class FollowController {
 
     private final MemberRepository memberRepository;
     private final FollowServiceImpl followService;
+    private final CommonUtil commonUtil;
 
     @Autowired
-    public FollowController(MemberRepository memberRepository ,FollowServiceImpl followService) {
+    public FollowController(MemberRepository memberRepository ,FollowServiceImpl followService, CommonUtil commonUtil) {
 
         this.memberRepository = memberRepository;
         this.followService = followService;
+        this.commonUtil = commonUtil;
     }
 
     @PostMapping("/follow/{targetEmail}")
@@ -97,10 +100,15 @@ public class FollowController {
         Member followingOwner = memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
         List<Member> followings =  followService.getFollowingList(followingOwner);
 
-        List<FollowMemberResponseDto> listResponseDtos = new ArrayList<>();
+        Member currentMember = commonUtil.getMember();
 
+        List<FollowMemberResponseDto> listResponseDtos = new ArrayList<>();
         for (Member member : followings) {
-            FollowMemberResponseDto dto = new FollowMemberResponseDto(member.getId(), member.getProfileImage(), member.getNickname());
+            int isFollowing = 0;
+            if (followService.isFollowing(currentMember, member)) {
+                isFollowing = 1;
+            }
+            FollowMemberResponseDto dto = new FollowMemberResponseDto(member.getId(), member.getProfileImage(), member.getNickname(), isFollowing);
             listResponseDtos.add(dto);
         }
 
@@ -117,10 +125,15 @@ public class FollowController {
         Member followerOwner = memberRepository.findByEmail(email).orElseThrow(MemberNotFoundException::new);
         List<Member> followers = followService.getFollowerList(followerOwner);
 
-        List<FollowMemberResponseDto> listResponseDtos = new ArrayList<>();
+        Member currentMember = commonUtil.getMember();
 
+        List<FollowMemberResponseDto> listResponseDtos = new ArrayList<>();
         for (Member member : followers) {
-            FollowMemberResponseDto dto = new FollowMemberResponseDto(member.getId(), member.getProfileImage(), member.getNickname());
+            int isFollowing = 0;
+            if (followService.isFollowing(currentMember, member)) {
+                isFollowing = 1;
+            }
+            FollowMemberResponseDto dto = new FollowMemberResponseDto(member.getId(), member.getProfileImage(), member.getNickname(),isFollowing);
             listResponseDtos.add(dto);
         }
 
