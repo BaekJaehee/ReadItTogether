@@ -183,7 +183,7 @@ const Library = () => {
                 <p className="font-bold text-lg">{nickname}</p>
               </div>
             </div>
-            <div className="absolute top-14 left-12 text-sm font-mono">
+            <div className="absolute top-[70px] left-12 text-sm font-mono">
               <p className="flex">안녕! 나는 {followingNum}명을 팔로우중이고</p>
               <p>{followerNum}명이 나를 팔로우 중이지!</p>
               <p>나랑 친구할래?</p>
