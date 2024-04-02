@@ -26,17 +26,18 @@ const DetailBook = () => {
   });
   const list = useState(bookInfo.commentListResponseDtos)
   
+  const fetchBookInfo = async () => {
+    try {
+      const response = await BookDetail(bookId); // BookDetail 함수를 통해 도서 정보를 가져옴
+      setBookInfo(response.data); // 가져온 도서 정보를 상태에 설정
+    } catch (error) {
+      console.error("책 정보를 가져오는 데 실패했습니다:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchBookInfo = async () => {
-      try {
-        const response = await BookDetail(bookId); // BookDetail 함수를 통해 도서 정보를 가져옴
-        setBookInfo(response.data); // 가져온 도서 정보를 상태에 설정
-      } catch (error) {
-        console.error("책 정보를 가져오는 데 실패했습니다:", error);
-      }
-    };
     fetchBookInfo(); // useEffect에서 한 번만 호출하도록 설정
-  }, [bookId]); // 의존성 배열을 빈 배열로 설정하여 컴포넌트가 마운트될 때 한 번만 실행되도록 함
+  }, [bookId]);
   
 
   // 데이터의 장르명 표시 바꾸기
@@ -113,10 +114,15 @@ const DetailBook = () => {
             ))}
           </p>
           
-          <CreateComments bookId={bookId} />
+          <CreateComments 
+          bookId={bookId}
+          refreshComments={fetchBookInfo}
+          />
         </div>
       </div>
-      <Comments bookId={bookId} commentListResponseDtos={bookInfo.commentListResponseDtos} />
+      <Comments bookId={bookId} 
+      commentListResponseDtos={bookInfo.commentListResponseDtos} 
+      refreshComments={fetchBookInfo}/>
     </div>
   );
 };
