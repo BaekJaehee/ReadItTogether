@@ -168,6 +168,7 @@ const SignUp = () => {
 
   const handleSendEmailCode = async () => {
     try {
+      alert('이메일을 확인해주세요. 인증 코드는 10분동안 유효합니다.')
       if (isEmailCheckDone) {
         if (isCorrectEmail) {
           await SendCode(email); // 인증 코드 전송
