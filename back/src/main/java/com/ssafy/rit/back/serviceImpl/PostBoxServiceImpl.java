@@ -57,7 +57,7 @@ public class PostBoxServiceImpl implements PostBoxService {
         if (weeklyPostboxes.isEmpty()) {
 
             // 현재 멤버를 제외한 랜덤 카드 목록 가져오기
-            List<Card> cards = cardRepository.findRandomCardsExcludingMember(currentMember.getId());
+            List<Card> cards = cardRepository.findRandomCardsExcludingMember(currentMember);
 
             // 현재 쉘프 그룹에 속한 멤버들로부터 카드 가져오기
             List<Member> allByShelfGroup = memberRepository.findAllByShelfGroup(currentMember.getShelfGroup());
