@@ -8,10 +8,6 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const Logout = () => {
   const navigate = useNavigate();
   const { setUserState } = useContext(AuthContext);
-  localStorage.removeItem(`memberId`);
-  localStorage.removeItem(`accessToken`);
-  localStorage.removeItem(`nickname`);
-  localStorage.removeItem(`profileImage`);
 
   useEffect(() => {
     const logout = async () => {
@@ -24,8 +20,12 @@ const Logout = () => {
             withCredentials: true,
           }
         );
+        localStorage.removeItem(`memberId`);
+        localStorage.removeItem(`accessToken`);
+        localStorage.removeItem(`nickname`);
+        localStorage.removeItem(`profileImage`);
+        localStorage.removeItem(`myEmail`);
         setUserState({ status: "loggedOut" });
-
 
         // 로그인 페이지로 리디렉션
         navigate("/login");
@@ -41,4 +41,3 @@ const Logout = () => {
 };
 
 export default Logout;
-  

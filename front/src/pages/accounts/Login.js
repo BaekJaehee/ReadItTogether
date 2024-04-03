@@ -67,8 +67,8 @@ const Login = () => {
       />
 
       {/* 로그인 창 */}
-      <div className="relative p-8 bg-black bg-opacity-70 rounded shadow-md max-w-sm w-full">
-        <h1 className="text-2xl text-white font-bold text-center mb-6">
+      <div className="relative p-8 bg-black bg-opacity-50 rounded shadow-md max-w-sm w-full">
+        <h1 className="text-3xl customFont text-white font-bold text-center mb-6">
           로 그 인
         </h1>
 
@@ -96,22 +96,22 @@ const Login = () => {
           />
           <label
             htmlFor="saveEmail"
-            className="text-white ml-2 cursor-pointer"
+            className="text-white customFont ml-2 cursor-pointer"
             onClick={() => setSaveEmail(!saveEmail)}
           >
             아이디 저장
           </label>
-          <button className="w-full focus:outline-none text-white bg-sky-600 hover:bg-sky-500 focus:ring-4 focus:ring-sky-300 font-medium rounded-lg py-2.5 ">
+          <button className="w-full text-xl customFont focus:outline-none text-white bg-sky-600 hover:bg-sky-500 focus:ring-4 focus:ring-sky-300 font-medium rounded-lg py-2.5 ">
             로그인
           </button>
           <div className="text-white text-center">
-            <Link to="/signup" className="text-sm hover:underline">
+            <Link to="/signup" className="text-sm customFont hover:underline hover:text-sky-300">
               아이디가 없으신가요?
             </Link>
             <br />
             <Link
               to="/find-password"
-              className="text-white text-sm hover:underline"
+              className="text-white text-sm customFont hover:underline hover:text-sky-300"
             >
               비밀번호를 잊으셨나요?
             </Link>
