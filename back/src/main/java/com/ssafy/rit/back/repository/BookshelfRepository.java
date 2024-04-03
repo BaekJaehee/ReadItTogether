@@ -25,7 +25,7 @@ public interface BookshelfRepository extends JpaRepository<Bookshelf, Integer> {
     @Query("select count(b) from Bookshelf b where b.memberId.id = :memberId AND b.isRead = 0")
     int getLikedBookCnt(@Param("memberId") Long memberId);
 
-    @Query("select bs.bookId.id from Bookshelf bs where bs.memberId.id = :memberId and bs.isRead = 1 and bs.createdAt >= :startDate and bs.createdAt < :endDate")
+    @Query("select bs.bookId.id from Bookshelf bs where bs.memberId.id = :memberId and bs.isRead = 1 and bs.createdAt >= :startDate and bs.createdAt <= :endDate")
     List<Integer> getBookIdListFromBookshelf(@Param("memberId")Long memberId, @Param("startDate") LocalDate startDate, @Param("endDate")LocalDate endDate);
 
 
