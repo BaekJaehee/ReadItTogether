@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 import GuestBookGet from "../../../api/llibrary/guestbook/GuestBookGet";
 import GuestBookDelete from "../../../api/llibrary/guestbook/GuestBookDelete";
@@ -15,10 +16,9 @@ const PostItView = ({
   moveRight,
   memberId,
   isMemberPage,
-  refreshList
-
+  refreshList,
 }) => {
-  const [fromMemberId, setFromMemberId] = useState("")
+  const [fromMemberId, setFromMemberId] = useState("");
   const [nickname, setNickname] = useState("");
   const [profileImg, setProfileImg] = useState(null);
   const [content, setContent] = useState("");
@@ -30,7 +30,7 @@ const PostItView = ({
       if (postId) {
         try {
           const response = await GuestBookGet(postId);
-          setFromMemberId(response.data.data.fromMemberId)
+          setFromMemberId(response.data.data.fromMemberId);
           setProfileImg(response.data.data.profileImg);
           setNickname(response.data.data.nickname);
           setContent(response.data.data.content);
@@ -45,7 +45,7 @@ const PostItView = ({
   }, [postId]);
 
   const checkDeleteButtonVisibility = () => {
-    if (memberId === fromMemberId || memberId === isMemberPage ) {
+    if (memberId === fromMemberId || memberId === isMemberPage) {
       setShowDeleteButton(true);
     } else {
       setShowDeleteButton(false);
@@ -73,18 +73,23 @@ const PostItView = ({
       >
         <div className="flex flex-col justify-between">
           <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center ">
-              <img
-                className="w-8 h-8 rounded-full mr-2"
-                src={profileImg}
-                alt="프로필사진"
-              />
-              <h3 className="customFont leading-6 text-gray-900">
-                {nickname}
-              </h3>
-            </div>
+            <Link onClick={onClose} to={`/${fromMemberId}`}>
+              <div className="flex items-center ">
+                <img
+                  className="w-8 h-8 rounded-full mr-2"
+                  src={profileImg}
+                  alt="프로필사진"
+                />
+                <h3 className="customFont leading-6 text-gray-900">
+                  {nickname}
+                </h3>
+              </div>
+            </Link>
             {showDeleteButton && (
-              <div className="flex items-center cursor-pointer" onClick={handleDeleteClick}>
+              <div
+                className="flex items-center cursor-pointer"
+                onClick={handleDeleteClick}
+              >
                 <img className="flex w-5 h-5" src={deleteButton} alt="삭제" />
               </div>
             )}
