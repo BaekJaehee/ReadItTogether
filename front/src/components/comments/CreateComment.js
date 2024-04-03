@@ -11,21 +11,24 @@ const CreateComment = ({ bookId,refreshComments }) => {
     setCommentInput(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!commentInput.trim()) return; // 빈 댓글은 추가하지 않음
-
+    if (!commentInput.trim()) return;
+  
     try {
-      // CommentForm API 호출 함수를 사용하여 서버로 데이터 전송
-      CommentForm(bookId, commentInput, rating * 2);
-      refreshComments();
+      await CommentForm(bookId, commentInput, rating * 2); // 비동기 생성이 완료된 후
+      setComments(prevComments => [...prevComments, newComment]); 
+      setCommentInput("");
+      setRating(0);
+
     } catch (error) {
       console.error("댓글 생성 중 오류 발생:", error);
     }
-
-    setCommentInput(""); // 입력 필드 초기화
-    setRating(0); // 평점 초기화
+  
+    setCommentInput("");
+    setRating(0);
   };
+  
 
 
   const handleMouseEnter = (index) => {
