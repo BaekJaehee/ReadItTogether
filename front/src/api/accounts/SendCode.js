@@ -19,7 +19,7 @@ const sendCode = async (email) => {
       }
     );
     console.log(response);
-    alert('받은 편지함을 확인해주세요');
+    // alert('받은 편지함을 확인해주세요');
     return response;
   } catch (error) {
     console.error(error);
