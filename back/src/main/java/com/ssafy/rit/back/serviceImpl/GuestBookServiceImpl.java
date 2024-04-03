@@ -97,7 +97,7 @@ public class GuestBookServiceImpl implements GuestBookService {
         GuestBook currentGuestBook = guestBookRepository.findById(postId)
                 .orElseThrow(GuestBookNotFoundException::new);
 
-        if (currentGuestBook.getFromMemberId() != currentMember && currentGuestBook.getFromMemberId() != currentGuestBook.getToMemberId()) {
+        if (currentGuestBook.getFromMemberId() != currentMember && currentGuestBook.getToMemberId() != currentMember) {
             throw new GuestBookToMemberMismatchException();
         }
 
