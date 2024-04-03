@@ -207,10 +207,6 @@ const Profile = () => {
                   <p className="text-center text-md text-black-400">최근 1달동안 읽은 책이 없습니다</p>
                 )}
               </div>
-              {/* {profileInfo.genreNoList}<br/> */}
-              {/* {genreCountByName} */}
-              {/* {dataLabels}<br/> */}
-              {/* {dataValues}<br/> */}
             </div>
             <div
               className="relative right-0 cursor-pointer"
