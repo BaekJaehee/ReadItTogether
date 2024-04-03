@@ -116,14 +116,6 @@ const Login = () => {
               비밀번호를 잊으셨나요?
             </Link>
           </div>
-          <div className="flex items-center justify-center space-x-2 select-none">
-            <hr className="w-28 bg-white h-0.5 border-none" />
-            <span className="text-white">OR</span>
-            <hr className="w-28 bg-white h-0.5 border-none" />
-          </div>
-          <div className="flex justify-center">
-            <KakaoLoginButton />
-          </div>
         </form>
       </div>
     </div>

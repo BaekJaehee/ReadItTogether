@@ -45,3 +45,9 @@
 .customFont {
   font-family: 'UhBeecharming', monospace;
 }
+
+@media (max-width: 780px) {
+  .size-down {
+    width: 50%;
+  }
+}

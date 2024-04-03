@@ -56,7 +56,7 @@ const SearchPage = () => {
         "{query}"의 검색결과{" "}
         {loading && <div className="text-md ml-2">Loading...</div>}
       </div>
-      <div className="px-40 flex">
+      <div className="mx-200 flex">
         <div className="w-1/2">
           {bookInfo.length > 0 ? (
             bookInfo
@@ -65,15 +65,17 @@ const SearchPage = () => {
                 <Link
                   to={`/detail-book/${result.bookId}`}
                   key={index}
-                  className="flex items-center mb-4"
+                  className="flex items-center mb-6 pb-6 mx-20 border-b-2 border-gray-200"
                 >
                   <img
-                    className="w-[100px] h-[150px] mr-2"
+                    className="w-[100px] h-[150px] mr-2 ml-10"
                     src={result.cover}
                     alt="책 표지"
                   />
                   <div>
-                    <h3 className="font-bold text-xl">{result.title}</h3>
+                    <h3 className="font-bold text-xl overflow-hidden whitespace-nowrap text-ellipsis">
+                      {result.title}
+                    </h3>
                     <p className="text-sm font-semibold text-gray-500">
                       {result.pubDate.split("년")[0]} · {result.author}
                     </p>
@@ -93,16 +95,18 @@ const SearchPage = () => {
               .map((result, index) => (
                 <Link
                   to={`/detail-book/${result.bookId}`}
-                  key={`right-${index}`}
-                  className="flex items-center mb-4"
+                  key={index}
+                  className="flex items-center mb-6 pb-6 mx-20 border-b-2 border-gray-200"
                 >
                   <img
-                    className="w-[100px] h-[150px] mr-2"
+                    className="w-[100px] h-[150px] mr-2 ml-10"
                     src={result.cover}
                     alt="책 표지"
                   />
                   <div>
-                    <h3 className="font-bold text-xl">{result.title}</h3>
+                    <h3 className="font-bold text-xl overflow-hidden whitespace-nowrap text-ellipsis">
+                      {result.title}
+                    </h3>
                     <p className="text-sm font-semibold text-gray-500">
                       {result.pubDate.split("년")[0]} · {result.author}
                     </p>
