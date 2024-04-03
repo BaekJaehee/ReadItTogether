@@ -197,16 +197,22 @@ const Profile = () => {
             </div>
 
             {/* 그래프 넣는 곳 */}
-            <div className="flex-1">
+            <div className="flex-1 flex justify-center items-center">
               <div>
                 {/* 도넛 그래프를 그릴 canvas 요소 */}
-                <DoughnutChart
-                  dataLabels={dataLabels}
-                  dataValues={dataValues}
-                />
+                {/* 데이터가 있는 경우에만 차트를 표시 */}
+                {profileInfo.genreNoList.reduce((acc, curr) => acc + curr, 0) !== 0 && (
+                  <DoughnutChart
+                    dataLabels={dataLabels}
+                    dataValues={dataValues}
+                  />
+                )}
+                {/* 데이터가 없는 경우 메시지를 표시 */}
+                {profileInfo.genreNoList.reduce((acc, curr) => acc + curr, 0) === 0 && (
+                  <p className="text-center text-md text-black-400">최근 1달동안 읽은 책이 없습니다</p>
+                )}
               </div>
               {/* {profileInfo.genreNoList}<br/> */}
-              {/* {genreCountByName} */}
               {/* {dataLabels}<br/> */}
               {/* {dataValues}<br/> */}
             </div>
