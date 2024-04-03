@@ -124,7 +124,7 @@ const Bookshelf = () => {
   const readOrNotText = isRead ? "읽은 책 목록" : "읽을 책 목록";
 
   return (
-    <div className="p-20">
+    <div className="p-20 min-w-[900px] overflow-auto">
       <div className="bg-rose-50 px-4 pb-10">
         <div className="flex items-center justify-center my-2">
           <BookFilter onFilterChange={handleFilterChange} />
@@ -157,7 +157,7 @@ const Bookshelf = () => {
             </label>
           </div>
         </div>
-        <div className="flex my-3">
+        <div className="flex my-3 justify-center">
           {isRead ? (
             <Read
               books={filteredBooks.filter((book) => book.isRead)}
