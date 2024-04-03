@@ -42,6 +42,8 @@ const SignUp = () => {
   // 중복 확인 버튼
   const [isCorrectEmail, setIsCorrectEmail] = useState(false);
   const [isCorrectNickname, setIsCorrectNickname] = useState(false);
+   // 이메일 중복 확인이 완료되었는지 여부
+   const [isEmailCheckDone, setIsEmailCheckDone] = useState(false);
 
   useEffect(() => {
     // 모든 입력란이 채워졌는지 + 중복 검사를 했는지 + 이메일 인증코드를 받았는지 확인
@@ -69,6 +71,7 @@ const SignUp = () => {
     const currentEmail = e.target.value;
     setIsEmailValid(false);
     setEmail(currentEmail);
+    setIsEmailCheckDone(false); // 이메일이 바뀌면 중복 확인도 초기화
     const emailRegExp = /^[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+(?:\.[-A-Za-z0-9!#$%&'*+/=?^_`{|}~]+)*@(?:[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[-A-Za-z0-9]*[A-Za-z0-9])?$/;
 
     if (!emailRegExp.test(currentEmail) && currentEmail.length !== 0) {
@@ -156,11 +159,8 @@ const SignUp = () => {
       setEmailStatusMessage(!isEmailDuplicate ? '중복된 이메일입니다.' : '사용 가능한 이메일입니다.');
       setEmailStatusMessageClassName(!isEmailDuplicate ? 'text-sm text-red-500' : 'text-sm text-blue-500');
       
-      setIsCorrectEmail(!isEmailDuplicate && isEmailValid);
-      // setIsCorrectEmail(!isEmailDuplicate);
-      // console.log(isCorrectEmail);  // true
-      console.log(isCorrectEmail);  // 이게 왜 뭔짓을 해도 true로 나오는지 모르겠음
-      console.log(isEmailValid) // false
+      setIsCorrectEmail(isEmailDuplicate);
+      setIsEmailCheckDone(true);
     } catch (error) {
       console.error(error);
     };
@@ -168,12 +168,14 @@ const SignUp = () => {
 
   const handleSendEmailCode = async () => {
     try {
-      await handleCheckEmail(); // 이메일 중복 확인
-      // if (isCorrectEmail === true) {
-      if (isEmailValid === true) {
-        await SendCode(email); // 인증 코드 전송
+      if (isEmailCheckDone) {
+        if (isCorrectEmail) {
+          await SendCode(email); // 인증 코드 전송
+        } else {
+          alert('이메일 전송에 실패했습니다');
+        }
       } else {
-        alert('중복된 이메일입니다');
+        alert('이메일 중복 확인을 먼저 진행해주세요');
       }
     } catch (error) {
       console.error(error);
@@ -222,7 +224,11 @@ const SignUp = () => {
           </div>
           <div className="flex items-center">
             <input type="text" id="email" name="email" value={email} onChange={onChangeEmail} className="border border-gray-300 px-2 py-1 flex-grow mr-3" />
-            <button type="button" onClick={handleSendEmailCode} className={`bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded ml-2 ${!isCorrectEmail && 'opacity-50 cursor-not-allowed'}`} disabled={!isCorrectEmail}>인증코드 전송</button>
+            {isEmailCheckDone ? (
+              <button type="button" onClick={handleSendEmailCode} className={`bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded ml-2 ${!isCorrectEmail && 'opacity-50 cursor-not-allowed'}`} disabled={!isCorrectEmail}>인증코드 전송</button>
+            ) : (
+              <button type="button" onClick={handleCheckEmail} className={`bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded ml-2 ${!isCorrectEmail && 'opacity-50 cursor-not-allowed'}`} disabled={!isCorrectEmail}>중복 확인</button>
+            )}
           </div>
         </div>
         <div className="mb-4">
@@ -234,9 +240,6 @@ const SignUp = () => {
             <button type="button" onClick={handleCheckEmailCode} className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded ml-2">인증코드 확인</button>
           </div>
           <p className={codeVerificationClassName}>{codeVerification}</p>
-          {/* {codeVerification && (
-          <p className={codeVerificationClassName}>{codeVerification}</p>
-          )} */}
         </div>
         <div className="mb-4">
           <div className="flex justify-between">
