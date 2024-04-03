@@ -17,7 +17,7 @@ const CreateComment = ({ bookId,refreshComments }) => {
   
     try {
       await CommentForm(bookId, commentInput, rating * 2); // 비동기 생성이 완료된 후
-      setComments(prevComments => [...prevComments, newComment]); 
+      // setComments(prevComments => [...prevComments, newComment]); 
       setCommentInput("");
       setRating(0);
 
