@@ -184,3 +184,36 @@ out/
 
 
 # 배포환경
+
+
+![캡처](/uploads/f915b386aebe16a857e29bd3db2f77d6/캡처.PNG)
+
+
+
+![캡처1](/uploads/db7d79b15eabf7d7b3c65c0cbcf73f28/캡처1.PNG)
+
+![캡처2](/uploads/f97287a67ce978f09d88e24fb7b2d822/캡처2.PNG)
+
+![캡처3](/uploads/51d2807935cc90beec155e1c2987bb67/캡처3.PNG)
+
+![캡처.4PNG](/uploads/ba8f299a9712bdf388ccb0f33d5ccfb6/캡처.4PNG.PNG)
+
+![캡처5](/uploads/bf6bd2f2441717fdacf9e793697c95a8/캡처5.PNG)
+
+![캡처6](/uploads/949ce7d42718f36f9611b9632b0a3410/캡처6.PNG)
+
+![캡처7](/uploads/89136b6b9b0ff56a16d43248bbfdefd5/캡처7.PNG)
+
+![캡처8](/uploads/b2d2f9d9cb22fe893782762aaad2766e/캡처8.PNG)
+
+![캡처9](/uploads/2e804b59e05cc4cea16d6e9b5eeaf8ff/캡처9.PNG)
+
+
+
+
+[추신]..해킹당한날
+
+비번은 최대한 어렵게 포트는 기본포트를 쓰지말자..
+
+
+![해킹당한날_24.3.29](/uploads/4c4ef248c833585d3b4960db74187ebf/해킹당한날_24.3.29.PNG)
