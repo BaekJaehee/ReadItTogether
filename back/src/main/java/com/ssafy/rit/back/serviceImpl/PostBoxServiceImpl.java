@@ -55,41 +55,36 @@ public class PostBoxServiceImpl implements PostBoxService {
         List<Postbox> weeklyPostboxes = postBoxRepository.findAllByMemberIdAndCreationDateBetween(currentMember, startOfWeek, endOfWeek);
 
         if (weeklyPostboxes.isEmpty()) {
-            Set<Book> selectedBookIds = new HashSet<>();
-            List<Card> uniqueCards = new ArrayList<>();
 
             // 현재 멤버를 제외한 랜덤 카드 목록 가져오기
             List<Card> cards = cardRepository.findRandomCardsExcludingMember(currentMember.getId());
-            List<Card> allCards = new ArrayList<>(cards);
 
             // 현재 쉘프 그룹에 속한 멤버들로부터 카드 가져오기
             List<Member> allByShelfGroup = memberRepository.findAllByShelfGroup(currentMember.getShelfGroup());
             List<Card> byFromMemberIdIn = cardRepository.findByFromMemberIdInAndToMemberIdNot(allByShelfGroup, currentMember);
-            allCards.addAll(byFromMemberIdIn);
+            if (!byFromMemberIdIn.isEmpty()) {
+                Collections.shuffle(byFromMemberIdIn);
+                cards.set(0, byFromMemberIdIn.get(0));
+            }
 
             // 현재 주에 해당하는 카드 목록 가져오기
             List<Card> thisWeekCards = cardRepository.findCardsBetweenDates(startOfWeek, endOfWeek, currentMember);
-            allCards.addAll(thisWeekCards);
+            if (!thisWeekCards.isEmpty()) {
+                Collections.shuffle(thisWeekCards);
+                cards.set(0, thisWeekCards.get(0));
+            }
 
             // 현재 멤버의 추천 도서와 연결된 카드 가져오기
             List<MemberRecommendBook> recBooks = memberRecommendBookRepository.findAllByMemberId(currentMember);
             List<Book> currentBooks = recBooks.stream().map(MemberRecommendBook::getBookId).toList();
             List<Card> byBooksAndExcludedMember = cardRepository.findByBooksAndExcludedMember(currentBooks, currentMember);
-            allCards.addAll(byBooksAndExcludedMember);
-
-            // 모든 카드를 섞은 후 고유한 카드 선택
-            Collections.shuffle(allCards);
-            for (Card card : allCards) {
-                if (uniqueCards.size() >= 3) break; // 최대 3개의 고유 카드 선택
-                if (!selectedBookIds.contains(card.getBookId())) {
-                    uniqueCards.add(card);
-                    selectedBookIds.add(card.getBookId());
-                }
+            if (!byBooksAndExcludedMember.isEmpty()) {
+                Collections.shuffle(byBooksAndExcludedMember);
+                cards.set(0, byBooksAndExcludedMember.get(0));
             }
 
-            // 고유 카드 리스트를 DTO로 변환하고, 포스트박스 생성
-            List<ReceiveCardsDto> cardsDto = convertCardsToDto(uniqueCards);
-            createPostboxesForCurrentMember(uniqueCards, currentMember);
+            List<ReceiveCardsDto> cardsDto = convertCardsToDto(cards);
+            createPostboxesForCurrentMember(cards, currentMember);
 
             // 응답 생성 및 반환
             PostBoxListResponse response = new PostBoxListResponse("카드 조회 성공", new PostBoxListResponseDto(cardsDto));
@@ -158,18 +153,5 @@ public class PostBoxServiceImpl implements PostBoxService {
                             .build();
                     postBoxRepository.save(newPostbox);
                 });
-    }
-
-    private Card getRandomUniqueCard(List<Card> sourceCards, List<Card> existingCards, int maxAttempts) {
-        Random random = new Random();
-        Card selectedCard = null;
-        for (int attempt = 0; attempt < maxAttempts; attempt++) {
-            Card potentialCard = sourceCards.get(random.nextInt(sourceCards.size()));
-            if (!existingCards.contains(potentialCard)) {
-                selectedCard = potentialCard;
-                break;
-            }
-        }
-        return selectedCard;
     }
 }
