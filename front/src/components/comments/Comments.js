@@ -16,6 +16,7 @@ const CommentCard = ({ bookId, comment, refreshComments }) => {
     try {
       await DeleteComment(comment.commentId);
       refreshComments(); // 여기서 함수를 호출
+      alert("평가를 삭제하였습니다.")
     } catch (error) {
       console.log(error);
     }
