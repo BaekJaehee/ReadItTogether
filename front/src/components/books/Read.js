@@ -2,7 +2,7 @@ import deleteButton from "../../assets/profile/delete.png";
 
 const Read = ({ books, handleClickBook, handleUpdateBookshelf, handleDeleteBookshelf }) => {
   return (
-    <div className="grid grid-cols-4 ">
+    <div className="grid lg:grid-cols-4 sm:grid-cols-2">
       {books && books.map((book) => (
         <div key={book.bookId} className="relative group text-center">
           <div className="absolute right-4 top-4 cursor-pointer opacity-0 group-hover:opacity-100" 

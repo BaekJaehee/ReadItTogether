@@ -64,9 +64,6 @@ const SideBar = ({ profileInfo, FollowingList, FollowerList }) => {
           />
         )}
 
-        <button className="bg-white border border-gray-300 hover:bg-gray-300 hover:text-white rounded-lg text-gray-500 text-xs py-2 px-4 mt-4 transition-colors duration-300">
-          FAQ 문의하기
-        </button>
       </div>
       <footer className="py-4 px-6 flex flex-col items-center justify-center bg-gray-100 rounded-b-lg">
         <div className="flex items-center mb-2">

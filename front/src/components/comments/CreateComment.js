@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import CommentForm from "../../api/book/comment/CommentForm";
 
-const CreateComment = ({ bookId,refreshComments }) => {
+const CreateComment = ({ bookId, refreshComments }) => {
   const [commentInput, setCommentInput] = useState("");
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
@@ -19,6 +19,8 @@ const CreateComment = ({ bookId,refreshComments }) => {
       // CommentForm API 호출 함수를 사용하여 서버로 데이터 전송
       CommentForm(bookId, commentInput, rating * 2);
       refreshComments();
+      alert("평가를 완료하였습니다!");
+      refreshComments();
     } catch (error) {
       console.error("댓글 생성 중 오류 발생:", error);
     }
@@ -26,7 +28,6 @@ const CreateComment = ({ bookId,refreshComments }) => {
     setCommentInput(""); // 입력 필드 초기화
     setRating(0); // 평점 초기화
   };
-
 
   const handleMouseEnter = (index) => {
     setHover(index);
@@ -42,7 +43,10 @@ const CreateComment = ({ bookId,refreshComments }) => {
 
   return (
     <div className="mt-4 w-[500px]">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form
+        onSubmit={rating === 0 ? (e) => e.preventDefault() : handleSubmit}
+        className="flex flex-col gap-4"
+      >
         <div className="flex mb-2">
           <h3 className="text-2xl mr-2">평점</h3>
           <div className="flex items-center">
@@ -77,6 +81,7 @@ const CreateComment = ({ bookId,refreshComments }) => {
         <button
           type="submit"
           className="self-end px-4 py-2 bg-sky-400 text-white rounded hover:bg-sky-500 disabled:opacity-50"
+          disabled={rating === 0}
         >
           평가 하기
         </button>

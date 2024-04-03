@@ -6,7 +6,7 @@ import UpdateCommentModal from "./UpdatecommentModal";
 
 import img from "../../assets/profile/man.png";
 
-const CommentCard = ({ bookId, comment ,refreshComments}) => {
+const CommentCard = ({ bookId, comment, refreshComments }) => {
   const [showModal, setShowModal] = useState(false);
   const handleEditClick = () => setShowModal(true);
   const handleCancel = () => setShowModal(false);
@@ -16,11 +16,12 @@ const CommentCard = ({ bookId, comment ,refreshComments}) => {
     try {
       await DeleteComment(comment.commentId);
       refreshComments(); // 여기서 함수를 호출
+      alert("평가를 삭제하였습니다.")
+      refreshComments(); // 여기서 함수를 호출
     } catch (error) {
       console.log(error);
     }
   };
-  
 
   const isOwner = memberId === comment.memberId.toString();
 
@@ -81,22 +82,25 @@ const CommentCard = ({ bookId, comment ,refreshComments}) => {
   );
 };
 
-const Comments = ({ bookId, commentListResponseDtos ,refreshComments }) => {
+const Comments = ({
+  bookId,
+  refreshComments,
+  commentList,
+}) => {
   return (
     <div className="px-44">
       <h1 className="text-3xl font-bold text-left mb-10 ml-8">
-        코멘트{" "}
-        <span className="text-sky-500">+ {commentListResponseDtos.length}</span>
+        코멘트 <span className="text-sky-500">+ {commentList.length}</span>
       </h1>
       <div className="flex flex-wrap m-2 mb-10">
-        {commentListResponseDtos.map((comment) => (
-          <div key={comment.id} className="p-2 w-1/4 min-w-[w-72]">
+        {commentList.map((comment, index) => (
+          <div key={`comment-${index}`} className="p-2 w-1/4 min-w-[w-72]">
             <CommentCard
               key={comment.id}
-               bookId={bookId}
-               comment={comment}
-               refreshComments={refreshComments} // 여기서 함수를 전달
-/>
+              bookId={bookId}
+              comment={comment}
+              refreshComments={refreshComments}
+            />
           </div>
         ))}
       </div>
