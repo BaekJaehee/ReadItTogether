@@ -17,7 +17,10 @@ const CreateComment = ({ bookId,refreshComments }) => {
   
     try {
       await CommentForm(bookId, commentInput, rating * 2); // 비동기 생성이 완료된 후
-      refreshComments(); // 댓글 목록을 새로 고침
+      setComments(prevComments => [...prevComments, newComment]); 
+      setCommentInput("");
+      setRating(0);
+
     } catch (error) {
       console.error("댓글 생성 중 오류 발생:", error);
     }
