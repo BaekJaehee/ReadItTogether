@@ -64,14 +64,22 @@ public class PostBoxServiceImpl implements PostBoxService {
             List<Card> byFromMemberIdIn = cardRepository.findByFromMemberIdInAndToMemberIdNot(allByShelfGroup, currentMember);
             if (!byFromMemberIdIn.isEmpty()) {
                 Collections.shuffle(byFromMemberIdIn);
-                cards.set(0, byFromMemberIdIn.get(0));
+                for (Card card : byFromMemberIdIn) {
+                    if (!cards.contains(card)) {
+                        cards.set(0, card);
+                    }
+                }
             }
 
             // 현재 주에 해당하는 카드 목록 가져오기
             List<Card> thisWeekCards = cardRepository.findCardsBetweenDates(startOfWeek, endOfWeek, currentMember);
             if (!thisWeekCards.isEmpty()) {
                 Collections.shuffle(thisWeekCards);
-                cards.set(0, thisWeekCards.get(0));
+                for (Card card : thisWeekCards) {
+                    if (!cards.contains(card)) {
+                        cards.set(0, card);
+                    }
+                }
             }
 
             // 현재 멤버의 추천 도서와 연결된 카드 가져오기
@@ -80,7 +88,11 @@ public class PostBoxServiceImpl implements PostBoxService {
             List<Card> byBooksAndExcludedMember = cardRepository.findByBooksAndExcludedMember(currentBooks, currentMember);
             if (!byBooksAndExcludedMember.isEmpty()) {
                 Collections.shuffle(byBooksAndExcludedMember);
-                cards.set(0, byBooksAndExcludedMember.get(0));
+                for (Card card : byBooksAndExcludedMember) {
+                    if (!cards.contains(card)) {
+                        cards.set(0, card);
+                    }
+                }
             }
 
             List<ReceiveCardsDto> cardsDto = convertCardsToDto(cards);
