@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 
+import BookDetail from "../../api/book/BookDetail";
 import CommentForm from "../../api/book/comment/CommentForm";
 
-const CreateComment = ({ bookId,refreshComments }) => {
+const CreateComment = ({ bookId, refreshComments }) => {
   const [commentInput, setCommentInput] = useState("");
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
@@ -20,6 +21,7 @@ const CreateComment = ({ bookId,refreshComments }) => {
       // setComments(prevComments => [...prevComments, newComment]); 
       setCommentInput("");
       setRating(0);
+      BookDetail(bookId);
 
     } catch (error) {
       console.error("댓글 생성 중 오류 발생:", error);
