@@ -23,7 +23,7 @@ import SearchPage from "./pages/recomend/SearchPage";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/" scrollRestoration="manual">
       <AuthProvider>
         <PageLayout>
           <Routes>

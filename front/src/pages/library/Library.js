@@ -84,7 +84,14 @@ const Library = () => {
 
   // 다이어리 상태
   const [isDiaryModalOpen, setIsDiaryModalOpen] = useState(false);
-  const openDiaryModal = () => setIsDiaryModalOpen(true);
+  const openDiaryModal = () => {
+    if (memberId === isMemberPage) {
+      setIsDiaryModalOpen(true);
+    } else {
+      console.warn("모달을 열 수 있는 권한이 없습니다.");
+      alert("서재 주인만 접근할 수 있습니다.");
+    }
+  };
   const closeDiaryModal = () => setIsDiaryModalOpen(false);
 
   // 소개글 상태
@@ -94,13 +101,21 @@ const Library = () => {
       setIsIntroOpen(true);
     } else {
       console.warn("모달을 열 수 있는 권한이 없습니다.");
+      alert("서재 주인만 접근할 수 있습니다.");
     }
   };
   const closeIntro = () => setIsIntroOpen(false);
 
   // 우편함 상태
   const [isMailBoxOpen, setIsMailBoxOpen] = useState(false);
-  const openMailBox = () => setIsMailBoxOpen(true);
+  const openMailBox = () => {
+    if (memberId === isMemberPage) {
+      setIsMailBoxOpen(true);
+    } else {
+      console.warn("모달을 열 수 있는 권한이 없습니다.");
+      alert("서재 주인만 접근할 수 있습니다.");
+    }
+  };
   const closeMailBox = () => setIsMailBoxOpen(false);
 
   //팔로우 목록 상태
@@ -109,11 +124,7 @@ const Library = () => {
   const closeFollowModal = () => setFollowModalOpen(false);
 
   return (
-    <div className="min-h-screen min-w-full overflow-auto">
-      {/* 배경 벽지 */}
-      <div className="bg-sky-100 absolute inset-0 min-w-full min-h-full"></div>
-
-      {/* 이미지 */}
+    <div className="bg-sky-100 min-h-screen min-w-full overflow-auto w-[1280px]">
       <div className="relative min-w-full min-h-full">
         <img
           className="absolute bottom-0 w-screen h-[500px] min-w-full"
@@ -145,14 +156,12 @@ const Library = () => {
           <button onClick={openIntro}>
             <div className="relative">
               <img
-                className="w-[448px] transform transition-transform duration-500 ease-in-out"
+                className="w-[448px] transform transition-transform duration-500 ease-in-out group-hover:scale-110"
                 src={whiteBoard}
                 alt="소개글"
               />
               <div className="w-[300px] absolute top-0 bottom-3 left-24 flex items-center justify-center">
-                {introText && (
-                  <p className="customFont text-xl">{introText}</p>
-                )}
+                {introText && <p className="customFont text-xl">{introText}</p>}
               </div>
             </div>
           </button>
@@ -166,11 +175,7 @@ const Library = () => {
         </div>
         <div className=" absolute left-40 top-20 overflow-hidden">
           <div className="relative">
-            <img
-              className="w-[300px] transform transition-transform duration-500 ease-in-out group-hover:scale-110"
-              src={list}
-              alt="서재 주인 정보"
-            />
+            <img className="w-[300px]" src={list} alt="서재 주인 정보" />
             <div className="absolute top-5 left-5">
               <div
                 className="flex items-center cursor-pointer"

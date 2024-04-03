@@ -124,11 +124,6 @@ const Profile = () => {
             {/* 유저 정보 */}
             <div className="flex-1 ml-4">
               <div className="relative">
-                {/* <img
-                  className="w-52 h-52 rounded-full mb-2"
-                  src={man}
-                  alt="헤키레키 잇센"
-                /> */}
                 <img
                   className="w-52 h-52 rounded-full mb-2"
                   // src={profileImageSrc}
@@ -213,10 +208,10 @@ const Profile = () => {
                 )}
               </div>
               {/* {profileInfo.genreNoList}<br/> */}
+              {/* {genreCountByName} */}
               {/* {dataLabels}<br/> */}
               {/* {dataValues}<br/> */}
             </div>
-            {/* 설정 톱니바퀴 */}
             <div
               className="relative right-0 cursor-pointer"
               onClick={handleSettingsClick}

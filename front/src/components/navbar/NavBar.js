@@ -70,6 +70,7 @@ const NavBar = () => {
   // 검색 입력 창 토글 함수
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
+    setSearchTerm("")
   };
 
   // location 변경될 때 마운트
