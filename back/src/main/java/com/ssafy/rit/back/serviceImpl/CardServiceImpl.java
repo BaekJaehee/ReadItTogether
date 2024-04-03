@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -87,7 +88,10 @@ public class CardServiceImpl implements CardService {
     @Override
     public ResponseEntity<Map<String, Object>> CardList(int page, int size) {
         Member currentMember = commonUtil.getMember(); // 현재 로그인한 사용자 정보 가져오기
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+
+
+
 
         // 보낸 카드 목록 조회: 삭제되지 않은 카드만 필터링
         Page<Card> sentCardsPage = cardRepository.findByFromMemberIdAndDeletedBySenderIsFalse(currentMember, pageable);
@@ -96,9 +100,11 @@ public class CardServiceImpl implements CardService {
                 .collect(Collectors.toList());
 
         // 받은 카드 목록 조회: 삭제되지 않은 카드만 필터링
+        //추가수정 보낸사람 == 받는 사람 같으면  필터링해버리기
         Page<Card> receivedCardsPage = cardRepository.findByToMemberIdAndDeletedByRecipientIsFalse(currentMember, pageable);
         List<CardListResponseDto> receivedCardDtos = receivedCardsPage.getContent().stream()
-                .map(card -> new CardListResponseDto(card.getId(), card.getBookId().getCover(), 1,card.getFromMemberId().getId(),card.getFromMemberId().getId()))
+                .filter(card -> !card.getFromMemberId().equals(card.getToMemberId()))
+                .map(card -> new CardListResponseDto(card.getId(), card.getBookId().getCover(), 1, card.getFromMemberId().getId(), card.getToMemberId().getId()))
                 .collect(Collectors.toList());
 
         // 응답 객체에 페이징 정보를 포함시켜 반환
