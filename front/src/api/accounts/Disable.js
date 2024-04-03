@@ -4,10 +4,10 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const disable = async (password) => {
   const requestBody = {
-    password: password
-  }
+    password: password,
+  };
 
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem("accessToken");
 
   try {
     const response = await axios.post(
@@ -17,16 +17,17 @@ const disable = async (password) => {
         withCredentials: true,
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`
+          Authorization: `Bearer ${accessToken}`,
         },
       }
-    )
+    );
 
     // 탈퇴 성공 시 로그아웃
     localStorage.removeItem(`memberId`);
     localStorage.removeItem(`accessToken`);
     localStorage.removeItem(`nickname`);
     localStorage.removeItem(`profileImage`);
+    localStorage.removeItem(`myEmail`);
 
     console.log(requestBody);
     return response;
@@ -34,6 +35,6 @@ const disable = async (password) => {
     console.log(error);
     throw error;
   }
-}
+};
 
 export default disable;
