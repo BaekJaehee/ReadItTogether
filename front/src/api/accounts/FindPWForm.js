@@ -4,16 +4,16 @@ const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const FindPWForm = async (name, email) => {
   try {
-    // FormData 객체 생성
-    const formData = new FormData();
-    // FormData 객체에 name과 email 추가
-    formData.append("name", name);
-    formData.append("email", email);
-
     // API 요청 보내기 (FormData 사용)
     const response = await axios.post(
-      `${API_BASE_URL}/temporary-password`,
-      formData
+      `${API_BASE_URL}/members/temporary-password`,
+      { name, email },
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
 
     // 요청 성공 시 응답 데이터 반환
