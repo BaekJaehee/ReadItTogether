@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import BookDetail from "../../api/book/BookDetail";
 import CommentForm from "../../api/book/comment/CommentForm";
 
 const CreateComment = ({ bookId, refreshComments }) => {
@@ -12,25 +11,21 @@ const CreateComment = ({ bookId, refreshComments }) => {
     setCommentInput(e.target.value);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (!commentInput.trim()) return;
-  
-    try {
-      await CommentForm(bookId, commentInput, rating * 2); // 비동기 생성이 완료된 후
-      // setComments(prevComments => [...prevComments, newComment]); 
-      setCommentInput("");
-      setRating(0);
-      BookDetail(bookId);
+    if (!commentInput.trim()) return; // 빈 댓글은 추가하지 않음
 
+    try {
+      // CommentForm API 호출 함수를 사용하여 서버로 데이터 전송
+      CommentForm(bookId, commentInput, rating * 2);
+      refreshComments();
     } catch (error) {
       console.error("댓글 생성 중 오류 발생:", error);
     }
-  
-    setCommentInput("");
-    setRating(0);
+
+    setCommentInput(""); // 입력 필드 초기화
+    setRating(0); // 평점 초기화
   };
-  
 
 
   const handleMouseEnter = (index) => {
