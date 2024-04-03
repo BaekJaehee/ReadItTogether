@@ -20,6 +20,7 @@ const CreateComment = ({ bookId, refreshComments }) => {
       CommentForm(bookId, commentInput, rating * 2);
       refreshComments();
       alert("평가를 완료하였습니다!")
+      refreshComments();
     } catch (error) {
       console.error("댓글 생성 중 오류 발생:", error);
     }
