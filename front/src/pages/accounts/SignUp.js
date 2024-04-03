@@ -161,10 +161,6 @@ const SignUp = () => {
       
       setIsCorrectEmail(isEmailDuplicate);
       setIsEmailCheckDone(true);
-      // setIsCorrectEmail(!isEmailDuplicate);
-      // console.log(isCorrectEmail);  // true
-      // console.log(isCorrectEmail);  // 이게 왜 뭔짓을 해도 true로 나오는지 모르겠음
-      // console.log(isEmailValid) // false
     } catch (error) {
       console.error(error);
     };
@@ -172,12 +168,14 @@ const SignUp = () => {
 
   const handleSendEmailCode = async () => {
     try {
-      // await handleCheckEmail(); // 이메일 중복 확인
-      if (isCorrectEmail === true) {
-      // if (isEmailValid === true) {
-        await SendCode(email); // 인증 코드 전송
+      if (isEmailCheckDone) {
+        if (isCorrectEmail) {
+          await SendCode(email); // 인증 코드 전송
+        } else {
+          alert('이메일 전송에 실패했습니다');
+        }
       } else {
-        alert('중복된 이메일입니다');
+        alert('이메일 중복 확인을 먼저 진행해주세요');
       }
     } catch (error) {
       console.error(error);
@@ -226,7 +224,11 @@ const SignUp = () => {
           </div>
           <div className="flex items-center">
             <input type="text" id="email" name="email" value={email} onChange={onChangeEmail} className="border border-gray-300 px-2 py-1 flex-grow mr-3" />
-            <button type="button" onClick={handleSendEmailCode} className={`bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded ml-2 ${!isCorrectEmail && 'opacity-50 cursor-not-allowed'}`} disabled={!isCorrectEmail}>인증코드 전송</button>
+            {isEmailCheckDone ? (
+              <button type="button" onClick={handleSendEmailCode} className={`bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded ml-2 ${!isCorrectEmail && 'opacity-50 cursor-not-allowed'}`} disabled={!isCorrectEmail}>인증코드 전송</button>
+            ) : (
+              <button type="button" onClick={handleCheckEmail} className={`bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded ml-2 ${!isCorrectEmail && 'opacity-50 cursor-not-allowed'}`} disabled={!isCorrectEmail}>중복 확인</button>
+            )}
           </div>
         </div>
         <div className="mb-4">
@@ -238,9 +240,6 @@ const SignUp = () => {
             <button type="button" onClick={handleCheckEmailCode} className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded ml-2">인증코드 확인</button>
           </div>
           <p className={codeVerificationClassName}>{codeVerification}</p>
-          {/* {codeVerification && (
-          <p className={codeVerificationClassName}>{codeVerification}</p>
-          )} */}
         </div>
         <div className="mb-4">
           <div className="flex justify-between">
