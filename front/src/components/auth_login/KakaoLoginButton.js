@@ -6,7 +6,7 @@ import kakaoLoginButton from "../../assets/login/kakao.png"
 const KakaoLoginButton = () => {
   const KAKAO_CLIENT_ID = "b501c56371fa45075470f62c6972768e";
   const redirectUri = encodeURIComponent(
-    "https://j10d206.p.ssafy.io/api/login/oauth2/code/kakao"
+    "https://j10d206.p.ssafy.io/login/oauth2/code/kakao"
   );
 
   const handleKakaoLogin = async () => {
