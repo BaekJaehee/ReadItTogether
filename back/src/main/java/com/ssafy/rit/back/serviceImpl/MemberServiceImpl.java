@@ -222,6 +222,7 @@ public class MemberServiceImpl implements MemberService {
 
 
     public Boolean verifyAccess(VerifyAccessRequestDto dto) {
+        log.info("=======================zxczxcxzcxzcxzxczzxczxc=====",dto) ;
 
         if (!dto.getAccessToken().startsWith("Bearer ")) {
             log.info(dto.getAccessToken());

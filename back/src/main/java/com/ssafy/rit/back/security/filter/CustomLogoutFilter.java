@@ -35,14 +35,15 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
         String requestUri = request.getRequestURI();
         if (!requestUri.matches("^/logout$")) {
-            System.out.println("--------------로가웃 경로 에러염--------------" + requestUri);
 
             filterChain.doFilter(request, response);
+
             return;
         }
 
         String requestMethod = request.getMethod();
         if (!requestMethod.equals("POST")) {
+
             filterChain.doFilter(request, response);
             return;
         }
@@ -53,12 +54,15 @@ public class CustomLogoutFilter extends GenericFilterBean {
         for (Cookie cookie : cookies) {
 
             if (cookie.getName().equals("refresh")) {
+
                 refresh = cookie.getValue();
             }
         }
 
-        // refresh 이것저것 검증
-        if (refresh == null) {
+
+        if (refresh == null ) {
+            System.out.println("--------------로가웃 경로 에러염4--------------" + refresh);
+            System.out.println("--------------로가웃 경로 에러염4--------------" + refresh);
 
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
@@ -72,21 +76,29 @@ public class CustomLogoutFilter extends GenericFilterBean {
         }
 
         String category = jwtUtil.getCategory(refresh);
-        if (!category.equals("refresh")) {
+
+        if (!category.equalsIgnoreCase("refresh")) {
+
 
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
-        Boolean isExist = refreshRepository.existsByRefresh(refresh);
-        if (!isExist) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
+//        Boolean isExist = refreshRepository.existsByRefresh(refresh);
+//        System.out.println("--------------로가웃 경로 에러염555--------------" + isExist);
+//
+//        if (!isExist) {
+//            System.out.println("--------------로가웃 경로 에러염5--------------" + requestUri);
+//            System.out.println("--------------로가웃 경로 에러염5--------------" + requestUri);
+//            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//            return;
+//        }
 
         System.out.println("-------------------굿 로그아웃 진행 ㄱㄱ-------------------" + requestUri);
         // 로그아웃 진행 - DB에서 리프레시 토큰 제거, 리프레시 토큰의 쿠키값 초기화
         refreshRepository.deleteByRefresh(refresh);
+
+        System.out.println("-------------------굿 로그아웃 진행 ㄱㄱ-------------------" + refresh);
 
         Cookie cookie = new Cookie("refresh", null);
         cookie.setMaxAge(0);
@@ -98,7 +110,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
         Cookie c = new Cookie("refresh", null);
         c.setMaxAge(0);
-        c.setPath("/members");
+        cookie.setPath("/");
 
         response.addCookie(cookie);
         response.setStatus(HttpServletResponse.SC_OK);

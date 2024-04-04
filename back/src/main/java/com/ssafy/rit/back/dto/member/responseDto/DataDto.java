@@ -14,4 +14,5 @@ public class DataDto {
     private Long memberId;
     private String profileImage;
     private String nickname;
+
 }
