@@ -16,6 +16,7 @@ const handleOauthLogin = async (code, stateValue, provider) => {
     );
     console.log(`${provider} Login Success:`, response);
     return response.data;
+    
   } catch (error) {
     console.error(`Error during ${provider} Login:`, error);
     throw error;
