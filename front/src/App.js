@@ -21,9 +21,11 @@ import ModifyProfile from "./pages/accounts/ModifyProfile";
 
 import SearchPage from "./pages/recomend/SearchPage";
 
+import LoginCallBack from "./components/auth_login/LoginCallback";
+
 function App() {
   return (
-    <BrowserRouter basename="/" scrollRestoration="manual">
+    <BrowserRouter>
       <AuthProvider>
         <PageLayout>
           <Routes>
@@ -33,15 +35,15 @@ function App() {
               <Route path="/signup" element={<SignUp />} />
               <Route path="/find-password" element={<FindPassword />} />
             </Route>
-
-            <Route path="/bookshelf/:memberId" element={<Bookshelf />} />
-            <Route path="/detail-book/:bookId" element={<DetailBook />} />
-            <Route path="/:memberId" element={<Library />} />
-            <Route path="/recommend-book" element={<RecommendBook />} />
-            <Route path="/search" element={<SearchPage />} />
-            <Route path="/modify/:memberId" element={<ModifyProfile />} />
-            <Route path="/profile/:memberId" element={<Profile />} />
-            <Route path="/diary/:memberId" element={<Diary />} />
+            <Route path="/ktest" element={<LoginCallBack />} />
+              <Route path="/bookshelf/:memberId" element={<Bookshelf />} />
+              <Route path="/detail-book/:bookId" element={<DetailBook />} />
+              <Route path="/:memberId" element={<Library />} />
+              <Route path="/recommend-book" element={<RecommendBook />} />
+              <Route path="/search" element={<SearchPage />} />
+              <Route path="/modify/:memberId" element={<ModifyProfile />} />
+              <Route path="/profile/:memberId" element={<Profile />} />
+              <Route path="/diary/:memberId" element={<Diary />} />
             <Route element={<PrivateRoute />}>
               <Route path="/logout" element={<Logout />} />
             </Route>

@@ -1,22 +1,33 @@
 import React from "react";
+import { getSessionState } from "../../api/accounts/authService";
 
-import kakao from "../../assets/login/kakao.png";
-
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+import kakaoLoginButton from "../../assets/login/kakao.png"
 
 const KakaoLoginButton = () => {
+  const KAKAO_CLIENT_ID = "b501c56371fa45075470f62c6972768e";
+  const redirectUri = encodeURIComponent(
+    "https://j10d206.p.ssafy.io/login/oauth2/code/kakao"
+  );
+
   const handleKakaoLogin = async () => {
     try {
-      window.location.href = `${API_BASE_URL}/klogin`
-      console.log();
+
+      const state = encodeURIComponent(
+        JSON.stringify({ provider: "kakao" })
+      );
+      const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&state=${state}`;
+      window.location.href = kakaoURL;
     } catch (error) {
-      console.log("에러 코드:", error);
+      console.error("Kakao Login Failure:", error);
     }
   };
 
   return (
     <button onClick={handleKakaoLogin}>
-      <img src={kakao} className="w-" alt="카카오 로그인 버튼" />
+      <img
+        src={kakaoLoginButton}
+        alt="카카오 로그인 버튼"
+      />
     </button>
   );
 };

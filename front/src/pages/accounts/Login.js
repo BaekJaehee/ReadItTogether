@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../authentication/AuthContext";
 
 import NormalLoginForm from "../../api/accounts/NormalLoginForm";
-import NaverLoginButton from "../../components/auth_login/NaverLoginButton";
 import KakaoLoginButton from "../../components/auth_login/KakaoLoginButton";
 
 // 이미지
@@ -115,7 +114,19 @@ const Login = () => {
             >
               비밀번호를 잊으셨나요?
             </Link>
+
+
           </div>
+
+          <div className="flex items-center justify-center space-x-2 select-none">
+            <hr className="w-28 bg-white h-0.5 border-none" />
+            <span className="text-white">OR</span>
+            <hr className="w-28 bg-white h-0.5 border-none" />
+          </div>
+          <div className="flex justify-center">
+            <KakaoLoginButton />
+          </div>
+
         </form>
       </div>
     </div>

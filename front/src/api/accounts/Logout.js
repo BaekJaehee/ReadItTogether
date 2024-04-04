@@ -20,6 +20,7 @@ const Logout = () => {
             withCredentials: true,
           }
         );
+
         localStorage.removeItem(`memberId`);
         localStorage.removeItem(`accessToken`);
         localStorage.removeItem(`nickname`);
