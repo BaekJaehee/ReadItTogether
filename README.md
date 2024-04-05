@@ -51,9 +51,9 @@
 
 
 ### 추천 페이지
-<img src="/assets/추천 페이지.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
+<img src="/assets/추천_페이지.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
 
-<img src="/assets/추천 페이지2.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
+<img src="/assets/추천_페이지2.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
 
 ### 검색 기능
 <img src="/assets/검색창.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
