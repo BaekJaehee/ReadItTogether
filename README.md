@@ -9,7 +9,7 @@
 <br/>
 
 ## 📝 회원가입 & 로그인
-
+<img src="/assets/로그인.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
 ## 내 서재 기능
 
 ### 내 책장
