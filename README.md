@@ -96,8 +96,6 @@ Jenkins-jdk17
 
 ### 서비스 아키텍처
 
-### 안드로이드 구조도
-
 ### 요구 사항 명세서
 
 ### 기능 명세서
@@ -116,3 +114,4 @@ Jenkins-jdk17
 ### ERD
 
 # :rocket: 노션 링크
+[DEVERLOPER101 노션 살펴보기](https://www.notion.so/21e6b0e4119c45ce9747987867685187)
