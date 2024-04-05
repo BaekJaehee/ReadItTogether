@@ -173,6 +173,89 @@ Jenkins-jdk17
 | feature | 기능개발 |
 
 ### ERD
+<img src="/assets/ERD.PNG" width="400">
 
 # :rocket: 노션 링크
 [D206 노션 살펴보기](https://ordinary-meeting-f0b.notion.site/21e6b0e4119c45ce9747987867685187)
+
+## 👪 팀원
+
+### 1. Frontend
+
+<table>
+  <tr>
+    <td style="border: 1px solid #ccc; padding: 10px; text-align: center;">
+      <div style="border: 1px solid #ccc; padding: 10px; text-align: center;">
+      <br/>
+      <b><a href="https://github.com/BaekJaehee" style="text-align:center;">백재희</a></b>
+      <br/>
+      </div>
+      <br/>
+      <div style="text-align:center;">기획</div>
+      <div style="text-align:center;">UI/UX 설계</div>
+      <div style="text-align:center;">화면 구현</div>
+    </td>
+    <td style="border: 1px solid #ccc; padding: 10px; text-align: center;">
+      <div style="border: 1px solid #ccc; padding: 10px; text-align: center;">
+      <br/>
+      <b><a href="https://github.com/Anhyunsung" style="text-align:center;">안현성</a></b>
+      <br/>
+      </div>
+      <br/>
+      <div style="text-align:center;">상태 관리</div>
+      <div style="text-align:center;">UI/UX 설계</div>
+      <div style="text-align:center;">화면 구현</div>
+    </td>
+  </tr>
+</table>
+
+### 2. Backend
+
+<table>
+  <tr>
+    <td style="border: 1px solid #ccc; padding: 10px; text-align: center;">
+      <div style="border: 1px solid #ccc; padding: 10px; text-align: center;">
+      <br/>
+      <b><a href="https://github.com/hyoseon1201" style="text-align:center;">곽효선</a></b>
+      <br/>
+      </div>
+      <br/>
+      <div style="text-align:center;">검색 API 구현</div>
+      <div style="text-align:center;">우편함/방명록 API 구현</div>
+      <div style="text-align:center;">SVD, 쿼리기반 추천 시스템 구현</div>
+      <div style="text-align:center;">SMTP, Redis 메일링 서비스 구현</div>
+    </td>
+    <td style="border: 1px solid #ccc; padding: 10px; text-align: center;">
+      <div style="border: 1px solid #ccc; padding: 10px; text-align: center;">
+      <br/>
+      <b><a href="https://github.com/sumin-mun" style="text-align:center;">문수민</a></b>
+      <br/>
+      </div>
+      <br/>
+      <div style="text-align:center;">JWT 인증/인가 구현</div>
+      <div style="text-align:center;">회원가입 API 구현</div>
+      <div style="text-align:center;">팔로우 API 구현</div>
+    </td>
+    <td style="border: 1px solid #ccc; padding: 10px; text-align: center;">
+      <div style="border: 1px solid #ccc; padding: 10px; text-align: center;">
+      <br/>
+      <b><a href="https://github.com/Limkyuhwan" style="text-align:center;">임규환</a></b>
+      <br/>
+      </div>
+      <br/>
+      <div style="text-align:center;">콘텐츠 기반 빅데이터 추천</div>
+      <div style="text-align:center;">책장 API 구현</div>
+      <div style="text-align:center;">책 상세/리뷰 API 구현</div>
+    </td>
+    <td style="border: 1px solid #ccc; padding: 10px; text-align: center;">
+      <div style="border: 1px solid #ccc; padding: 10px; text-align: center;">
+      <br/>
+      <b><a href="https://github.com/BokAndYoung" style="text-align:center;">복영석</a></b>
+      <br/>
+      </div>
+      <br/>
+      <div style="text-align:center;">책 카드 API 구현</div>
+      <div style="text-align:center;">CI/CD</div>
+    </td>
+  </tr>
+</table>
