@@ -11,25 +11,54 @@
 ## 📝 회원가입 & 로그인
 <img src="/assets/로그인.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
 
+<img src="/assets/회원가입.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
+
+<img src="/assets/임시 비밀번호.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
+
 ## 내 서재 기능
+<img src="/assets/내 서재.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
 
 ### 내 책장
+<img src="/assets/책장 디테일.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
 
 ### 방명록
+<img src="/assets/방명록.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
+
+<img src="/assets/방명록 작성.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
+
+<img src="/assets/방명록 디테일.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
 
 ### 우편함
+<img src="/assets/우편함.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
+
+<img src="/assets/카드 디테일.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
 
 ### 다이어리
+<img src="/assets/카드 다이어리.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
 
 ### 서재 소개글
+<img src="/assets/소개글.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
 
 ## 기타 기능
+<img src="/assets/프로필.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
+
+<img src="/assets/팔로우.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
 
 ### 책 상세 페이지
+<img src="/assets/도서 디테일.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
+
+<img src="/assets/코멘트.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
+
 
 ### 추천 페이지
+<img src="/assets/추천 페이지.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
+
+<img src="/assets/추천 페이지2.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
 
 ### 검색 기능
+<img src="/assets/검색창.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
+
+<img src="/assets/검색.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
 
 ## 기술 스택
 
