@@ -10,6 +10,7 @@
 
 ## 📝 회원가입 & 로그인
 <img src="/assets/로그인.PNG" width="400">  <img src="/assets/image/login_page.jpg" width="400">
+
 ## 내 서재 기능
 
 ### 내 책장
@@ -95,13 +96,16 @@ Jenkins-jdk17
 
 
 ### 서비스 아키텍처
+<img src="/assets/아키텍처.PNG" width="400">
 
 ### 요구 사항 명세서
+<img src="/assets/요구_사항_명세서.PNG" width="400">
 
 ### 기능 명세서
+<img src="/assets/기능_명세서.PNG" width="400">
 
 ### API 설계서
-
+<img src="/assets/API_설계서.PNG" width="400">
 
 ### Git 컨벤션
 
