@@ -114,4 +114,4 @@ Jenkins-jdk17
 ### ERD
 
 # :rocket: 노션 링크
-[DEVERLOPER101 노션 살펴보기](https://www.notion.so/21e6b0e4119c45ce9747987867685187)
+[D206 노션 살펴보기](https://ordinary-meeting-f0b.notion.site/21e6b0e4119c45ce9747987867685187)
